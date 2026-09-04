@@ -1,58 +1,119 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="Logo.png" width="400" alt="Laravel Logo"></a></p>
+
+<h1 align="center">
+Nestly
+</h1>
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+<a href=""><img src="https://img.shields.io/badge/Status-In%20Development-blue" alt="Status"></a>
+<a href=""><img src="https://img.shields.io/badge/Stack-Laravel%20%2B%20Livewire-red" alt="Stack"></a>
+<a href=""><img src="https://img.shields.io/badge/Data-MySQL-4479A1" alt="Data"></a>
+<a href=""><img src="https://img.shields.io/badge/Theme-Pink-FF4D8D" alt="Theme"></a>
 </p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+> 🎓 **All-in-one academic dashboard for students.** Track tasks, monitor progress, manage class schedules, and keep your student finances in check — all in one place.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Live Demo :** Coming Soon
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Current Status :** Full Stack Development (Laravel + Livewire) — Phase 1 in progress
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🚀 About Nestly
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Nestly is a web application designed to help students manage their academic life without the clutter. From tracking assignment deadlines to keeping monthly finances under control, Nestly turns a chaotic student life into a clear, actionable dashboard.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Nestly is built as a **full stack application** using **Laravel** for both backend and frontend (via Blade + Livewire), with data stored in a **MySQL database**. The app runs locally using **Laragon** as the local development server, and the database is managed through **HeidiSQL**.
 
-## Agentic Development
+> ℹ️ The current version runs as a **single-user** application (no full authentication system yet), but all data is already persisted in MySQL — not in the browser (`localStorage`).
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## ✨ Core Features
 
-php artisan boost:install
-```
+### 📝 Task Management
+- Create, edit, delete, and categorize academic tasks
+- Track status: `Not Started` → `In Progress` → `Completed`
+- Set deadlines, priority levels, and progress percentage (0–100%)
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 📊 Progress & Dashboard
+- Visual progress bars for each task
+- Dashboard overview: total tasks, status breakdown, overall progress, nearest deadlines, monthly finance summary
+- Real-time statistics powered by Livewire — no full page reload
 
-## Contributing
+### ⏰ Deadline Tracking
+- Smart urgency indicators, updated automatically based on the current date:
+  - 🟢 **Green** — Safe & on track
+  - 🟡 **Yellow** — Approaching deadline
+  - 🟠 **Orange** — High priority, needs attention soon
+  - 🔴 **Red** — Overdue / Critical
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 🗓️ Schedule Management
+- Log class schedules (Subject, Day, Time, Room, Lecturer)
+- Quick reference for weekly academic planning
+- Accent color per schedule card for visual variety
 
-## Code of Conduct
+### 💰 Finance Tracker
+- Record income & expenses with categories (food, transport, allowance, academic needs, etc.)
+- Set monthly budget and track remaining balance in real-time
+- Visual indicator when spending is approaching or exceeding budget
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 🔍 Search, Filter & Sort
+- Filter by status, deadline, subject, or progress
+- Sort by nearest deadline, highest/lowest progress, or creation date
 
-## Security Vulnerabilities
+### 🎨 Theme & UX
+- **Pink theme** (default) with Light / Dark mode toggle — preference saved and applied automatically
+- Fully responsive design (Mobile, Tablet, Desktop)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 🛠️ Tech Stack & Architecture
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Component | Technology |
+|-----------|------------|
+| **Frontend & Backend** | Laravel (Blade + Livewire) |
+| **Styling** | Tailwind CSS |
+| **Database** | MySQL |
+| **Local Dev Server** | Laragon |
+| **Database Management Tool** | HeidiSQL |
+| **Deployment** | Localhost (personal project / portfolio) |
+
+> ℹ️ No separate JavaScript framework is used — all dynamic/interactive features (real-time updates, filters, progress indicators) are handled through **Livewire**.
+
+---
+
+## 🎨 Color System
+
+Nestly's default theme is **Pink**, with dedicated Light Mode and Dark Mode token sets (12 tokens each: Primary, Secondary, Tertiary, Background, Surface, Text, Text Muted, Border, Success, Danger, Warning, Info).
+
+Full color tokens are documented in [`PROJECT.md`](./PROJECT.md#12-color-system).
+
+---
+
+## 🗺️ Development Roadmap
+
+| Phase | Focus | Key Deliverables |
+|-------|-------|------------------|
+| **Phase 1** 🟢 *(Current)* | **Core Full Stack Build** | Database design & migrations, Task CRUD, Schedule CRUD, Finance Tracker (income/expense/budget), Dashboard summary, deadline urgency indicators, Pink theme (Light/Dark mode), responsive Tailwind UI, Livewire integration |
+| **Phase 2** 🟡 | **Refinement & UX Polish** | Search/filter/sorting refinement, multi color theme (**Blue** & **Monochrome**, each with Light + Dark mode) in addition to the default Pink theme, overall data validation & UX improvements |
+| **Phase 3** 🔵 | **Enhancements (Future)** | User authentication & multi-user support, role management, notifications, advanced academic/financial analytics, potential cloud/hosting deployment |
+
+---
+
+## 🤝 Contributing & Feedback
+
+Nestly is a personal academic project aimed at solving real student pain points. Feedback, feature requests, and collaboration are highly welcome!
+- 🐛 Found a bug? Open an [Issue](#)
+- 💡 Have an idea? Start a [Discussion](#)
+- 🛠️ Want to contribute? Check the [Roadmap](#️-development-roadmap)
+
+
+> ⚠️ **Disclaimer:** Nestly is currently in active development. Features and architecture may evolve as the project progresses.
+
+---
+
+<div align="center">
+  <sub>Built with ❤️ by <strong>Syukron Raffiansyah (Vyy)</strong> • 2026</sub>
+</div>
