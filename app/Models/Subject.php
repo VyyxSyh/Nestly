@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Schedule;
 
 class Subject extends Model
 {
-    public function task() {
+    protected $fillable = ['name'];
+    public function tasks() {
         return $this->hasMany(Task::class);
     }
-    public function schedules() {
-        return $this->hasMany(Schedule::class);
-    }
+
+    // di pakenya ntar 
+    // public function schedules() {
+    //     return $this->hasMany(Schedule::class);
+    // }
 }

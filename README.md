@@ -1,4 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="Logo.png" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="#" target="_blank"><img src="logo.png" width="200" alt="Laravel Logo"></a></p>
 
 <h1 align="center">
 Nestly

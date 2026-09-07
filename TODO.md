@@ -19,7 +19,7 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 
 ## ✅ Task Management
 - [x] Migration tabel `tasks` (judul, deskripsi, mata_kuliah_id, deadline, status, progress, priority)
-- [ ] Model `Task` + relasi ke `Subject`/Mata Kuliah
+- [x] Model `Task` + relasi ke `Subject`/Mata Kuliah
 - [ ] Livewire component: form tambah tugas
 - [ ] Livewire component: daftar tugas (Task List)
 - [ ] Fitur edit tugas
