@@ -2,8 +2,11 @@
 ## Nestly — Student Task & Study Dashboard
 
 **Version:** 1.0 (Full Stack)
+
 **Author:** Syukron Raffiansyah (Vyy)
+
 **Status:** In Development
+
 **Last Updated:** 2026
 
 ---
