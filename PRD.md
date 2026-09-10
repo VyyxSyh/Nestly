@@ -2,11 +2,8 @@
 ## Nestly — Student Task & Study Dashboard
 
 **Version:** 1.0 (Full Stack)
-
 **Author:** Syukron Raffiansyah (Vyy)
-
 **Status:** In Development
-
 **Last Updated:** 2026
 
 ---
@@ -213,19 +210,48 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
 | 🔴 Red | Overdue / sangat kritis / pengeluaran melebihi budget |
 
 ### 8.4 Komponen Utama
+
+- **Navigation Bar (Bottom Nav)** — komponen navigasi utama, posisi **fixed di bagian bawah layar** di semua ukuran device.
+
+  **Desktop & Tablet** — layout terbagi jadi 3 section:
+  - **Section kiri:** Logo Nestly + teks "Nestly".
+  - **Section tengah:** Menu navigasi (`Home`, `Task`, `Schedule`, `Finance`).
+  - **Section kanan:** Icon akun/login (icon orang).
+  - Tablet mengikuti layout yang sama persis seperti Desktop, hanya dengan ukuran elemen yang diperkecil (scaled down).
+  - **Perilaku menu aktif:** Setiap item menu defaultnya hanya menampilkan **label teks**. Saat sebuah menu menjadi aktif (halaman sedang dibuka):
+    - Sebuah **icon muncul dari belakang label**, bergeser ke posisi **sebelah kiri label** (slide-in dari arah kanan/belakang teks ke kiri).
+    - Saat berpindah ke halaman lain (menu tersebut jadi tidak aktif lagi), icon tersebut **menghilang dengan arah sebaliknya** — bergerak ke kanan, masuk ke belakang label lagi (slide-out ke kanan).
+    - Menu yang aktif juga dibedakan lewat **warna border** dan **warna label + icon** (menggunakan token warna `Primary` dari Color System).
+
+  **Mobile** — layout lebih ringkas, kebalikan dari perilaku Desktop/Tablet:
+  - Logo dan teks "Nestly" **tidak ditampilkan** di dalam Bottom Nav.
+  - Isi menu: `Home`, `Task`, `Schedule`, `Finance`, `Account` — seluruhnya dalam bentuk **icon saja** secara default (tanpa label).
+  - **Perilaku menu aktif:** kebalikan dari Desktop/Tablet — icon selalu tampil, dan **label baru muncul saat menu tersebut aktif** (icon lain tetap icon-only, hanya menu aktif yang melebar menampilkan label di sebelah iconnya).
+  - **Logo Nestly terpisah** ditampilkan mengambang di **pojok kiri atas layar**, dengan efek **blur/frosted-glass** di area sekitarnya (backdrop blur), independen dari Bottom Nav.
+
+  Referensi visual perilaku "icon-only default, melebar dengan label saat aktif" mengikuti pola floating pill navigation seperti pada aplikasi mobile modern (icon-only nav yang salah satu itemnya melebar menampilkan label saat dipilih).
+
+  **Badge/notifikasi:** Icon menu `Task` menampilkan badge angka (misal jumlah tugas overdue/due today), baik di tampilan Desktop, Tablet, maupun Mobile. Badge tetap muncul terlepas dari status aktif/tidaknya menu tersebut.
+
+- **Theme Toggle** — switch Light/Dark mode, ditempatkan di bagian atas halaman (terpisah dari Bottom Nav).
 - **Task Card** — menampilkan judul tugas, progress bar, status, dan indikator warna urgensi.
 - **Progress Bar** — representasi visual progress (persentase) per tugas dan progress keseluruhan.
 - **Dashboard Summary Widget** — kartu ringkasan statistik (total tugas, status, deadline terdekat, ringkasan keuangan).
 - **Schedule Card/List** — menampilkan jadwal kuliah secara terstruktur, dengan accent color per kartu.
 - **Finance Summary Widget** — kartu ringkasan pemasukan, pengeluaran, dan sisa saldo, dengan indikator progress terhadap budget.
 - **Filter & Sort Bar** — kontrol untuk pencarian, filter, dan pengurutan tugas.
-- **Theme Toggle** — switch Light/Dark mode.
 
 Referensi warna lengkap (hex code untuk Light & Dark mode, serta accent color untuk Schedule Card) mengikuti **Color System** yang telah ditetapkan di `PROJECT.md`.
 
 ### 8.5 Layout & Responsiveness
-- Layout harus adaptif untuk 3 breakpoint utama: Mobile, Tablet, Desktop.
+
+- Layout adaptif untuk 3 breakpoint utama: **Mobile**, **Tablet**, **Desktop**.
+- **Navigation Bar** (lihat 8.4) tetap berada di **bottom** pada seluruh breakpoint, namun kontennya berubah:
+  - **Desktop:** 3-section layout penuh (logo+teks | menu | icon akun), menu default menampilkan label, icon muncul dengan animasi saat aktif.
+  - **Tablet:** identik dengan Desktop, ukuran elemen diperkecil (scaled down).
+  - **Mobile:** hanya icon-only nav (`Home`, `Task`, `Schedule`, `Finance`, `Account`), tanpa logo/teks; label baru muncul saat menu aktif. Logo Nestly ditampilkan terpisah, mengambang di pojok kiri atas dengan efek blur di sekitarnya.
 - Dashboard sebagai halaman utama (landing) setelah aplikasi dibuka.
+- Konten utama halaman (Task List, Schedule, Finance) perlu diberi padding/margin bawah yang cukup agar tidak tertutup oleh Bottom Nav yang bersifat fixed.
 
 ---
 
