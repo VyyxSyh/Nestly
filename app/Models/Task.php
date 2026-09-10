@@ -43,24 +43,28 @@ class Task extends Model
 
         $daysLeft = Carbon::now()->diffInDays($this->deadline, false);
 
-        if ($daysLeft <= 10) {
-            return 'high';
+        if ($daysLeft <= 5) {
+            return 'critical';
         }
 
-        if ($daysLeft <= 30) {
-            return 'medium';
+        if ($daysLeft <= 12) {
+            return 'urgent';
         }
 
-        return 'low';
+        if ($daysLeft <= 20) {
+            return 'approaching';
+        }
+
+        return 'safe';
     }
 
     public function getUrgencyColorAttribute(): string
     {
         return match ($this->priority) {
             'done' => 'gray',
-            'overdue' => 'red',
-            'high' => 'orange',
-            'medium' => 'yellow',
+            'overdue', 'critical' => 'red',
+            'urgent' => 'orange',
+            'approaching' => 'yellow',
             default => 'green',
         };
     }

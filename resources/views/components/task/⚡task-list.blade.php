@@ -33,6 +33,8 @@ new class extends Component
             'deadline' => 'required|date',
         ]);
 
+        $validated['subject_id'] = $validated['subject_id'] ?: null;
+
         Task::create($validated);
 
         $this->closeModal();
