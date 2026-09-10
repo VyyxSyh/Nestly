@@ -12,7 +12,6 @@ class Task extends Model
         'title',
         'description',
         'deadline',
-        'status',
         'progress_mode',
         'progress',
     ];
@@ -29,6 +28,19 @@ class Task extends Model
     public function checklistItems()
     {
         return $this->hasMany(TaskChecklistItem::class);
+    }
+
+    public function getStatusAttribute(): string
+    {
+        if ($this->progress >= 100) {
+            return 'completed';
+        }
+
+        if ($this->progress > 0) {
+            return 'in_progress';
+        }
+
+        return 'not_started';
     }
 
     public function getPriorityAttribute(): string
