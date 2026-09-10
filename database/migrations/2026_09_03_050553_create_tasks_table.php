@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->dateTime('deadline');
             $table->string('status')->default('not_started');
-            $table->string('priority')->default('medium');
             $table->string('progress_mode')->default('manual');
             $table->unsignedTinyInteger('progress')->default(0);
             $table->timestamps();
