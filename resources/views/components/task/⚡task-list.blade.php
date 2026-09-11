@@ -16,6 +16,7 @@ new class extends Component
     public $description = '';
     public $deadline = '';
     public $progress_mode = 'manual';
+    public $newChecklistItemTitle = '';
 
     public ?int $confirmingDeleteId = null;
 
@@ -85,8 +86,36 @@ new class extends Component
     {
         $item = TaskChecklistItem::findOrFail($itemId);
         $item->update(['is_done' => ! $item->is_done]);
+        $this->recalculateProgress($item->task_id);
+    }
 
-        $task = $item->task;
+    public function addChecklistItem(int $taskId)
+    {
+        $this->validate([
+            'newChecklistItemTitle' => 'required|string|max:255',
+        ], [], ['newChecklistItemTitle' => 'judul checklist']);
+
+        TaskChecklistItem::create([
+            'task_id' => $taskId,
+            'title' => $this->newChecklistItemTitle,
+            'is_done' => false,
+        ]);
+
+        $this->reset('newChecklistItemTitle');
+        $this->recalculateProgress($taskId);
+    }
+
+    public function deleteChecklistItem(int $itemId)
+    {
+        $item = TaskChecklistItem::findOrFail($itemId);
+        $taskId = $item->task_id;
+        $item->delete();
+        $this->recalculateProgress($taskId);
+    }
+
+    private function recalculateProgress(int $taskId): void
+    {
+        $task = Task::findOrFail($taskId);
         $total = $task->checklistItems()->count();
         $done = $task->checklistItems()->where('is_done', true)->count();
         $newProgress = $total > 0 ? (int) round(($done / $total) * 100 / 5) * 5 : 0;
@@ -202,13 +231,26 @@ new class extends Component
                     @else
                         <div class="space-y-1">
                             @forelse ($task->checklistItems as $item)
-                                <label class="flex items-center gap-2 text-sm">
-                                    <input type="checkbox" wire:click="toggleChecklistItem({{ $item->id }})" @checked($item->is_done)>
-                                    <span class="{{ $item->is_done ? 'line-through text-gray-400' : '' }}">{{ $item->title }}</span>
-                                </label>
+                                <div class="flex items-center justify-between gap-2 text-sm">
+                                    <label class="flex items-center gap-2 flex-1">
+                                        <input type="checkbox" wire:click="toggleChecklistItem({{ $item->id }})" @checked($item->is_done)>
+                                        <span class="{{ $item->is_done ? 'line-through text-gray-400' : '' }}">{{ $item->title }}</span>
+                                    </label>
+                                    <button wire:click="deleteChecklistItem({{ $item->id }})" class="text-red-500 text-xs">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
                             @empty
                                 <p class="text-sm text-gray-400">Belum ada checklist item.</p>
                             @endforelse
+
+                            <form wire:submit="addChecklistItem({{ $task->id }})" class="flex gap-2 mt-2">
+                                <input type="text" wire:model="newChecklistItemTitle" placeholder="Tambah item checklist..."
+                                    class="flex-1 border rounded-md px-2 py-1 text-sm">
+                                <button type="submit" class="px-3 py-1 bg-teal-600 text-white rounded-md text-sm">Tambah</button>
+                            </form>
+                            @error('newChecklistItemTitle') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+
                             <div class="text-sm text-gray-500 mt-1">Progress: {{ $task->progress }}%</div>
                         </div>
                     @endif
