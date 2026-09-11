@@ -118,7 +118,7 @@ new class extends Component
         $task = Task::findOrFail($taskId);
         $total = $task->checklistItems()->count();
         $done = $task->checklistItems()->where('is_done', true)->count();
-        $newProgress = $total > 0 ? (int) round(($done / $total) * 100 / 5) * 5 : 0;
+        $newProgress = $total > 0 ? (int) round(($done / $total) * 100) : 0;
 
         $task->update(['progress' => $newProgress]);
     }
@@ -231,26 +231,13 @@ new class extends Component
                     @else
                         <div class="space-y-1">
                             @forelse ($task->checklistItems as $item)
-                                <div class="flex items-center justify-between gap-2 text-sm">
-                                    <label class="flex items-center gap-2 flex-1">
-                                        <input type="checkbox" wire:click="toggleChecklistItem({{ $item->id }})" @checked($item->is_done)>
-                                        <span class="{{ $item->is_done ? 'line-through text-gray-400' : '' }}">{{ $item->title }}</span>
-                                    </label>
-                                    <button wire:click="deleteChecklistItem({{ $item->id }})" class="text-red-500 text-xs">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </div>
+                                <label class="flex items-center gap-2 text-sm">
+                                    <input type="checkbox" wire:click="toggleChecklistItem({{ $item->id }})" @checked($item->is_done)>
+                                    <span class="{{ $item->is_done ? 'line-through text-gray-400' : '' }}">{{ $item->title }}</span>
+                                </label>
                             @empty
-                                <p class="text-sm text-gray-400">Belum ada checklist item.</p>
+                                <p class="text-sm text-gray-400">Belum ada checklist item. Klik Edit untuk menambahkan.</p>
                             @endforelse
-
-                            <form wire:submit="addChecklistItem({{ $task->id }})" class="flex gap-2 mt-2">
-                                <input type="text" wire:model="newChecklistItemTitle" placeholder="Tambah item checklist..."
-                                    class="flex-1 border rounded-md px-2 py-1 text-sm">
-                                <button type="submit" class="px-3 py-1 bg-teal-600 text-white rounded-md text-sm">Tambah</button>
-                            </form>
-                            @error('newChecklistItemTitle') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-
                             <div class="text-sm text-gray-500 mt-1">Progress: {{ $task->progress }}%</div>
                         </div>
                     @endif
@@ -313,6 +300,33 @@ new class extends Component
                             <option value="checklist">Checklist (otomatis dari sub-tugas)</option>
                         </select>
                     </div>
+
+                    @if ($isEditing && $progress_mode === 'checklist')
+                        <div class="border-t pt-3 mt-1">
+                            <label class="block text-sm mb-2 font-medium">Checklist Item</label>
+
+                            <div class="space-y-1 mb-2">
+                                @foreach (\App\Models\TaskChecklistItem::where('task_id', $editingTaskId)->get() as $item)
+                                    <div class="flex items-center justify-between text-sm">
+                                        <span>{{ $item->title }}</span>
+                                        <button type="button" wire:click="deleteChecklistItem({{ $item->id }})" class="text-red-500 text-xs">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <div class="flex gap-2">
+                                <input type="text" wire:model="newChecklistItemTitle" placeholder="Tambah item checklist..."
+                                    class="flex-1 border rounded-md px-2 py-1 text-sm">
+                                <button type="button" wire:click="addChecklistItem({{ $editingTaskId }})"
+                                        class="px-3 py-1 bg-teal-600 text-white rounded-md text-sm">
+                                    Tambah
+                                </button>
+                            </div>
+                            @error('newChecklistItemTitle') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+                    @endif
 
                     <div class="flex justify-end gap-2 pt-2">
                         <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border">Batal</button>
