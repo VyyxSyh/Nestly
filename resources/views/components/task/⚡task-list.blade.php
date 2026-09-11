@@ -18,11 +18,14 @@ new class extends Component
     public $progress_mode = 'manual';
     public $newChecklistItemTitle = '';
 
+    public array $pendingNewItems = [];
+    public array $pendingDeleteIds = [];
+
     public ?int $confirmingDeleteId = null;
 
     public function openCreateModal()
     {
-        $this->reset(['subject_id', 'title', 'description', 'deadline', 'editingTaskId']);
+        $this->reset(['subject_id', 'title', 'description', 'deadline', 'editingTaskId', 'pendingNewItems', 'pendingDeleteIds', 'newChecklistItemTitle']);
         $this->progress_mode = 'manual';
         $this->isEditing = false;
         $this->showModal = true;
@@ -38,6 +41,9 @@ new class extends Component
         $this->description = $task->description;
         $this->deadline = $task->deadline->format('Y-m-d\TH:i');
         $this->progress_mode = $task->progress_mode;
+        $this->pendingNewItems = [];
+        $this->pendingDeleteIds = [];
+        $this->newChecklistItemTitle = '';
         $this->isEditing = true;
         $this->showModal = true;
     }
@@ -47,6 +53,37 @@ new class extends Component
         $this->showModal = false;
         $this->isEditing = false;
         $this->editingTaskId = null;
+        $this->pendingNewItems = [];
+        $this->pendingDeleteIds = [];
+        $this->newChecklistItemTitle = '';
+    }
+
+    public function stageNewChecklistItem()
+    {
+        $this->validate([
+            'newChecklistItemTitle' => 'required|string|max:255',
+        ], [], ['newChecklistItemTitle' => 'judul checklist']);
+
+        $this->pendingNewItems[] = $this->newChecklistItemTitle;
+        $this->reset('newChecklistItemTitle');
+    }
+
+    public function unstageNewChecklistItem(int $index)
+    {
+        unset($this->pendingNewItems[$index]);
+        $this->pendingNewItems = array_values($this->pendingNewItems);
+    }
+
+    public function stageDeleteExistingItem(int $itemId)
+    {
+        if (! in_array($itemId, $this->pendingDeleteIds)) {
+            $this->pendingDeleteIds[] = $itemId;
+        }
+    }
+
+    public function unstageDeleteExistingItem(int $itemId)
+    {
+        $this->pendingDeleteIds = array_values(array_diff($this->pendingDeleteIds, [$itemId]));
     }
 
     public function save()
@@ -62,11 +99,25 @@ new class extends Component
         $validated['subject_id'] = $validated['subject_id'] ?: null;
 
         if ($this->isEditing && $this->editingTaskId) {
-            Task::findOrFail($this->editingTaskId)->update($validated);
+            $task = Task::findOrFail($this->editingTaskId);
+            $task->update($validated);
         } else {
-            Task::create($validated);
+            $task = Task::create($validated);
         }
 
+        if (! empty($this->pendingDeleteIds)) {
+            TaskChecklistItem::whereIn('id', $this->pendingDeleteIds)->delete();
+        }
+
+        foreach ($this->pendingNewItems as $itemTitle) {
+            TaskChecklistItem::create([
+                'task_id' => $task->id,
+                'title' => $itemTitle,
+                'is_done' => false,
+            ]);
+        }
+
+        $this->recalculateProgress($task->id);
         $this->closeModal();
     }
 
@@ -87,30 +138,6 @@ new class extends Component
         $item = TaskChecklistItem::findOrFail($itemId);
         $item->update(['is_done' => ! $item->is_done]);
         $this->recalculateProgress($item->task_id);
-    }
-
-    public function addChecklistItem(int $taskId)
-    {
-        $this->validate([
-            'newChecklistItemTitle' => 'required|string|max:255',
-        ], [], ['newChecklistItemTitle' => 'judul checklist']);
-
-        TaskChecklistItem::create([
-            'task_id' => $taskId,
-            'title' => $this->newChecklistItemTitle,
-            'is_done' => false,
-        ]);
-
-        $this->reset('newChecklistItemTitle');
-        $this->recalculateProgress($taskId);
-    }
-
-    public function deleteChecklistItem(int $itemId)
-    {
-        $item = TaskChecklistItem::findOrFail($itemId);
-        $taskId = $item->task_id;
-        $item->delete();
-        $this->recalculateProgress($taskId);
     }
 
     private function recalculateProgress(int $taskId): void
@@ -144,6 +171,9 @@ new class extends Component
         return [
             'tasks' => Task::with(['subject', 'checklistItems'])->latest()->get(),
             'subjects' => Subject::all(),
+            'editingTaskExistingItems' => $this->isEditing && $this->editingTaskId
+                ? TaskChecklistItem::where('task_id', $this->editingTaskId)->get()
+                : collect(),
         ];
     }
 };
@@ -301,15 +331,40 @@ new class extends Component
                         </select>
                     </div>
 
-                    @if ($isEditing && $progress_mode === 'checklist')
+                    @if ($progress_mode === 'checklist')
                         <div class="border-t pt-3 mt-1">
                             <label class="block text-sm mb-2 font-medium">Checklist Item</label>
 
                             <div class="space-y-1 mb-2">
-                                @foreach (\App\Models\TaskChecklistItem::where('task_id', $editingTaskId)->get() as $item)
-                                    <div class="flex items-center justify-between text-sm">
-                                        <span>{{ $item->title }}</span>
-                                        <button type="button" wire:click="deleteChecklistItem({{ $item->id }})" class="text-red-500 text-xs">
+                                {{-- item yang sudah ada di database (kalau sedang edit) --}}
+                                @foreach ($editingTaskExistingItems as $item)
+                                    @if (! in_array($item->id, $pendingDeleteIds))
+                                        <div class="flex items-center justify-between text-sm">
+                                            <span>{{ $item->title }}</span>
+                                            <button type="button" wire:click="stageDeleteExistingItem({{ $item->id }})" class="text-red-500 text-xs">
+                                                <i class="fa-solid fa-xmark"></i>
+                                            </button>
+                                        </div>
+                                    @endif
+                                @endforeach
+
+                                {{-- item ditandai untuk dihapus (bisa dibatalkan) --}}
+                                @foreach ($editingTaskExistingItems as $item)
+                                    @if (in_array($item->id, $pendingDeleteIds))
+                                        <div class="flex items-center justify-between text-sm text-gray-400">
+                                            <span class="line-through">{{ $item->title }} (akan dihapus)</span>
+                                            <button type="button" wire:click="unstageDeleteExistingItem({{ $item->id }})" class="text-blue-500 text-xs">
+                                                Batal
+                                            </button>
+                                        </div>
+                                    @endif
+                                @endforeach
+
+                                {{-- item baru yang belum disimpan --}}
+                                @foreach ($pendingNewItems as $index => $itemTitle)
+                                    <div class="flex items-center justify-between text-sm text-teal-700">
+                                        <span>{{ $itemTitle }} <span class="text-xs">(baru)</span></span>
+                                        <button type="button" wire:click="unstageNewChecklistItem({{ $index }})" class="text-red-500 text-xs">
                                             <i class="fa-solid fa-xmark"></i>
                                         </button>
                                     </div>
@@ -319,12 +374,13 @@ new class extends Component
                             <div class="flex gap-2">
                                 <input type="text" wire:model="newChecklistItemTitle" placeholder="Tambah item checklist..."
                                     class="flex-1 border rounded-md px-2 py-1 text-sm">
-                                <button type="button" wire:click="addChecklistItem({{ $editingTaskId }})"
+                                <button type="button" wire:click="stageNewChecklistItem"
                                         class="px-3 py-1 bg-teal-600 text-white rounded-md text-sm">
                                     Tambah
                                 </button>
                             </div>
                             @error('newChecklistItemTitle') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <p class="text-xs text-gray-400 mt-1">Perubahan checklist baru tersimpan permanen setelah klik "Simpan".</p>
                         </div>
                     @endif
 

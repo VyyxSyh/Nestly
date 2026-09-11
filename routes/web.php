@@ -9,3 +9,7 @@ Route::get('/', function () {
 Route::get('/tasks', function () {
     return view('tasks-page');
 })->name('tasks');
+
+Route::get('/schedules', function () {
+    return view('schedules-page');
+})->name('schedules');
