@@ -13,3 +13,7 @@ Route::get('/tasks', function () {
 Route::get('/schedules', function () {
     return view('schedules-page');
 })->name('schedules');
+
+Route::get('/subjects', function () {
+    return view('subjects-page');
+})->name('subjects');
