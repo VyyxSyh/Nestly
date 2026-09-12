@@ -11,8 +11,7 @@ class Subject extends Model
         return $this->hasMany(Task::class);
     }
 
-    // di pakenya ntar 
-    // public function schedules() {
-    //     return $this->hasMany(Schedule::class);
-    // }
+    public function schedules() {
+        return $this->hasMany(Schedule::class);
+    }
 }
