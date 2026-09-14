@@ -17,3 +17,7 @@ Route::get('/schedules', function () {
 Route::get('/subjects', function () {
     return view('subjects-page');
 })->name('subjects');
+
+Route::get('/finance', function () {
+    return view('finance-page');
+})->name('finance');

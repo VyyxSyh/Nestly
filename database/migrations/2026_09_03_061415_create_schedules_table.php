@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->string('room')->nullable();
-            $table->string('lecture')->nullable();
+            $table->string('lecturer')->nullable();
             $table->string('accent_color');
             $table->timestamps();
         });
