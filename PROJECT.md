@@ -113,13 +113,26 @@ Overall Progress
 
 ---
 
-### 4.4 Schedule
+### 4.4 Subjects (Mata Kuliah/Mata Pelajaran)
+
+Pengguna dapat mengelola data mata kuliah sebagai **data referensi**, terpisah dari halaman Schedule.
+
+Fitur:
+
+* Menambahkan mata kuliah baru (nama mata kuliah).
+* Melihat, mengedit, dan menghapus data mata kuliah.
+
+Data mata kuliah menjadi referensi (relasi) yang dipakai di **Task** dan **Schedule** — dipilih lewat dropdown, bukan diketik ulang manual tiap kali. Halaman ini sengaja dipisah dari Schedule karena sifatnya beda: Subjects adalah data yang jarang diubah (diisi sekali di awal semester), sementara Schedule adalah halaman operasional yang sering dicek sehari-hari.
+
+---
+
+### 4.5 Schedule
 
 Pengguna dapat melihat jadwal perkuliahan atau aktivitas belajar.
 
 Informasi dapat mencakup:
 
-* Nama mata kuliah.
+* Mata kuliah (relasi ke Subjects).
 * Hari.
 * Waktu.
 * Ruangan.
@@ -127,7 +140,7 @@ Informasi dapat mencakup:
 
 ---
 
-### 4.5 Deadline Tracking
+### 4.6 Deadline Tracking
 
 Dashboard dapat menampilkan tugas berdasarkan deadline dan tingkat urgensinya.
 
@@ -149,7 +162,7 @@ Tujuannya agar pengguna dapat mengetahui tugas mana yang perlu diprioritaskan ha
 
 ---
 
-### 4.6 Finance Tracker
+### 4.7 Finance Tracker
 
 Dashboard menyediakan fitur pencatatan keuangan pribadi mahasiswa untuk membantu mengontrol pengeluaran bulanan.
 
@@ -176,7 +189,7 @@ Update saldo dan indikator budget dilakukan secara real-time menggunakan Livewir
 
 ---
 
-### 4.7 Search, Filter & Sorting
+### 4.8 Search, Filter & Sorting
 
 Pengguna dapat mencari dan mengatur daftar tugas.
 
@@ -196,7 +209,7 @@ Contoh sorting:
 
 ---
 
-### 4.8 Theme
+### 4.9 Theme
 
 Website mendukung:
 
@@ -207,12 +220,13 @@ Preferensi theme dapat disimpan sehingga pilihan pengguna tetap digunakan ketika
 
 ---
 
-### 4.9 Navigation
+### 4.10 Navigation
 
 Nestly menggunakan pendekatan navigasi yang tidak konvensional untuk web — menempatkan menu navigasi utama di **bagian bawah layar (Bottom Nav)**, alih-alih navbar konvensional di atas. Pendekatan ini dipilih sebagai eksplorasi desain personal, terinspirasi dari pola navigasi aplikasi mobile native.
 
 Garis besar konsepnya:
 
+* Menu navigasi: `Home`, `Task`, `Schedule`, `Subjects`, `Finance`.
 * **Bottom Nav** tampil konsisten di seluruh halaman, dengan isi dan perilaku yang berbeda antar breakpoint (Desktop, Tablet, Mobile) — termasuk animasi transisi icon saat berpindah menu.
 * Pada **Mobile**, terdapat tambahan **Top Bar** (sticky, transparan-lalu-muncul-background saat di-scroll) sebagai tempat logo dan toggle Light/Dark, karena Bottom Nav di Mobile berbentuk icon-only tanpa ruang untuk elemen tersebut.
 
@@ -352,6 +366,7 @@ Rencana deployment ke hosting/cloud dapat dipertimbangkan pada tahap pengembanga
 * Task management.
 * Progress tracking.
 * Deadline management.
+* Subjects (data referensi mata kuliah/mata pelajaran).
 * Schedule.
 * Finance tracker.
 * Search, filter & sorting.
