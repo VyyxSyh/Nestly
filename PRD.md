@@ -216,7 +216,7 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
   **Desktop & Tablet** — layout terbagi jadi 3 section:
   - **Section kiri:** Logo Nestly + teks "Nestly".
   - **Section tengah:** Menu navigasi (`Home`, `Task`, `Schedule`, `Finance`).
-  - **Section kanan:** Icon akun/login (icon orang).
+  - **Section kanan:** Icon akun/login (icon orang) **+ Toggle switch Light/Dark Mode**, ditampilkan berdampingan.
   - Tablet mengikuti layout yang sama persis seperti Desktop, hanya dengan ukuran elemen yang diperkecil (scaled down).
   - **Perilaku menu aktif:** Setiap item menu defaultnya hanya menampilkan **label teks**. Saat sebuah menu menjadi aktif (halaman sedang dibuka):
     - Sebuah **icon muncul dari belakang label**, bergeser ke posisi **sebelah kiri label** (slide-in dari arah kanan/belakang teks ke kiri).
@@ -224,16 +224,29 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
     - Menu yang aktif juga dibedakan lewat **warna border** dan **warna label + icon** (menggunakan token warna `Primary` dari Color System).
 
   **Mobile** — layout lebih ringkas, kebalikan dari perilaku Desktop/Tablet:
-  - Logo dan teks "Nestly" **tidak ditampilkan** di dalam Bottom Nav.
   - Isi menu: `Home`, `Task`, `Schedule`, `Finance`, `Account` — seluruhnya dalam bentuk **icon saja** secara default (tanpa label).
   - **Perilaku menu aktif:** kebalikan dari Desktop/Tablet — icon selalu tampil, dan **label baru muncul saat menu tersebut aktif** (icon lain tetap icon-only, hanya menu aktif yang melebar menampilkan label di sebelah iconnya).
-  - **Logo Nestly terpisah** ditampilkan mengambang di **pojok kiri atas layar**, dengan efek **blur/frosted-glass** di area sekitarnya (backdrop blur), independen dari Bottom Nav.
+  - Logo Nestly **tidak ditampilkan** di Bottom Nav pada Mobile — sudah ditangani oleh **Top Bar** (lihat komponen di bawah) yang tampil konsisten di semua breakpoint termasuk Mobile.
 
   Referensi visual perilaku "icon-only default, melebar dengan label saat aktif" mengikuti pola floating pill navigation seperti pada aplikasi mobile modern (icon-only nav yang salah satu itemnya melebar menampilkan label saat dipilih).
 
   **Badge/notifikasi:** Icon menu `Task` menampilkan badge angka (misal jumlah tugas overdue/due today), baik di tampilan Desktop, Tablet, maupun Mobile. Badge tetap muncul terlepas dari status aktif/tidaknya menu tersebut.
 
-- **Theme Toggle** — switch Light/Dark mode, ditempatkan di bagian atas halaman (terpisah dari Bottom Nav).
+- **Theme Toggle (Light/Dark Mode)** — button toggle switch untuk beralih Light/Dark mode. Posisinya berbeda antar breakpoint:
+  - **Desktop & Tablet:** berada di section kanan Bottom Nav, berdampingan dengan icon akun.
+  - **Mobile:** berada di Top Bar (lihat komponen di bawah), karena Bottom Nav Mobile berbentuk icon-only tanpa ruang untuk toggle.
+
+- **Top Bar** — komponen navigasi tambahan di bagian atas layar, **khusus tampil pada breakpoint Mobile** (karena Bottom Nav di Mobile berupa icon-only tanpa slot logo). Pada Desktop & Tablet, Top Bar ini **tidak digunakan** — logo tetap berada di section kiri Bottom Nav (lihat spesifikasi Desktop & Tablet di atas).
+  - **Posisi:** `position: sticky` di bagian atas (top), menempel terus saat halaman di-scroll.
+  - **Isi:** 2 elemen saja —
+    - **Kiri:** Logo Nestly + teks "Nestly".
+    - **Kanan:** Toggle switch Light/Dark Mode (tanpa hamburger menu).
+  - **Shape:** hanya sudut **bottom-left dan bottom-right** yang diberi border-radius; bagian atas rata/menyatu dengan tepi layar (tidak ada radius di top-left & top-right), sehingga terkesan menyambung dengan browser/viewport.
+  - **Perilaku animasi saat scroll:**
+    - **State awal (belum di-scroll / di posisi paling atas halaman):** Top Bar tampil **transparan, tanpa background** — logo dan toggle terlihat mengambang langsung di atas konten halaman.
+    - **Setelah halaman di-scroll (user mulai scroll ke bawah):** Top Bar mendapatkan **background** (solid/blur sesuai token Color System), muncul dengan animasi transisi halus (fade/slide), memberi kesan "muncul" saat dibutuhkan agar tetap terbaca di atas konten yang sedang di-scroll.
+
+- **Accent Color Selector** — pemilihan tema warna (**Pink** default, serta **Blue** dan **Monochrome** pada Phase 2) ditempatkan di halaman **Pengaturan/Settings**, terpisah dari Theme Toggle Light/Dark di atas. Accent color bersifat "diatur sekali, jarang diubah", sehingga tidak perlu akses secepat toggle Light/Dark mode.
 - **Task Card** — menampilkan judul tugas, progress bar, status, dan indikator warna urgensi.
 - **Progress Bar** — representasi visual progress (persentase) per tugas dan progress keseluruhan.
 - **Dashboard Summary Widget** — kartu ringkasan statistik (total tugas, status, deadline terdekat, ringkasan keuangan).
@@ -246,12 +259,13 @@ Referensi warna lengkap (hex code untuk Light & Dark mode, serta accent color un
 ### 8.5 Layout & Responsiveness
 
 - Layout adaptif untuk 3 breakpoint utama: **Mobile**, **Tablet**, **Desktop**.
+- **Top Bar** (lihat 8.4) hanya muncul pada **Mobile** — `sticky` di atas, transparan di awal lalu memunculkan background saat halaman di-scroll. Berisi logo+teks (kiri) dan toggle Light/Dark (kanan).
 - **Navigation Bar** (lihat 8.4) tetap berada di **bottom** pada seluruh breakpoint, namun kontennya berubah:
-  - **Desktop:** 3-section layout penuh (logo+teks | menu | icon akun), menu default menampilkan label, icon muncul dengan animasi saat aktif.
+  - **Desktop:** 3-section layout penuh (logo+teks | menu | icon akun + toggle Light/Dark), menu default menampilkan label, icon muncul dengan animasi saat aktif.
   - **Tablet:** identik dengan Desktop, ukuran elemen diperkecil (scaled down).
-  - **Mobile:** hanya icon-only nav (`Home`, `Task`, `Schedule`, `Finance`, `Account`), tanpa logo/teks; label baru muncul saat menu aktif. Logo Nestly ditampilkan terpisah, mengambang di pojok kiri atas dengan efek blur di sekitarnya.
+  - **Mobile:** hanya icon-only nav (`Home`, `Task`, `Schedule`, `Finance`, `Account`), tanpa logo/teks dan tanpa toggle Light/Dark; label baru muncul saat menu aktif. Logo dan toggle Light/Dark sudah ditangani oleh Top Bar (khusus Mobile).
 - Dashboard sebagai halaman utama (landing) setelah aplikasi dibuka.
-- Konten utama halaman (Task List, Schedule, Finance) perlu diberi padding/margin bawah yang cukup agar tidak tertutup oleh Bottom Nav yang bersifat fixed.
+- Konten utama halaman (Task List, Schedule, Finance) perlu diberi padding/margin atas & bawah yang cukup agar tidak tertutup oleh Top Bar maupun Bottom Nav yang bersifat fixed/sticky.
 
 ---
 
