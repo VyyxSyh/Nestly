@@ -211,7 +211,7 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
 
 ### 8.4 Komponen Utama
 
-- **Navigation Bar (Bottom Nav)** — komponen navigasi utama, posisi **fixed di bagian bawah layar** di semua ukuran device.
+- **Navigation Bar (Bottom Nav)** — komponen navigasi utama, tampil **konsisten di seluruh halaman aplikasi** (Dashboard, Task, Schedule, Finance, Settings, dll), posisi **fixed di bagian bawah layar** di semua ukuran device.
 
   **Desktop & Tablet** — layout terbagi jadi 3 section:
   - **Section kiri:** Logo Nestly + teks "Nestly".
@@ -266,6 +266,36 @@ Referensi warna lengkap (hex code untuk Light & Dark mode, serta accent color un
   - **Mobile:** hanya icon-only nav (`Home`, `Task`, `Schedule`, `Finance`, `Account`), tanpa logo/teks dan tanpa toggle Light/Dark; label baru muncul saat menu aktif. Logo dan toggle Light/Dark sudah ditangani oleh Top Bar (khusus Mobile).
 - Dashboard sebagai halaman utama (landing) setelah aplikasi dibuka.
 - Konten utama halaman (Task List, Schedule, Finance) perlu diberi padding/margin atas & bawah yang cukup agar tidak tertutup oleh Top Bar maupun Bottom Nav yang bersifat fixed/sticky.
+
+### 8.6 Dashboard Page Layout
+
+Dashboard menggunakan pendekatan **card grid**, disusun dengan prioritas visual: **Jadwal** ditempatkan paling atas sebagai section pertama yang terlihat, diikuti section lain di bawahnya.
+
+**Row 1 — Jadwal & Ringkasan Cepat (prioritas utama)**
+
+- **Desktop:**
+  - Section **Jadwal** menampati **5/6 lebar row**, berisi **4 card jadwal sejajar dalam 1 baris** (card bertambah ke arah kanan).
+  - Sisa **1/6 lebar row**: **1 card ringkasan super singkat**, berisi:
+    - Jumlah tugas yang belum selesai (belum `Completed`).
+    - Persentase budget yang sudah terpakai bulan ini.
+- **Tablet & Mobile:**
+  - 4 card jadwal disusun ulang menjadi **grid 2×2** (2 card per baris, 2 baris).
+  - Card ringkasan singkat (tugas belum selesai + persentase budget) ditampilkan di **bawah grid jadwal**, full-width.
+
+**Row 2 — List Tugas Terdekat Deadline**
+
+- Menampilkan tugas yang deadline-nya paling mendekat, maksimal **3–5 item**.
+- Setiap item hanya menampilkan: **nama tugas**, **aksen warna dari mata kuliah terkait**, dan **deadline**.
+- Ditampilkan ringkas (tanpa progress bar/detail lain) — cukup untuk sekilas info, detail lengkap dilihat di halaman Task.
+
+**Row 3 — List Transaksi Finance Terbaru**
+
+- Menampilkan **3–5 transaksi terakhir**, dengan syarat: **hanya transaksi dari bulan berjalan (bulan ini)**.
+- Sistem perlu mengecek dulu apakah ada transaksi di bulan berjalan:
+  - Jika ada → tampilkan 3–5 transaksi terbaru bulan ini.
+  - Jika tidak ada transaksi sama sekali di bulan ini → tampilkan **empty state** dengan pesan informatif (misal: "Belum ada transaksi bulan ini"), bukan area kosong tanpa keterangan.
+
+> Catatan: Row 2 dan Row 3 disusun dengan pendekatan tipografi & spacing yang rapi (bukan sekadar list polos), agar tetap terasa "aesthetic" konsisten dengan Row 1 yang berbentuk card. Detail visual (spacing, radius, tipografi) mengacu pada token di `PROJECT.md`.
 
 ---
 
