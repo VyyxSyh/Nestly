@@ -123,6 +123,15 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-9.1 Seluruh data (task, progress, deadline, status, schedule, data keuangan, theme, pengaturan pengguna) disimpan di database MySQL melalui Laravel.
 - FR-9.2 Data tetap tersedia secara permanen selama tidak dihapus langsung dari database, tidak bergantung pada browser/perangkat yang digunakan untuk mengakses.
 
+### FR-10 — Navigation
+- FR-10.1 Sistem menampilkan Bottom Nav secara konsisten di seluruh halaman aplikasi (Dashboard, Task, Schedule, Finance, Settings).
+- FR-10.2 Pada Desktop & Tablet, Bottom Nav menampilkan 3 section: logo+teks (kiri), menu navigasi berlabel (tengah), icon akun + toggle Light/Dark (kanan).
+- FR-10.3 Pada Desktop & Tablet, item menu yang aktif menampilkan icon dengan animasi slide-in dari belakang label (dan slide-out saat berpindah halaman), disertai perubahan warna border dan warna label/icon.
+- FR-10.4 Pada Mobile, Bottom Nav menampilkan menu dalam bentuk icon-only, dengan label yang hanya muncul saat menu tersebut aktif.
+- FR-10.5 Pada Mobile, sistem menampilkan Top Bar terpisah (sticky di atas) berisi logo+teks (kiri) dan toggle Light/Dark (kanan).
+- FR-10.6 Top Bar pada Mobile tampil transparan saat halaman berada di posisi paling atas, dan menampilkan background dengan animasi transisi saat halaman di-scroll.
+- FR-10.7 Icon menu Task menampilkan badge notifikasi berupa angka (misal jumlah tugas overdue/due today), pada seluruh breakpoint.
+
 ---
 
 ## 5. Non-Functional Requirements
@@ -189,6 +198,7 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 | 8 | Theme (Light/Dark) | Toggle tema + preferensi tersimpan | Should Have |
 | 9 | Data Persistence | Simpan semua data ke database MySQL | Must Have |
 | 10 | Responsive Design | Optimal di Mobile, Tablet, Desktop | Must Have |
+| 11 | Navigation | Bottom Nav (semua device) + Top Bar khusus Mobile, dengan animasi & badge notifikasi | Must Have |
 
 ---
 
