@@ -13,7 +13,7 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Setup database MySQL via Laragon
 - [x] Buat koneksi database di `.env` & test koneksi
 - [x] Setup HeidiSQL untuk akses & inspeksi database
-- [x] Rancang skema database awal (tabel: tasks, mata_kuliah/subjects, schedules, finance_records, budgets)
+- [x] Rancang skema database awal (tabel: tasks, mata_kuliah/subjects, schedules, finance_records, budgets, user_settings/preferensi Greeting & Profil)
 - [x] Setup struktur folder project (Livewire components, views, routes)
 - [x] Setup Git repository & `.gitignore`
 
@@ -37,12 +37,33 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 
 ## 🏠 Dashboard
 - [ ] Layout halaman utama (Dashboard) sebagai route utama
-- [ ] Livewire component: widget total tugas
-- [ ] Widget breakdown status (Not Started / In Progress / Completed)
-- [ ] Widget progress keseluruhan (agregat semua tugas, query dari database)
-- [ ] Widget deadline terdekat
-- [ ] Widget ringkasan keuangan bulan berjalan (income, expense, sisa saldo)
-- [ ] Responsive layout untuk dashboard widgets
+- [ ] Setup CSS Grid 6 kolom × 4 baris (gap 10px) untuk Desktop, sesuai spesifikasi PRD.md 8.6
+- [ ] Livewire component: section Jadwal (kolom 1-5, baris 1) — 4 card jadwal sejajar
+- [ ] Livewire component: section Ringkasan Singkat (kolom 6, baris 1) — jumlah tugas belum selesai + % budget terpakai
+- [ ] Livewire component: section List Tugas Terdekat Deadline (kolom 1-2, baris 2-4) — nama, aksen warna mata kuliah, deadline (3-5 item)
+- [ ] Livewire component: section List Transaksi Finance (kolom 3-4, baris 2-4) — 3-5 transaksi bulan berjalan
+- [ ] Empty state untuk List Transaksi Finance jika belum ada transaksi bulan ini
+- [ ] Livewire component: section Profil (kolom 5-6, baris 3-4) — foto profil (lingkaran), nama, kelas
+- [ ] Livewire component: section Greeting (kolom 5-6, baris 2) — format "[Kata Sapaan], [Nama Panggilan]!"
+- [ ] Fitur edit Kata Sapaan (dropdown/select: Hai, Hii, Halo, Alloww, Heyy, dll) + tombol edit di kanan section Greeting
+- [ ] Fitur edit Nama Panggilan, tersimpan ke database
+- [ ] Migration & model untuk menyimpan preferensi Greeting (Kata Sapaan + Nama Panggilan) per pengguna
+- [ ] Responsive: Tablet — scale down grid 6x4 tanpa ubah susunan
+- [ ] Responsive: Mobile — restrukturisasi jadi 1 kolom vertikal (urutan: Greeting+Profil → Jadwal → Ringkasan → List Tugas → List Transaksi)
+
+## 🧭 Navigation
+- [ ] Livewire/Blade component: Bottom Nav (tampil di semua halaman)
+- [ ] Desktop & Tablet — 3 section: logo+teks (kiri), menu label Home/Task/Schedule/Finance (tengah), icon akun + toggle Light/Dark (kanan)
+- [ ] Animasi icon slide-in dari belakang label saat menu aktif (dan slide-out saat pindah halaman)
+- [ ] Styling border & warna berbeda untuk menu yang sedang aktif (pakai token Primary)
+- [ ] Tablet — scaled down version dari layout Desktop
+- [ ] Mobile — Bottom Nav icon-only (Home, Task, Schedule, Finance, Account), label muncul saat menu aktif
+- [ ] Badge notifikasi (angka) di icon Task — semua breakpoint
+- [ ] Mobile — Top Bar terpisah: logo+teks (kiri), toggle Light/Dark (kanan)
+- [ ] Top Bar `position: sticky`, border-radius hanya di bottom-left & bottom-right
+- [ ] Animasi Top Bar: transparan di posisi awal, muncul background saat halaman di-scroll
+- [ ] Routing/state management untuk menandai menu mana yang sedang aktif
+- [ ] Pastikan konten halaman punya padding cukup agar tidak tertutup Bottom Nav/Top Bar (fixed/sticky)
 
 ## 🗓️ Schedule
 - [ ] Migration tabel `schedules` (mata_kuliah_id, hari, jam_mulai, jam_selesai, ruangan, dosen, accent_color)
