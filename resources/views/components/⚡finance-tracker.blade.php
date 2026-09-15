@@ -120,14 +120,17 @@ new class extends Component
 
     public function with(): array
     {
-        $records = FinanceRecord::whereMonth('date', now()->month)
+        $currentMonthRecords = FinanceRecord::whereMonth('date', now()->month)
             ->whereYear('date', now()->year)
-            ->orderByDesc('date')
             ->get();
 
-        $totalIncome = $records->where('type', 'income')->sum('amount');
-        $totalExpense = $records->where('type', 'expense')->sum('amount');
+        $totalIncome = $currentMonthRecords->where('type', 'income')->sum('amount');
+        $totalExpense = $currentMonthRecords->where('type', 'expense')->sum('amount');
         $netBalance = $totalIncome - $totalExpense;
+
+        $groupedRecords = FinanceRecord::orderByDesc('date')
+            ->get()
+            ->groupBy(fn ($record) => $record->date->format('F Y'));
 
         $currentMonthBudget = Budget::where('month', now()->month)->where('year', now()->year)->first();
         $effectiveBudget = $this->getEffectiveBudget();
@@ -137,7 +140,7 @@ new class extends Component
         $percentUsed = $budgetAmount > 0 ? min(100, round(($totalExpense / $budgetAmount) * 100)) : 0;
 
         return [
-            'records' => $records,
+            'groupedRecords' => $groupedRecords,
             'totalIncome' => $totalIncome,
             'totalExpense' => $totalExpense,
             'netBalance' => $netBalance,
@@ -224,43 +227,53 @@ new class extends Component
         <p class="text-sm text-gray-400 mb-4">Belum ada budget. Klik "Atur Budget" untuk menentukan.</p>
     @endif
 
-    {{-- Records list --}}
-    <div class="space-y-2">
-        @forelse ($records as $record)
-            <div class="border rounded-md p-3 flex justify-between items-center">
-                <div>
-                    <div class="font-medium">
-                        {{ $record->category }}
-                        <span class="text-xs px-2 py-0.5 rounded-full {{ $record->type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                            {{ $record->type === 'income' ? 'Pemasukan' : 'Pengeluaran' }}
-                        </span>
-                    </div>
-                    <div class="text-sm text-gray-500">{{ $record->date->format('d M Y') }} @if($record->note) — {{ $record->note }} @endif</div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span class="font-medium {{ $record->type === 'income' ? 'text-green-600' : 'text-red-600' }}">
-                        Rp{{ number_format($record->amount, 0, ',', '.') }}
-                    </span>
-                    <button wire:click="openEditRecordModal({{ $record->id }})" class="text-blue-600">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button wire:click="confirmDelete({{ $record->id }})" class="text-red-600">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
+    {{-- Records list, grouped by month --}}
+    <div class="space-y-6">
+        @forelse ($groupedRecords as $monthLabel => $monthRecords)
+            <div>
+                <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide border-b pb-1 mb-2">
+                    {{ $monthLabel }}
+                </h2>
+
+                <div class="space-y-2">
+                    @foreach ($monthRecords as $record)
+                        <div class="border rounded-md p-3 flex justify-between items-center">
+                            <div>
+                                <div class="font-medium">
+                                    {{ $record->category }}
+                                    <span class="text-xs px-2 py-0.5 rounded-full {{ $record->type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                        {{ $record->type === 'income' ? 'Pemasukan' : 'Pengeluaran' }}
+                                    </span>
+                                </div>
+                                <div class="text-sm text-gray-500">{{ $record->date->format('d M Y') }} @if($record->note) — {{ $record->note }} @endif</div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="font-medium {{ $record->type === 'income' ? 'text-green-600' : 'text-red-600' }}">
+                                    Rp{{ number_format($record->amount, 0, ',', '.') }}
+                                </span>
+                                <button wire:click="openEditRecordModal({{ $record->id }})" class="text-blue-600">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button wire:click="confirmDelete({{ $record->id }})" class="text-red-600">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        @if ($confirmingDeleteId === $record->id)
+                            <div class="bg-red-50 border border-red-200 rounded-md p-3 flex justify-between items-center -mt-1">
+                                <span class="text-sm text-red-700">Yakin hapus transaksi ini?</span>
+                                <div class="flex gap-2">
+                                    <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border">Batal</button>
+                                    <button wire:click="deleteRecord({{ $record->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">Hapus</button>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
             </div>
-
-            @if ($confirmingDeleteId === $record->id)
-                <div class="bg-red-50 border border-red-200 rounded-md p-3 flex justify-between items-center -mt-1">
-                    <span class="text-sm text-red-700">Yakin hapus transaksi ini?</span>
-                    <div class="flex gap-2">
-                        <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border">Batal</button>
-                        <button wire:click="deleteRecord({{ $record->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">Hapus</button>
-                    </div>
-                </div>
-            @endif
         @empty
-            <p class="text-gray-500">Belum ada transaksi bulan ini.</p>
+            <p class="text-gray-500">Belum ada transaksi sama sekali.</p>
         @endforelse
     </div>
 
