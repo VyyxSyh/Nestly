@@ -82,6 +82,11 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-3.3 Menampilkan progress keseluruhan (agregat semua tugas).
 - FR-3.4 Menampilkan deadline terdekat.
 - FR-3.5 Menampilkan ringkasan keuangan bulan berjalan (total pemasukan, pengeluaran, sisa saldo).
+- FR-3.6 Menampilkan card Profil (foto profil, nama, kelas).
+- FR-3.7 Menampilkan Greeting dengan format "[Kata Sapaan], [Nama Panggilan]!".
+- FR-3.8 Pengguna dapat mengkustomisasi Kata Sapaan (dipilih dari daftar pilihan, misal: Hai, Hii, Halo, Alloww, Heyy) melalui tombol edit pada section Greeting.
+- FR-3.9 Pengguna dapat mengkustomisasi Nama Panggilan yang ditampilkan pada Greeting.
+- FR-3.10 Preferensi Kata Sapaan dan Nama Panggilan tersimpan di database dan diterapkan otomatis setiap kali Dashboard dibuka.
 
 ### FR-4 — Schedule
 - FR-4.1 Pengguna dapat menambahkan jadwal kuliah dengan informasi: nama mata kuliah, hari, waktu, ruangan, dosen.
@@ -269,33 +274,34 @@ Referensi warna lengkap (hex code untuk Light & Dark mode, serta accent color un
 
 ### 8.6 Dashboard Page Layout
 
-Dashboard menggunakan pendekatan **card grid**, disusun dengan prioritas visual: **Jadwal** ditempatkan paling atas sebagai section pertama yang terlihat, diikuti section lain di bawahnya.
+Dashboard menggunakan **CSS Grid 6 kolom × 4 baris** (gap 10px) pada tampilan Desktop, dengan 6 section yang ditempatkan sebagai berikut:
 
-**Row 1 — Jadwal & Ringkasan Cepat (prioritas utama)**
+| # | Section | Posisi Grid (kolom, baris) | Isi |
+|---|---|---|---|
+| 1 | **Jadwal** | Kolom 1–5, Baris 1 | 4 card jadwal sejajar di dalam section ini |
+| 2 | **Ringkasan Singkat** | Kolom 6, Baris 1 | Jumlah tugas belum selesai + persentase budget terpakai bulan ini |
+| 3 | **List Tugas Terdekat Deadline** | Kolom 1–2, Baris 2–4 | 3–5 tugas: nama, aksen warna mata kuliah, deadline |
+| 4 | **List Transaksi Finance** | Kolom 3–4, Baris 2–4 | 3–5 transaksi bulan berjalan (dengan empty state jika belum ada) |
+| 5 | **Profil** | Kolom 5–6, Baris 3–4 | Foto profil (bentuk lingkaran), Nama, Kelas |
+| 6 | **Greeting** | Kolom 5–6, Baris 2 | Sapaan custom (lihat detail di bawah) |
 
-- **Desktop:**
-  - Section **Jadwal** menampati **5/6 lebar row**, berisi **4 card jadwal sejajar dalam 1 baris** (card bertambah ke arah kanan).
-  - Sisa **1/6 lebar row**: **1 card ringkasan super singkat**, berisi:
-    - Jumlah tugas yang belum selesai (belum `Completed`).
-    - Persentase budget yang sudah terpakai bulan ini.
-- **Tablet & Mobile:**
-  - 4 card jadwal disusun ulang menjadi **grid 2×2** (2 card per baris, 2 baris).
-  - Card ringkasan singkat (tugas belum selesai + persentase budget) ditampilkan di **bawah grid jadwal**, full-width.
+**Detail Section 6 — Greeting:**
+- Menampilkan format: `[Kata Sapaan], [Nama Panggilan]!`
+- **Kata sapaan** dapat dikustomisasi lewat pilihan dropdown/select, contoh opsi: `Hai`, `Hii`, `Halo`, `Alloww`, `Heyy`, dll.
+- **Nama panggilan** juga dapat dikustomisasi oleh pengguna.
+- Sebuah **tombol edit** ditempatkan di sisi **paling kanan** section ini (tetap berada di dalam batas section 6) untuk membuka pengaturan kustomisasi kata sapaan & nama panggilan.
 
-**Row 2 — List Tugas Terdekat Deadline**
+**Responsiveness:**
+- **Desktop:** grid 6×4 seperti tabel di atas.
+- **Tablet:** grid & proporsi yang sama, seluruh elemen di-scale lebih kecil (tidak ada perubahan susunan).
+- **Mobile:** grid ditata ulang total menjadi **1 kolom vertikal (stacked)**, dengan urutan dari atas ke bawah:
+  1. Greeting + Profil (digabung sebagai header personal di paling atas)
+  2. Jadwal
+  3. Ringkasan Singkat
+  4. List Tugas Terdekat Deadline
+  5. List Transaksi Finance
 
-- Menampilkan tugas yang deadline-nya paling mendekat, maksimal **3–5 item**.
-- Setiap item hanya menampilkan: **nama tugas**, **aksen warna dari mata kuliah terkait**, dan **deadline**.
-- Ditampilkan ringkas (tanpa progress bar/detail lain) — cukup untuk sekilas info, detail lengkap dilihat di halaman Task.
-
-**Row 3 — List Transaksi Finance Terbaru**
-
-- Menampilkan **3–5 transaksi terakhir**, dengan syarat: **hanya transaksi dari bulan berjalan (bulan ini)**.
-- Sistem perlu mengecek dulu apakah ada transaksi di bulan berjalan:
-  - Jika ada → tampilkan 3–5 transaksi terbaru bulan ini.
-  - Jika tidak ada transaksi sama sekali di bulan ini → tampilkan **empty state** dengan pesan informatif (misal: "Belum ada transaksi bulan ini"), bukan area kosong tanpa keterangan.
-
-> Catatan: Row 2 dan Row 3 disusun dengan pendekatan tipografi & spacing yang rapi (bukan sekadar list polos), agar tetap terasa "aesthetic" konsisten dengan Row 1 yang berbentuk card. Detail visual (spacing, radius, tipografi) mengacu pada token di `PROJECT.md`.
+> Catatan: Section Jadwal (poin 1 di atas) di dalamnya sendiri berisi 4 card jadwal — perilaku responsivenya (grid 2×2 di Tablet/Mobile) mengikuti spesifikasi yang sudah ditetapkan sebelumnya, tetap berlaku sebagai bagian dari section ini.
 
 ---
 
