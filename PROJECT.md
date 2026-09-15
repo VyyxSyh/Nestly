@@ -92,6 +92,12 @@ Informasi yang dapat ditampilkan:
 * Progress keseluruhan.
 * Deadline terdekat.
 * Ringkasan keuangan bulan berjalan.
+* Greeting personal (sapaan + nama panggilan yang bisa dikustomisasi).
+* Profil singkat (foto profil, nama, kelas).
+
+Dashboard disusun menggunakan **card grid** dengan prioritas visual: Jadwal ditempatkan di posisi paling menonjol, diikuti ringkasan tugas, list tugas terdekat deadline, dan list transaksi finance bulan berjalan.
+
+> Detail lengkap struktur grid, posisi tiap section, dan perilaku responsive (Desktop/Tablet/Mobile) didokumentasikan di `PRD.md` section 8.6.
 
 Contoh konsep:
 
@@ -198,6 +204,19 @@ Website mendukung:
 * Dark mode.
 
 Preferensi theme dapat disimpan sehingga pilihan pengguna tetap digunakan ketika website dibuka kembali.
+
+---
+
+### 4.9 Navigation
+
+Nestly menggunakan pendekatan navigasi yang tidak konvensional untuk web — menempatkan menu navigasi utama di **bagian bawah layar (Bottom Nav)**, alih-alih navbar konvensional di atas. Pendekatan ini dipilih sebagai eksplorasi desain personal, terinspirasi dari pola navigasi aplikasi mobile native.
+
+Garis besar konsepnya:
+
+* **Bottom Nav** tampil konsisten di seluruh halaman, dengan isi dan perilaku yang berbeda antar breakpoint (Desktop, Tablet, Mobile) — termasuk animasi transisi icon saat berpindah menu.
+* Pada **Mobile**, terdapat tambahan **Top Bar** (sticky, transparan-lalu-muncul-background saat di-scroll) sebagai tempat logo dan toggle Light/Dark, karena Bottom Nav di Mobile berbentuk icon-only tanpa ruang untuk elemen tersebut.
+
+> Detail lengkap struktur, posisi tiap elemen, dan perilaku animasi didokumentasikan di `PRD.md` section 8.4 dan 8.5.
 
 ---
 
