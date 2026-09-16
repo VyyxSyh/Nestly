@@ -298,10 +298,27 @@ Dashboard menggunakan **CSS Grid 6 kolom × 4 baris** (gap 10px) pada tampilan D
 |---|---|---|---|
 | 1 | **Jadwal** | Kolom 1–5, Baris 1 | 4 card jadwal sejajar di dalam section ini |
 | 2 | **Ringkasan Singkat** | Kolom 6, Baris 1 | Jumlah tugas belum selesai + persentase budget terpakai bulan ini |
-| 3 | **List Tugas Terdekat Deadline** | Kolom 1–2, Baris 2–4 | 3–5 tugas: nama, aksen warna mata kuliah, deadline |
+| 3 | **List Tugas Terdekat Deadline** | Kolom 1–2, Baris 2–4 | Lihat detail sub-struktur di bawah |
 | 4 | **List Transaksi Finance** | Kolom 3–4, Baris 2–4 | 3–5 transaksi bulan berjalan (dengan empty state jika belum ada) |
 | 5 | **Profil** | Kolom 5–6, Baris 3–4 | Foto profil (bentuk lingkaran), Nama, Kelas |
 | 6 | **Greeting** | Kolom 5–6, Baris 2 | Sapaan custom (lihat detail di bawah) |
+
+**Detail Section 3 — List Tugas Terdekat Deadline:**
+
+Section ini dipecah jadi 2 container tersusun vertikal:
+
+- **Container atas — Statistik Tugas:**
+  - Layout: `display: flex; justify-content: space-evenly;`
+  - Berisi 4 item statistik yang dihitung otomatis dari data tugas:
+    1. **Total Task** — jumlah seluruh tugas.
+    2. **Not Started** — jumlah tugas berstatus `Not Started`.
+    3. **In Progress** — jumlah tugas berstatus `In Progress`.
+    4. **Completed** — jumlah tugas berstatus `Completed`.
+  - Setiap item terdiri dari label (nama status) + angka (dihitung real-time via Livewire dari database, bukan manual).
+
+- **Container bawah — List Tugas:**
+  - Menampilkan 3–5 tugas dengan deadline paling mendekat.
+  - Setiap item hanya menampilkan: **nama tugas**, **aksen warna dari mata kuliah terkait**, dan **deadline**.
 
 **Detail Section 6 — Greeting:**
 - Menampilkan format: `[Kata Sapaan], [Nama Panggilan]!`
