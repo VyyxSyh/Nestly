@@ -42,7 +42,15 @@ new class extends Component
 
     public function delete(int $id)
     {
-        Subject::findOrFail($id)->delete();
+        $subject = Subject::withCount(['tasks', 'schedules'])->findOrFail($id);
+
+        if ($subject->tasks_count > 0 || $subject->schedules_count > 0) {
+            session()->flash('deleteError', 'Tidak bisa hapus "' . $subject->name . '" karena masih dipakai di ' . $subject->tasks_count . ' tugas dan ' . $subject->schedules_count . ' jadwal.');
+            $this->confirmingDeleteId = null;
+            return;
+        }
+
+        $subject->delete();
         $this->confirmingDeleteId = null;
     }
 
@@ -62,6 +70,12 @@ new class extends Component
             + Tambah Mata Kuliah
         </button>
     </div>
+
+    @if (session('deleteError'))
+        <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md p-3 mb-3">
+            {{ session('deleteError') }}
+        </div>
+    @endif
 
     <div class="space-y-2">
         @forelse ($subjects as $subject)
