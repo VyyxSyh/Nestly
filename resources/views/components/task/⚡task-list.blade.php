@@ -17,7 +17,11 @@ new class extends Component
     public $deadline = '';
     public $progress_mode = 'manual';
     public $newChecklistItemTitle = '';
-
+    public $search = '';
+    public $filterStatus = '';
+    public $filterSubject = '';
+    public $sortBy = 'deadline_asc';
+    
     public array $pendingNewItems = [];
     public array $pendingDeleteIds = [];
 
@@ -168,12 +172,34 @@ new class extends Component
 
     public function with(): array
     {
+        $query = Task::with(['subject', 'checklistItems']);
+
+        if ($this->search) {
+            $query->where('title', 'like', '%' . $this->search . '%');
+        }
+
+        if ($this->filterSubject) {
+            $query->where('subject_id', $this->filterSubject);
+        }
+
+        $tasks = $query->get();
+
+        if ($this->filterStatus) {
+            $tasks = $tasks->filter(fn ($t) => $t->status === $this->filterStatus);
+        }
+
+        $tasks = match ($this->sortBy) {
+            'deadline_asc' => $tasks->sortBy('deadline'),
+            'deadline_desc' => $tasks->sortByDesc('deadline'),
+            'progress_asc' => $tasks->sortBy('progress'),
+            'progress_desc' => $tasks->sortByDesc('progress'),
+            'newest' => $tasks->sortByDesc('created_at'),
+            default => $tasks->sortBy('deadline'),
+        };
+
         return [
-            'tasks' => Task::with(['subject', 'checklistItems'])->latest()->get(),
+            'tasks' => $tasks->values(),
             'subjects' => Subject::all(),
-            'editingTaskExistingItems' => $this->isEditing && $this->editingTaskId
-                ? TaskChecklistItem::where('task_id', $this->editingTaskId)->get()
-                : collect(),
         ];
     }
 };
@@ -185,6 +211,33 @@ new class extends Component
         <button wire:click="openCreateModal" class="bg-teal-600 text-white px-4 py-2 rounded-md">
             + Tambah Tugas
         </button>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+        <input type="text" wire:model.live="search" placeholder="Cari judul tugas..."
+            class="border rounded-md px-3 py-2 text-sm flex-1 min-w-[150px]">
+
+        <select wire:model.live="filterStatus" class="border rounded-md px-3 py-2 text-sm">
+            <option value="">Semua Status</option>
+            <option value="not_started">Not Started</option>
+            <option value="in_progress">In Progress</option>
+            <option value="completed">Completed</option>
+        </select>
+
+        <select wire:model.live="filterSubject" class="border rounded-md px-3 py-2 text-sm">
+            <option value="">Semua Mata Kuliah</option>
+            @foreach ($subjects as $subject)
+                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+            @endforeach
+        </select>
+
+        <select wire:model.live="sortBy" class="border rounded-md px-3 py-2 text-sm">
+            <option value="deadline_asc">Deadline Terdekat</option>
+            <option value="deadline_desc">Deadline Terjauh</option>
+            <option value="progress_desc">Progress Tertinggi</option>
+            <option value="progress_asc">Progress Terendah</option>
+            <option value="newest">Terbaru Dibuat</option>
+        </select>
     </div>
 
     <div class="space-y-3">
