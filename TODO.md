@@ -65,10 +65,19 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [ ] Routing/state management untuk menandai menu mana yang sedang aktif
 - [ ] Pastikan konten halaman punya padding cukup agar tidak tertutup Bottom Nav/Top Bar (fixed/sticky)
 
+## 📚 Subjects (Mata Kuliah)
+- [ ] Migration tabel `subjects` (nama mata kuliah)
+- [ ] Model `Subject`
+- [ ] Livewire component: form tambah mata kuliah
+- [ ] Tampilan daftar mata kuliah
+- [ ] Fitur edit mata kuliah
+- [ ] Fitur hapus mata kuliah (cek dulu relasi ke Task/Schedule sebelum hapus, hindari data yatim)
+- [ ] Dropdown pilih mata kuliah dipakai ulang di form Task & form Schedule
+
 ## 🗓️ Schedule
-- [ ] Migration tabel `schedules` (mata_kuliah_id, hari, jam_mulai, jam_selesai, ruangan, dosen, accent_color)
-- [ ] Model `Schedule` + relasi ke `Subject`/Mata Kuliah
-- [ ] Livewire component: form tambah jadwal
+- [ ] Migration tabel `schedules` (subject_id, hari, jam_mulai, jam_selesai, ruangan, dosen, accent_color)
+- [ ] Model `Schedule` + relasi ke `Subject`
+- [ ] Livewire component: form tambah jadwal (pilih mata kuliah dari dropdown Subjects)
 - [ ] Tampilan daftar/tabel jadwal
 - [ ] Fitur edit jadwal
 - [ ] Fitur hapus jadwal
