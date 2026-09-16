@@ -404,9 +404,11 @@ Aplikasi dibangun di atas fondasi Laravel + Livewire yang solid sejak awal, sehi
 | Text | `#16141A` | Headings, primary content |
 | Text Muted | `#6B6470` | Descriptions, metadata, timestamps |
 | Border | `#FFE1EA` | Dividers, input outlines, card borders |
-| Success | `#22C55E` | Completed tasks, income entries, "on track" budget |
-| Danger | `#EF4444` | Overdue tasks, expense entries, over-budget alerts |
-| Warning | `#F59E0B` | Approaching deadline, nearing budget limit |
+| Success | `#22C55E` | Task status "safe" (urgency terjauh), income entries, "on track" budget |
+| Danger | `#EF4444` | Task urgency "critical" & "overdue", expense entries, over-budget alerts |
+| Warning | `#F59E0B` | Task urgency "urgent" (oranye), nearing budget limit |
+| Caution | `#EAB308` | Task urgency "approaching" (kuning, beda dari Warning yang oranye) |
+| Neutral | `#9CA3AF` | Task urgency "done" (abu-abu, progress 100%) |
 | Info | `#3B82F6` | In-progress states, neutral notifications |
 
 ### Dark Mode
@@ -421,9 +423,11 @@ Aplikasi dibangun di atas fondasi Laravel + Livewire yang solid sejak awal, sehi
 | Text | `#F8F0FA` | Headings, primary content |
 | Text Muted | `#BFA6C7` | Descriptions, metadata, timestamps |
 | Border | `#4A2F52` | Dividers, input outlines, card borders |
-| Success | `#4ADE80` | Completed tasks, income entries, "on track" budget |
-| Danger | `#F87171` | Overdue tasks, expense entries, over-budget alerts |
-| Warning | `#FBBF24` | Approaching deadline, nearing budget limit |
+| Success | `#4ADE80` | Task status "safe" (urgency terjauh), income entries, "on track" budget |
+| Danger | `#F87171` | Task urgency "critical" & "overdue", expense entries, over-budget alerts |
+| Warning | `#FBBF24` | Task urgency "urgent" (oranye), nearing budget limit |
+| Caution | `#FDE047` | Task urgency "approaching" (kuning, beda dari Warning yang oranye) |
+| Neutral | `#A1A1AA` | Task urgency "done" (abu-abu, progress 100%) |
 | Info | `#60A5FA` | In-progress states, neutral notifications |
 
 ### Color Usage Guidelines

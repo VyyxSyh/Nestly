@@ -62,20 +62,25 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 ## 4. Functional Requirements
 
 ### FR-1 — Task Management
-- FR-1.1 Pengguna dapat menambahkan tugas baru.
+- FR-1.1 Pengguna dapat menambahkan tugas baru dengan informasi: judul, mata kuliah (relasi ke Subjects), deskripsi, deadline, mode progress.
 - FR-1.2 Pengguna dapat melihat daftar seluruh tugas.
-- FR-1.3 Pengguna dapat mengubah informasi tugas (judul, mata kuliah terkait, deadline, status, dll).
+- FR-1.3 Pengguna dapat mengubah informasi tugas (judul, mata kuliah terkait, deskripsi, deadline, status, dll).
 - FR-1.4 Pengguna dapat menghapus tugas.
-- FR-1.5 Pengguna dapat memperbarui progress tugas (dalam persentase).
-- FR-1.6 Pengguna dapat menentukan deadline tugas.
-- FR-1.7 Pengguna dapat menentukan status tugas: `Not Started`, `In Progress`, `Completed`.
-- FR-1.8 Pengguna dapat menentukan prioritas tugas.
+- FR-1.5 Pengguna dapat menentukan status tugas: `Not Started`, `In Progress`, `Completed`.
+- FR-1.6 Input deadline hanya meminta tanggal (hari/bulan/tahun); jam bersifat opsional.
+- FR-1.7 Deadline ditampilkan di UI dengan format lengkap termasuk nama hari, contoh: "Rabu, 16 September 2026" (ditambah jam jika diisi saat input).
+- FR-1.8 Status `Completed` otomatis ter-set ketika progress tugas mencapai 100% (lihat FR-2.5) — bukan dipilih manual secara terpisah dari progress.
+- FR-1.9 Deskripsi tugas ditampilkan di halaman Task (tidak ditampilkan di ringkasan Dashboard, sesuai FR-3).
 
 ### FR-2 — Task Progress
-- FR-2.1 Setiap tugas menampilkan progress bar visual berdasarkan persentase penyelesaian.
-- FR-2.2 Progress dapat diperbarui secara manual oleh pengguna dan langsung ter-update di tampilan (real-time via Livewire).
-- FR-2.3 Progress tersimpan otomatis ke database setiap kali diperbarui.
-- FR-2.4 Halaman Task menampilkan progress keseluruhan (agregat dari seluruh tugas) sebagai indikator ringkasan di halaman tersebut.
+- FR-2.1 Setiap tugas memiliki **Mode Progress**, dipilih salah satu:
+  - **Manual** — progress diatur manual oleh pengguna, bertambah/berkurang dalam kelipatan 5% menggunakan tombol `+`/`-`.
+  - **Checklist** — progress dihitung otomatis berdasarkan proporsi sub-tugas yang sudah dicentang selesai (contoh: 1 dari 3 sub-tugas selesai = 33%).
+- FR-2.2 Mode **Checklist** memerlukan pengguna menambahkan minimal 1 sub-tugas; setiap sub-tugas punya judul singkat dan status selesai/belum (checkbox).
+- FR-2.3 Setiap tugas menampilkan progress bar visual berdasarkan persentase penyelesaian (baik dari mode Manual maupun Checklist).
+- FR-2.4 Progress tersimpan otomatis ke database setiap kali diperbarui, secara real-time via Livewire.
+- FR-2.5 Ketika progress mencapai 100% (baik lewat Manual maupun Checklist), status tugas otomatis berubah menjadi `Completed`.
+- FR-2.6 Halaman Task menampilkan progress keseluruhan (agregat dari seluruh tugas) sebagai indikator ringkasan di halaman tersebut.
 
 ### FR-3 — Dashboard
 - FR-3.1 Menampilkan jumlah tugas per status (Total Task / Not Started / In Progress / Completed) dalam container statistik di card List Tugas.
@@ -99,13 +104,21 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-5.3 Jadwal ditampilkan dalam format yang mudah dibaca (mis. per hari/minggu).
 
 ### FR-6 — Deadline Tracking
-- FR-6.1 Tugas dikategorikan otomatis berdasarkan urgensi deadline: `Due Today`, `Due Tomorrow`, `Upcoming`, `Overdue`.
-- FR-6.2 Setiap tugas memiliki indikator warna urgensi otomatis:
-  - 🟢 Green — deadline masih jauh, aman.
-  - 🟡 Yellow — deadline mulai mendekat.
-  - 🟠 Orange — deadline dekat, perlu diprioritaskan.
-  - 🔴 Red — deadline mendesak / overdue.
-- FR-6.3 Indikator warna diperbarui otomatis berdasarkan tanggal sistem saat ini.
+- FR-6.1 Sistem menghitung urgensi tugas secara otomatis berdasarkan sisa hari menuju deadline, dengan level berikut (dari paling aman ke paling kritis):
+
+  | Level | Rentang Sisa Hari | Warna |
+  |---|---|---|
+  | `safe` | ≥ 25 hari (default) | Success (hijau) |
+  | `approaching` | 17–24 hari | Caution (kuning) |
+  | `urgent` | 10–16 hari | Warning (oranye) |
+  | `critical` | 0–9 hari | Danger (merah) |
+  | `overdue` | Sudah lewat deadline (sisa hari negatif) | Danger (merah) |
+  | `done` | Progress 100% (berapapun sisa harinya) | Neutral (abu-abu) |
+
+- FR-6.2 Level `done` menggantikan/override level urgensi lain begitu progress tugas mencapai 100%, terlepas dari sisa hari deadline-nya.
+- FR-6.3 Level `overdue` dan `critical` menggunakan warna yang sama (Danger/merah), namun secara logis tetap dua kondisi berbeda (lewat deadline vs mendekati deadline).
+- FR-6.4 Level urgensi ditampilkan di UI sebagai label "Priority" pada Task Card (lihat 8.4), meskipun secara teknis ini adalah hasil kalkulasi urgensi deadline, bukan field prioritas manual yang diinput pengguna.
+- FR-6.5 Level urgensi dihitung ulang secara otomatis (real-time) berdasarkan tanggal sistem saat ini setiap kali halaman dibuka/direfresh.
 
 ### FR-7 — Finance Tracker
 - FR-7.1 Pengguna dapat mencatat pemasukan (contoh: uang saku, kiriman orang tua, penghasilan sampingan) beserta nominal dan tanggal.
@@ -116,9 +129,11 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-7.6 Pengguna dapat mengedit dan menghapus catatan pemasukan/pengeluaran.
 
 ### FR-8 — Search, Filter & Sorting
-- FR-8.1 Pengguna dapat mencari tugas berdasarkan kata kunci.
-- FR-8.2 Pengguna dapat memfilter tugas berdasarkan: status, deadline, mata kuliah, progress.
-- FR-8.3 Pengguna dapat mengurutkan tugas berdasarkan: deadline terdekat, progress tertinggi, progress terendah, tugas terbaru.
+- FR-8.1 Pengguna dapat mencari tugas berdasarkan judul (real-time search).
+- FR-8.2 Filter Status: `Semua Status`, `Not Started`, `In Progress`, `Completed`.
+- FR-8.3 Filter Mata Kuliah: `Semua Mata Kuliah`, diikuti daftar dinamis dari data Subjects yang sudah diinput pengguna.
+- FR-8.4 Sorting: `Deadline Terdekat`, `Deadline Terjauh`, `Progress Tertinggi`, `Progress Terendah`, `Terbaru Dibuat`.
+- FR-8.5 Search, filter, dan sorting dapat dikombinasikan sekaligus (bukan saling eksklusif).
 
 ### FR-9 — Theme
 - FR-9.1 Pengguna dapat beralih antara Light mode dan Dark mode.
@@ -269,7 +284,13 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
     - **Setelah halaman di-scroll (user mulai scroll ke bawah):** Top Bar mendapatkan **background** (solid/blur sesuai token Color System), muncul dengan animasi transisi halus (fade/slide), memberi kesan "muncul" saat dibutuhkan agar tetap terbaca di atas konten yang sedang di-scroll.
 
 - **Accent Color Selector** — pemilihan tema warna (**Pink** default, serta **Blue** dan **Monochrome** pada Phase 2) ditempatkan di halaman **Pengaturan/Settings**, terpisah dari Theme Toggle Light/Dark di atas. Accent color bersifat "diatur sekali, jarang diubah", sehingga tidak perlu akses secepat toggle Light/Dark mode.
-- **Task Card** — menampilkan judul tugas, progress bar, status, dan indikator warna urgensi.
+- **Task Card** — menampilkan:
+  - Judul tugas.
+  - Icon edit dan icon hapus (di pojok kanan atas card).
+  - Mata kuliah + deadline terformat (contoh: "Networking — Deadline: Rabu, 16 September 2026").
+  - Badge status (`Not Started` / `In Progress` / `Completed`), berwarna sesuai token status masing-masing.
+  - Label "Priority" yang menampilkan level urgensi deadline (`safe` / `approaching` / `urgent` / `critical` / `overdue` / `done`), lihat FR-6.
+  - Progress bar dengan tombol `+`/`-` di kedua ujungnya (khusus Mode Progress **Manual**, kelipatan 5%) dan angka persentase; untuk Mode Progress **Checklist**, progress ditampilkan read-only (dihitung otomatis dari sub-tugas, tanpa tombol +/-).
 - **Progress Bar** — representasi visual progress (persentase) per tugas dan progress keseluruhan.
 - **Dashboard Summary Widget** — kartu ringkasan statistik (total tugas, status, deadline terdekat, ringkasan keuangan).
 - **Schedule Card/List** — menampilkan jadwal kuliah secara terstruktur, dengan accent color per kartu.
