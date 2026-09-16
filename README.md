@@ -38,9 +38,15 @@ Nestly is built as a **full stack application** using **Laravel** for both backe
 - Set deadlines, priority levels, and progress percentage (0–100%)
 
 ### 📊 Progress & Dashboard
+- Card-grid dashboard layout: Schedule highlight, quick summary, upcoming task deadlines, recent finance transactions, personal greeting, and profile card
 - Visual progress bars for each task
-- Dashboard overview: total tasks, status breakdown, overall progress, nearest deadlines, monthly finance summary
 - Real-time statistics powered by Livewire — no full page reload
+
+### 🧭 Navigation
+- Unconventional bottom navigation (instead of a traditional top navbar) — an intentional design exploration inspired by mobile app patterns
+- **Desktop & Tablet:** 3-section bottom bar (logo | menu labels | account icon + theme toggle), with an animated icon reveal on the active menu item
+- **Mobile:** icon-only bottom nav (label appears only on the active item) plus a separate sticky top bar for the logo and theme toggle
+- Notification badge on the Task icon (e.g. overdue task count) across all breakpoints
 
 ### ⏰ Deadline Tracking
 - Smart urgency indicators, updated automatically based on the current date:
@@ -49,8 +55,13 @@ Nestly is built as a **full stack application** using **Laravel** for both backe
   - 🟠 **Orange** — High priority, needs attention soon
   - 🔴 **Red** — Overdue / Critical
 
+### 📚 Subjects
+- Manage course/subject reference data (add, edit, delete)
+- Kept separate from Schedule — Subjects is rarely-changed reference data, while Schedule is checked daily/weekly
+- Used as a dropdown reference across Task and Schedule forms
+
 ### 🗓️ Schedule Management
-- Log class schedules (Subject, Day, Time, Room, Lecturer)
+- Log class schedules (linked to Subjects, Day, Time, Room, Lecturer)
 - Quick reference for weekly academic planning
 - Accent color per schedule card for visual variety
 
@@ -96,7 +107,7 @@ Full color tokens are documented in [`PROJECT.md`](./PROJECT.md#12-color-system)
 
 | Phase | Focus | Key Deliverables |
 |-------|-------|------------------|
-| **Phase 1** 🟢 *(Current)* | **Core Full Stack Build** | Database design & migrations, Task CRUD, Schedule CRUD, Finance Tracker (income/expense/budget), Dashboard summary, deadline urgency indicators, Pink theme (Light/Dark mode), responsive Tailwind UI, Livewire integration |
+| **Phase 1** 🟢 *(Current)* | **Core Full Stack Build** | Database design & migrations, Subjects & Schedule CRUD, Task CRUD, Finance Tracker (income/expense/budget), card-grid Dashboard (greeting, profile, summaries), Bottom Nav + Top Bar navigation, deadline urgency indicators, Pink theme (Light/Dark mode), responsive Tailwind UI, Livewire integration |
 | **Phase 2** 🟡 | **Refinement & UX Polish** | Search/filter/sorting refinement, multi color theme (**Blue** & **Monochrome**, each with Light + Dark mode) in addition to the default Pink theme, overall data validation & UX improvements |
 | **Phase 3** 🔵 | **Enhancements (Future)** | User authentication & multi-user support, role management, notifications, advanced academic/financial analytics, potential cloud/hosting deployment |
 
