@@ -75,18 +75,17 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-2.1 Setiap tugas menampilkan progress bar visual berdasarkan persentase penyelesaian.
 - FR-2.2 Progress dapat diperbarui secara manual oleh pengguna dan langsung ter-update di tampilan (real-time via Livewire).
 - FR-2.3 Progress tersimpan otomatis ke database setiap kali diperbarui.
+- FR-2.4 Halaman Task menampilkan progress keseluruhan (agregat dari seluruh tugas) sebagai indikator ringkasan di halaman tersebut.
 
 ### FR-3 — Dashboard
-- FR-3.1 Menampilkan total jumlah tugas.
-- FR-3.2 Menampilkan jumlah tugas per status (Not Started / In Progress / Completed).
-- FR-3.3 Menampilkan progress keseluruhan (agregat semua tugas).
-- FR-3.4 Menampilkan deadline terdekat.
-- FR-3.5 Menampilkan ringkasan keuangan bulan berjalan (total pemasukan, pengeluaran, sisa saldo).
-- FR-3.6 Menampilkan card Profil (foto profil, nama, kelas).
-- FR-3.7 Menampilkan Greeting dengan format "[Kata Sapaan], [Nama Panggilan]!".
-- FR-3.8 Pengguna dapat mengkustomisasi Kata Sapaan (dipilih dari daftar pilihan, misal: Hai, Hii, Halo, Alloww, Heyy) melalui tombol edit pada section Greeting.
-- FR-3.9 Pengguna dapat mengkustomisasi Nama Panggilan yang ditampilkan pada Greeting.
-- FR-3.10 Preferensi Kata Sapaan dan Nama Panggilan tersimpan di database dan diterapkan otomatis setiap kali Dashboard dibuka.
+- FR-3.1 Menampilkan jumlah tugas per status (Total Task / Not Started / In Progress / Completed) dalam container statistik di card List Tugas.
+- FR-3.2 Menampilkan tugas dengan deadline terdekat (3–5 item: nama tugas, aksen warna mata kuliah, deadline) di card List Tugas.
+- FR-3.3 Menampilkan ringkasan keuangan bulan berjalan (total pemasukan, pengeluaran, sisa saldo).
+- FR-3.4 Menampilkan card Profil (foto profil, nama, kelas).
+- FR-3.5 Menampilkan Greeting dengan format "[Kata Sapaan], [Nama Panggilan]!".
+- FR-3.6 Pengguna dapat mengkustomisasi Kata Sapaan (dipilih dari daftar pilihan, misal: Hai, Hii, Halo, Alloww, Heyy) melalui tombol edit pada section Greeting.
+- FR-3.7 Pengguna dapat mengkustomisasi Nama Panggilan yang ditampilkan pada Greeting.
+- FR-3.8 Preferensi Kata Sapaan dan Nama Panggilan tersimpan di database dan diterapkan otomatis setiap kali Dashboard dibuka.
 
 ### FR-4 — Subjects (Mata Kuliah)
 - FR-4.1 Pengguna dapat menambahkan data mata kuliah (nama mata kuliah) sebagai data referensi.

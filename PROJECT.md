@@ -77,6 +77,8 @@ Progress: 70%
 
 Progress dapat diperbarui oleh pengguna secara real-time menggunakan Livewire, dan disimpan langsung ke database.
 
+Halaman Task juga menampilkan **progress keseluruhan** (agregat dari seluruh tugas) sebagai indikator ringkasan di halaman tersebut.
+
 ---
 
 ### 4.3 Dashboard
@@ -85,11 +87,7 @@ Dashboard menjadi halaman utama yang menampilkan ringkasan aktivitas pengguna.
 
 Informasi yang dapat ditampilkan:
 
-* Total tugas.
-* Tugas yang belum dimulai.
-* Tugas yang sedang dikerjakan.
-* Tugas yang telah selesai.
-* Progress keseluruhan.
+* Jumlah tugas per status (Total, Not Started, In Progress, Completed).
 * Deadline terdekat.
 * Ringkasan keuangan bulan berjalan.
 * Greeting personal (sapaan + nama panggilan yang bisa dikustomisasi).
@@ -99,21 +97,18 @@ Dashboard disusun menggunakan **card grid** dengan prioritas visual: Jadwal dite
 
 > Detail lengkap struktur grid, posisi tiap section, dan perilaku responsive (Desktop/Tablet/Mobile) didokumentasikan di `PRD.md` section 8.6.
 
-Contoh konsep:
+Contoh konsep (statistik tugas di card List Tugas):
 
 ```text
-Total Tasks        8
-Completed          3
-In Progress        4
-Not Started        1
-
-Overall Progress
-██████████████░░░░░░ 68%
+Total Task          8
+Not Started         1
+In Progress         4
+Completed           3
 ```
 
 ---
 
-### 4.4 Subjects (Mata Kuliah/Mata Pelajaran)
+### 4.4 Subjects (Mata Kuliah)
 
 Pengguna dapat mengelola data mata kuliah sebagai **data referensi**, terpisah dari halaman Schedule.
 
@@ -366,7 +361,7 @@ Rencana deployment ke hosting/cloud dapat dipertimbangkan pada tahap pengembanga
 * Task management.
 * Progress tracking.
 * Deadline management.
-* Subjects (data referensi mata kuliah/mata pelajaran).
+* Subjects (data referensi mata kuliah).
 * Schedule.
 * Finance tracker.
 * Search, filter & sorting.
