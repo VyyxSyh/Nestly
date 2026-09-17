@@ -104,6 +104,7 @@ new class extends Component
         ]);
 
         $validated['subject_id'] = $validated['subject_id'] ?: null;
+        $validated['deadline_time'] = $validated['deadline_time'] ?: null;
 
         if ($this->isEditing && $this->editingTaskId) {
             $task = Task::findOrFail($this->editingTaskId);
