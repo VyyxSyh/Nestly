@@ -10,7 +10,7 @@ new class extends Component
     public bool $isEditing = false;
     public ?int $editingScheduleId = null;
 
-    public $subject_name = '';
+    public $subject_id = '';
     public $day = 'Senin';
     public $start_time = '';
     public $end_time = '';
@@ -29,7 +29,7 @@ new class extends Component
 
     public function openCreateModal()
     {
-        $this->reset(['subject_name', 'start_time', 'end_time', 'room', 'lecturer', 'accent_color', 'editingScheduleId']);
+        $this->reset(['subject_id', 'start_time', 'end_time', 'room', 'lecturer', 'accent_color', 'editingScheduleId']);
         $this->day = 'Senin';
         $this->accent_color = $this->accentPalette[array_rand($this->accentPalette)];
         $this->isEditing = false;
@@ -41,7 +41,7 @@ new class extends Component
         $schedule = Schedule::findOrFail($scheduleId);
 
         $this->editingScheduleId = $schedule->id;
-        $this->subject_name = $schedule->subject->name;
+        $this->subject_id = $schedule->subject_id;
         $this->day = $schedule->day;
         $this->start_time = $schedule->start_time;
         $this->end_time = $schedule->end_time;
@@ -72,7 +72,7 @@ new class extends Component
     public function save()
     {
         $validated = $this->validate([
-            'subject_name' => 'required|string|max:255',
+            'subject_id' => 'required|exists:subjects,id',
             'day' => 'required|string',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
@@ -81,22 +81,10 @@ new class extends Component
             'accent_color' => 'required|string',
         ]);
 
-        $subject = Subject::firstOrCreate(['name' => $validated['subject_name']]);
-
-        $data = [
-            'subject_id' => $subject->id,
-            'day' => $validated['day'],
-            'start_time' => $validated['start_time'],
-            'end_time' => $validated['end_time'],
-            'room' => $validated['room'],
-            'lecturer' => $validated['lecturer'],
-            'accent_color' => $validated['accent_color'],
-        ];
-
         if ($this->isEditing && $this->editingScheduleId) {
-            Schedule::findOrFail($this->editingScheduleId)->update($data);
+            Schedule::findOrFail($this->editingScheduleId)->update($validated);
         } else {
-            Schedule::create($data);
+            Schedule::create($validated);
         }
 
         $this->closeModal();
@@ -189,8 +177,14 @@ new class extends Component
 
                 <form wire:submit="save" class="space-y-3">
                     <div>
-                        <label class="block text-sm mb-1">Mata Kuliah (opsional)</label>
-                        <input type="text" wire:model="subject_name" class="w-full border rounded-md px-3 py-2" placeholder="misal: Pemrograman Web">
+                        <label class="block text-sm mb-1">Mata Kuliah</label>
+                        <select wire:model="subject_id" class="w-full border rounded-md px-3 py-2">
+                            <option value="">-- Pilih Mata Kuliah --</option>
+                            @foreach ($subjects as $subject)
+                                <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('subject_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <div>

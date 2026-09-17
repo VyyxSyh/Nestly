@@ -12,12 +12,13 @@ class Task extends Model
         'title',
         'description',
         'deadline',
+        'deadline_time',
         'progress_mode',
         'progress',
     ];
 
     protected $casts = [
-        'deadline' => 'datetime',
+        'deadline' => 'date',
     ];
 
     public function subject()
@@ -49,11 +50,11 @@ class Task extends Model
             return 'done';
         }
 
-        if (Carbon::now()->greaterThan($this->deadline)) {
+        if (Carbon::now()->startOfDay()->greaterThan($this->deadline)) {
             return 'overdue';
         }
 
-        $daysLeft = Carbon::now()->diffInDays($this->deadline, false);
+        $daysLeft = Carbon::now()->startOfDay()->diffInDays($this->deadline, false);
 
         if ($daysLeft <= 5) {
             return 'critical';
@@ -68,6 +69,15 @@ class Task extends Model
         }
 
         return 'safe';
+    }
+
+    public function getDeadlineFormattedAttribute(): string
+    {
+        $formatted = $this->deadline->translatedFormat('l, d F Y');
+        if ($this->deadline_time) {
+            $formatted .= ', ' . \Carbon\Carbon::parse($this->deadline_time)->format('H:i');
+        }
+        return $formatted;
     }
 
     public function getUrgencyColorAttribute(): string

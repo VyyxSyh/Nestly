@@ -15,6 +15,7 @@ new class extends Component
     public $title = '';
     public $description = '';
     public $deadline = '';
+    public $deadline_time = '';
     public $progress_mode = 'manual';
     public $newChecklistItemTitle = '';
     public $search = '';
@@ -29,7 +30,7 @@ new class extends Component
 
     public function openCreateModal()
     {
-        $this->reset(['subject_id', 'title', 'description', 'deadline', 'editingTaskId', 'pendingNewItems', 'pendingDeleteIds', 'newChecklistItemTitle']);
+        $this->reset(['subject_id', 'title', 'description', 'deadline', 'deadline_time', 'editingTaskId', 'pendingNewItems', 'pendingDeleteIds', 'newChecklistItemTitle']);
         $this->progress_mode = 'manual';
         $this->isEditing = false;
         $this->showModal = true;
@@ -43,7 +44,8 @@ new class extends Component
         $this->subject_id = $task->subject_id ?? '';
         $this->title = $task->title;
         $this->description = $task->description;
-        $this->deadline = $task->deadline->format('Y-m-d\TH:i');
+        $this->deadline = $task->deadline->format('Y-m-d');
+        $this->deadline_time = $task->deadline_time ? \Carbon\Carbon::parse($task->deadline_time)->format('H:i') : '';
         $this->progress_mode = $task->progress_mode;
         $this->pendingNewItems = [];
         $this->pendingDeleteIds = [];
@@ -97,6 +99,7 @@ new class extends Component
             'subject_id' => 'nullable|exists:subjects,id',
             'description' => 'nullable|string',
             'deadline' => 'required|date',
+            'deadline_time' => 'nullable',
             'progress_mode' => 'required|in:manual,checklist',
         ]);
 
@@ -255,8 +258,11 @@ new class extends Component
                     <div>
                         <div class="font-medium">{{ $task->title }}</div>
                         <div class="text-sm text-gray-500">
-                            {{ $task->subject?->name ?? 'Tanpa mata kuliah' }} — Deadline: {{ $task->deadline->format('d M Y, H:i') }}
+                            {{ $task->subject?->name ?? 'Tanpa mata kuliah' }} — Deadline: {{ $task->deadline_formatted }}
                         </div>
+                        @if ($task->description)
+                            <div class="text-sm text-gray-600 mt-1">{{ $task->description }}</div>
+                        @endif
                     </div>
                     <div class="flex gap-3 text-lg">
                         <button wire:click="openEditModal({{ $task->id }})" class="text-blue-600" title="Edit">
@@ -370,10 +376,16 @@ new class extends Component
                         <textarea wire:model="description" class="w-full border rounded-md px-3 py-2"></textarea>
                     </div>
 
-                    <div>
-                        <label class="block text-sm mb-1">Deadline</label>
-                        <input type="datetime-local" wire:model="deadline" class="w-full border rounded-md px-3 py-2">
-                        @error('deadline') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    <div class="flex gap-2">
+                        <div class="flex-1">
+                            <label class="block text-sm mb-1">Deadline (tanggal)</label>
+                            <input type="date" wire:model="deadline" class="w-full border rounded-md px-3 py-2">
+                            @error('deadline') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-sm mb-1">Jam (opsional)</label>
+                            <input type="time" wire:model="deadline_time" class="w-full border rounded-md px-3 py-2">
+                        </div>
                     </div>
 
                     <div>

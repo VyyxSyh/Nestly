@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('subject_id')->nullable()->constrained()->nullOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->dateTime('deadline');
+            $table->date('deadline');
+            $table->time('deadline_time')->nullable();
             $table->string('status')->default('not_started');
             $table->string('progress_mode')->default('manual');
             $table->unsignedTinyInteger('progress')->default(0);
