@@ -32,11 +32,11 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 ## 📊 Task Progress
 - [x] Migration tabel `subtasks` (task_id, judul, is_completed)
 - [x] Model `Subtask` + relasi ke `Task`
-- [ ] Field `progress_mode` pada tabel `tasks` (enum: manual, checklist)
-- [ ] Livewire component: progress bar + tombol `+`/`-` (kelipatan 5%) — khusus Mode Manual
-- [ ] Livewire component: Todo List/checklist sub-tugas — khusus Mode Checklist
-- [ ] Logika kalkulasi otomatis progress dari proporsi sub-tugas selesai (Mode Checklist)
-- [ ] Progress tersimpan otomatis ke database setiap perubahan, real-time via Livewire
+- [x] Field `progress_mode` pada tabel `tasks` (enum: manual, checklist)
+- [x] Livewire component: progress bar + tombol `+`/`-` (kelipatan 5%) — khusus Mode Manual
+- [x] Livewire component: Todo List/checklist sub-tugas — khusus Mode Checklist
+- [x] Logika kalkulasi otomatis progress dari proporsi sub-tugas selesai (Mode Checklist)
+- [x] Progress tersimpan otomatis ke database setiap perubahan, real-time via Livewire
 - [ ] Widget/indikator progress keseluruhan (agregat semua tugas) di halaman Task
 
 ## 🏠 Dashboard
@@ -72,51 +72,51 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 ## 📚 Subjects (Mata Kuliah)
 - [x] Migration tabel `subjects` (nama mata kuliah)
 - [x] Model `Subject`
-- [ ] Livewire component: form tambah mata kuliah
-- [ ] Tampilan daftar mata kuliah
-- [ ] Fitur edit mata kuliah
-- [ ] Fitur hapus mata kuliah (cek dulu relasi ke Task/Schedule sebelum hapus, hindari data yatim)
-- [ ] Dropdown pilih mata kuliah dipakai ulang di form Task & form Schedule
+- [x] Livewire component: form tambah mata kuliah
+- [x] Tampilan daftar mata kuliah
+- [x] Fitur edit mata kuliah
+- [x] Fitur hapus mata kuliah (cek dulu relasi ke Task/Schedule sebelum hapus, hindari data yatim)
+- [x] Dropdown pilih mata kuliah dipakai ulang di form Task & form Schedule
 
 ## 🗓️ Schedule
 - [x] Migration tabel `schedules` (subject_id, hari, jam_mulai, jam_selesai, ruangan, dosen, accent_color)
 - [x] Model `Schedule` + relasi ke `Subject`
-- [ ] Livewire component: form tambah jadwal (pilih mata kuliah dari dropdown Subjects)
-- [ ] Tampilan daftar/tabel jadwal
-- [ ] Fitur edit jadwal
-- [ ] Fitur hapus jadwal
+- [x] Livewire component: form tambah jadwal (pilih mata kuliah dari dropdown Subjects)
+- [x] Tampilan daftar/tabel jadwal
+- [x] Fitur edit jadwal
+- [x] Fitur hapus jadwal
 - [ ] Tampilan jadwal per hari/minggu
-- [ ] Random/pilih accent color per schedule card
+- [x] Random/pilih accent color per schedule card
 
 ## ⏰ Deadline Tracking
-- [ ] Logika kalkulasi sisa hari menuju deadline
-- [ ] Logika penentuan level urgensi (`safe` ≥25 hari, `approaching` 17-24 hari, `urgent` 10-16 hari, `critical` 0-9 hari, `overdue` sudah lewat, `done` progress 100%)
-- [ ] Mapping warna per level: safe=Success, approaching=Caution, urgent=Warning, critical/overdue=Danger, done=Neutral
-- [ ] Tampilkan level urgensi sebagai label "Priority" di Task Card
-- [ ] Update otomatis level & warna secara real-time (Livewire), dihitung ulang tiap load halaman
+- [x] Logika kalkulasi sisa hari menuju deadline
+- [x] Logika penentuan level urgensi (`safe` ≥25 hari, `approaching` 17-24 hari, `urgent` 10-16 hari, `critical` 0-9 hari, `overdue` sudah lewat, `done` progress 100%)
+- [x] Mapping warna per level: safe=Success, approaching=Caution, urgent=Warning, critical/overdue=Danger, done=Neutral
+- [x] Tampilkan level urgensi sebagai label "Priority" di Task Card
+- [x] Update otomatis level & warna secara real-time (Livewire), dihitung ulang tiap load halaman
 
 ## 💰 Finance Tracker
-- [ ] Migration tabel `finance_records` (tipe: income/expense, kategori, nominal, tanggal, catatan)
-- [ ] Migration tabel `budgets` (bulan, tahun, nominal_budget)
-- [ ] Model `FinanceRecord` & `Budget`
-- [ ] Livewire component: form tambah pemasukan
-- [ ] Livewire component: form tambah pengeluaran (dengan kategori)
-- [ ] Fitur edit & hapus catatan pemasukan/pengeluaran
-- [ ] Fitur set budget bulanan
-- [ ] Kalkulasi otomatis: total income, total expense, sisa saldo (real-time via Livewire)
-- [ ] Indikator visual/progress bar saat pengeluaran mendekati/melebihi budget
-- [ ] Tampilan riwayat transaksi (list income & expense)
+- [x] Migration tabel `finance_records` (tipe: income/expense, kategori, nominal, tanggal, catatan)
+- [x] Migration tabel `budgets` (bulan, tahun, nominal_budget)
+- [x] Model `FinanceRecord` & `Budget`
+- [x] Livewire component: form tambah pemasukan
+- [x] Livewire component: form tambah pengeluaran (dengan kategori)
+- [x] Fitur edit & hapus catatan pemasukan/pengeluaran
+- [x] Fitur set budget bulanan
+- [x] Kalkulasi otomatis: total income, total expense, sisa saldo (real-time via Livewire)
+- [x] Indikator visual/progress bar saat pengeluaran mendekati/melebihi budget
+- [x] Tampilan riwayat transaksi (list income & expense)
 
 ## 🔍 Search, Filter & Sorting
-- [ ] Fitur search tugas berdasarkan judul (Livewire real-time search)
-- [ ] Filter Status: Semua Status / Not Started / In Progress / Completed
-- [ ] Filter Mata Kuliah: Semua Mata Kuliah / daftar dinamis dari Subjects
-- [ ] Sorting: Deadline Terdekat
-- [ ] Sorting: Deadline Terjauh
-- [ ] Sorting: Progress Tertinggi
-- [ ] Sorting: Progress Terendah
-- [ ] Sorting: Terbaru Dibuat
-- [ ] Pastikan search + filter + sort bisa dikombinasikan sekaligus
+- [x] Fitur search tugas berdasarkan judul (Livewire real-time search)
+- [x] Filter Status: Semua Status / Not Started / In Progress / Completed
+- [x] Filter Mata Kuliah: Semua Mata Kuliah / daftar dinamis dari Subjects
+- [x] Sorting: Deadline Terdekat
+- [x] Sorting: Deadline Terjauh
+- [x] Sorting: Progress Tertinggi
+- [x] Sorting: Progress Terendah
+- [x] Sorting: Terbaru Dibuat
+- [x] Pastikan search + filter + sort bisa dikombinasikan sekaligus
 
 ## 🎨 Theme (Tema Pink — default)
 - [ ] Implementasi Light mode tema Pink (Tailwind color tokens sesuai PROJECT.md)
