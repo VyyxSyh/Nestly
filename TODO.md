@@ -20,18 +20,18 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 ## ✅ Task Management
 - [x] Migration tabel `tasks` (judul, deskripsi, subject_id, deadline, status, progress_mode, progress)
 - [x] Model `Task` + relasi ke `Subject`
-- [ ] Livewire component: form tambah tugas (judul, dropdown mata kuliah, deskripsi/textarea, deadline, dropdown mode progress)
-- [ ] Input deadline: date picker (wajib) + time picker (opsional)
+- [x] Livewire component: form tambah tugas (judul, dropdown mata kuliah, deskripsi/textarea, deadline, dropdown mode progress)
+- [x] Input deadline: date picker (wajib) + time picker (opsional)
 - [ ] Livewire component: daftar tugas (Task List) dengan Task Card sesuai desain PRD.md 8.7
-- [ ] Fitur edit tugas (icon edit di card)
-- [ ] Fitur hapus tugas (icon hapus + konfirmasi)
-- [ ] Logika status `Completed` otomatis ter-set saat progress mencapai 100% (bukan field manual terpisah)
-- [ ] Format tampilan deadline dengan nama hari (contoh: "Rabu, 16 September 2026")
-- [ ] Validasi input form (judul wajib, deadline valid, dll) menggunakan Laravel Validation
+- [x] Fitur edit tugas (icon edit di card)
+- [x] Fitur hapus tugas (icon hapus + konfirmasi)
+- [x] Logika status `Completed` otomatis ter-set saat progress mencapai 100% (bukan field manual terpisah)
+- [x] Format tampilan deadline dengan nama hari (contoh: "Rabu, 16 September 2026")
+- [x] Validasi input form (judul wajib, deadline valid, dll) menggunakan Laravel Validation
 
 ## 📊 Task Progress
-- [ ] Migration tabel `subtasks` (task_id, judul, is_completed)
-- [ ] Model `Subtask` + relasi ke `Task`
+- [x] Migration tabel `subtasks` (task_id, judul, is_completed)
+- [x] Model `Subtask` + relasi ke `Task`
 - [ ] Field `progress_mode` pada tabel `tasks` (enum: manual, checklist)
 - [ ] Livewire component: progress bar + tombol `+`/`-` (kelipatan 5%) — khusus Mode Manual
 - [ ] Livewire component: Todo List/checklist sub-tugas — khusus Mode Checklist
@@ -70,8 +70,8 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [ ] Pastikan konten halaman punya padding cukup agar tidak tertutup Bottom Nav/Top Bar (fixed/sticky)
 
 ## 📚 Subjects (Mata Kuliah)
-- [ ] Migration tabel `subjects` (nama mata kuliah)
-- [ ] Model `Subject`
+- [x] Migration tabel `subjects` (nama mata kuliah)
+- [x] Model `Subject`
 - [ ] Livewire component: form tambah mata kuliah
 - [ ] Tampilan daftar mata kuliah
 - [ ] Fitur edit mata kuliah
@@ -79,8 +79,8 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [ ] Dropdown pilih mata kuliah dipakai ulang di form Task & form Schedule
 
 ## 🗓️ Schedule
-- [ ] Migration tabel `schedules` (subject_id, hari, jam_mulai, jam_selesai, ruangan, dosen, accent_color)
-- [ ] Model `Schedule` + relasi ke `Subject`
+- [x] Migration tabel `schedules` (subject_id, hari, jam_mulai, jam_selesai, ruangan, dosen, accent_color)
+- [x] Model `Schedule` + relasi ke `Subject`
 - [ ] Livewire component: form tambah jadwal (pilih mata kuliah dari dropdown Subjects)
 - [ ] Tampilan daftar/tabel jadwal
 - [ ] Fitur edit jadwal
