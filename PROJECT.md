@@ -46,12 +46,10 @@ Pengguna dapat mengelola tugas kuliah.
 
 Fitur:
 
-* Menambahkan tugas.
+* Menambahkan tugas, dengan informasi: judul, mata kuliah (relasi ke Subjects), deskripsi, deadline, mode progress.
 * Melihat daftar tugas.
 * Mengubah informasi tugas.
 * Menghapus tugas.
-* Mengubah progress tugas.
-* Menentukan deadline.
 * Menentukan status tugas.
 
 Contoh status:
@@ -60,11 +58,20 @@ Contoh status:
 * In Progress
 * Completed
 
+Status `Completed` otomatis ter-set ketika progress tugas mencapai 100% — bukan dipilih manual terpisah dari progress.
+
+Input deadline hanya meminta tanggal (jam bersifat opsional), namun ditampilkan lengkap dengan nama hari, contoh: "Rabu, 16 September 2026". Deskripsi tugas ditampilkan di halaman Task (tidak ikut ditampilkan di ringkasan Dashboard).
+
+> Detail desain visual Task Card (neo-brutalist style, badge, layout 2 kolom, Todo List) didokumentasikan di `PRD.md` section 8.7.
+
 ---
 
 ### 4.2 Task Progress
 
-Setiap tugas memiliki progress yang dapat diperbarui.
+Setiap tugas memiliki **Mode Progress**, dipilih salah satu:
+
+* **Manual** — progress diatur sendiri oleh pengguna, bertambah/berkurang dalam kelipatan 5% menggunakan tombol `+`/`-`.
+* **Checklist** — progress dihitung otomatis dari proporsi sub-tugas yang sudah dicentang selesai. Contoh: 1 dari 3 sub-tugas selesai = 33%.
 
 Contoh:
 
@@ -137,23 +144,20 @@ Informasi dapat mencakup:
 
 ### 4.6 Deadline Tracking
 
-Dashboard dapat menampilkan tugas berdasarkan deadline dan tingkat urgensinya.
+Sistem menghitung urgensi tugas secara otomatis berdasarkan sisa hari menuju deadline, ditampilkan sebagai label "Priority" di Task Card:
 
-Contoh kategori:
+| Level | Rentang Sisa Hari | Warna |
+|---|---|---|
+| `safe` | ≥ 25 hari (default) | Success (hijau) |
+| `approaching` | 17–24 hari | Caution (kuning) |
+| `urgent` | 10–16 hari | Warning (oranye) |
+| `critical` | 0–9 hari | Danger (merah) |
+| `overdue` | Sudah lewat deadline | Danger (merah) |
+| `done` | Progress 100% (berapapun sisa harinya) | Neutral (abu-abu) |
 
-- Due Today
-- Due Tomorrow
-- Upcoming
-- Overdue
+Level `done` menggantikan level urgensi lain begitu progress tugas mencapai 100%, terlepas dari sisa hari deadline-nya. Level dihitung ulang otomatis berdasarkan tanggal sistem setiap kali halaman dibuka/direfresh.
 
-Setiap tugas dapat memiliki indikator warna berdasarkan tingkat urgensi deadline:
-
-- 🟢 **Green** — Deadline masih cukup jauh dan tugas dalam kondisi aman.
-- 🟡 **Yellow** — Deadline mulai mendekat dan perlu diperhatikan.
-- 🟠 **Orange** — Deadline sudah dekat dan tugas perlu segera diprioritaskan.
-- 🔴 **Red** — Deadline sangat mendesak, sudah jatuh tempo, atau telah melewati deadline.
-
-Tujuannya agar pengguna dapat mengetahui tugas mana yang perlu diprioritaskan hanya dengan melihat indikator visual.
+Tujuannya agar pengguna dapat mengetahui tugas mana yang perlu diprioritaskan hanya dengan melihat indikator visual, tanpa perlu field prioritas manual terpisah.
 
 ---
 
@@ -188,19 +192,13 @@ Update saldo dan indikator budget dilakukan secara real-time menggunakan Livewir
 
 Pengguna dapat mencari dan mengatur daftar tugas.
 
-Contoh filter:
+Filter Status: `Semua Status`, `Not Started`, `In Progress`, `Completed`.
 
-* Status.
-* Deadline.
-* Mata kuliah.
-* Progress.
+Filter Mata Kuliah: `Semua Mata Kuliah`, diikuti daftar dinamis dari data Subjects.
 
-Contoh sorting:
+Sorting: `Deadline Terdekat`, `Deadline Terjauh`, `Progress Tertinggi`, `Progress Terendah`, `Terbaru Dibuat`.
 
-* Deadline terdekat.
-* Progress tertinggi.
-* Progress terendah.
-* Tugas terbaru.
+Search, filter, dan sorting dapat dikombinasikan sekaligus.
 
 ---
 
