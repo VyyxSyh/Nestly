@@ -71,6 +71,7 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-1.7 Deadline ditampilkan di UI dengan format lengkap termasuk nama hari, contoh: "Rabu, 16 September 2026" (ditambah jam jika diisi saat input).
 - FR-1.8 Status `Completed` otomatis ter-set ketika progress tugas mencapai 100% (lihat FR-2.5) — bukan dipilih manual secara terpisah dari progress.
 - FR-1.9 Deskripsi tugas ditampilkan di halaman Task (tidak ditampilkan di ringkasan Dashboard, sesuai FR-3).
+- FR-1.10 Halaman Task List menampilkan Task Card dalam layout 2 kolom masonry (Desktop & Tablet) atau 1 kolom stack (Mobile), lihat detail visual di 8.7.
 
 ### FR-2 — Task Progress
 - FR-2.1 Setiap tugas memiliki **Mode Progress**, dipilih salah satu:
@@ -101,7 +102,8 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 ### FR-5 — Schedule
 - FR-5.1 Pengguna dapat menambahkan jadwal kuliah dengan informasi: mata kuliah (relasi ke Subjects), hari, waktu, ruangan, dosen.
 - FR-5.2 Pengguna dapat melihat, mengedit, dan menghapus jadwal.
-- FR-5.3 Jadwal ditampilkan dalam format yang mudah dibaca (mis. per hari/minggu).
+- FR-5.3 Jadwal ditampilkan dalam bentuk Schedule Card (gaya "boarding pass"), dikelompokkan/ditandai berdasarkan hari lewat badge Hari pada tiap card, lihat detail visual di 8.8.
+- FR-5.4 Setiap Schedule Card memiliki accent color (lihat Schedule Card Accent Colors di `PROJECT.md` section 12) yang diterapkan pada border dan badge Hari.
 
 ### FR-6 — Deadline Tracking
 - FR-6.1 Sistem menghitung urgensi tugas secara otomatis berdasarkan sisa hari menuju deadline, dengan level berikut (dari paling aman ke paling kritis):
@@ -386,6 +388,38 @@ Task Card di halaman Task (bukan versi ringkas di Dashboard) menggunakan gaya **
 - Section Todo List ini **tidak muncul** jika Mode Progress tugas adalah **Manual** (karena tidak ada sub-tugas).
 
 **Icon edit & hapus:** tetap tersedia di card ini (lihat FR-1), penempatan detail (misal di pojok kanan atas, dekat badge status) disesuaikan saat implementasi visual agar tidak bertabrakan dengan badge.
+
+**Layout Halaman Task List (susunan antar-card):**
+- **Desktop & Tablet:** 2 kolom sejajar, masing-masing kolom berisi beberapa Task Card tersusun ke bawah (gaya masonry — tinggi tiap card bisa berbeda-beda tergantung panjang deskripsi dan jumlah sub-tugas, tidak harus seragam).
+- **Mobile:** 1 kolom, seluruh card di-stack vertikal ke bawah.
+
+---
+
+### 8.8 Schedule Card Design (Halaman Schedule)
+
+Schedule Card menggunakan gaya visual yang konsisten dengan Task Card (neo-brutalist: border tebal + hard shadow offset), dengan layout "boarding pass" khas untuk info jadwal.
+
+**Struktur luar card:**
+- Border: `2px solid`, warna mengikuti accent color card (lihat Schedule Card Accent Colors di `PROJECT.md` section 12).
+- `border-radius: 14px`.
+- `box-shadow: 5px 5px 0px [warna aksen yang sama dengan border]`.
+
+**Badge Hari — nempel di garis border atas:**
+- Posisi: kiri atas (bukan tengah/kanan).
+- Bentuk pill dengan border (outline, bukan solid fill), background sama dengan `Surface` card (supaya "memotong" garis border, konsisten dengan pola badge di Task Card).
+- Warna border & teks mengikuti accent color card.
+- Ukuran cukup besar/jelas terbaca (tidak mini).
+
+**Body card:**
+- **Kolom kiri (blok waktu, "boarding pass style"):**
+  - Jam mulai ditampilkan besar & bold (contoh: "08").
+  - Menit ditampilkan kecil di bawahnya (contoh: "00").
+  - Garis vertikal pemisah pendek.
+  - Jam selesai ditampilkan kecil di bawah garis (contoh: "09:40").
+- **Kolom kanan (info mata kuliah):**
+  - Nama mata kuliah — font besar & bold (lebih besar dari teks lain di card).
+  - Ruangan — baris tersendiri.
+  - Nama pengajar/dosen — baris tersendiri, **di bawah** ruangan.
 
 ---
 
