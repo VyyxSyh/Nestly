@@ -18,22 +18,26 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Setup Git repository & `.gitignore`
 
 ## ✅ Task Management
-- [x] Migration tabel `tasks` (judul, deskripsi, mata_kuliah_id, deadline, status, progress, priority)
-- [x] Model `Task` + relasi ke `Subject`/Mata Kuliah
-- [ ] Livewire component: form tambah tugas
-- [ ] Livewire component: daftar tugas (Task List)
-- [ ] Fitur edit tugas
-- [ ] Fitur hapus tugas (dengan konfirmasi)
-- [ ] Fitur update status tugas (Not Started / In Progress / Completed)
-- [ ] Fitur set & update deadline tugas
-- [ ] Fitur set prioritas tugas
+- [x] Migration tabel `tasks` (judul, deskripsi, subject_id, deadline, status, progress_mode, progress)
+- [x] Model `Task` + relasi ke `Subject`
+- [ ] Livewire component: form tambah tugas (judul, dropdown mata kuliah, deskripsi/textarea, deadline, dropdown mode progress)
+- [ ] Input deadline: date picker (wajib) + time picker (opsional)
+- [ ] Livewire component: daftar tugas (Task List) dengan Task Card sesuai desain PRD.md 8.7
+- [ ] Fitur edit tugas (icon edit di card)
+- [ ] Fitur hapus tugas (icon hapus + konfirmasi)
+- [ ] Logika status `Completed` otomatis ter-set saat progress mencapai 100% (bukan field manual terpisah)
+- [ ] Format tampilan deadline dengan nama hari (contoh: "Rabu, 16 September 2026")
 - [ ] Validasi input form (judul wajib, deadline valid, dll) menggunakan Laravel Validation
 
 ## 📊 Task Progress
-- [ ] Komponen progress bar per tugas (Blade + Tailwind)
-- [ ] Fitur update progress secara real-time via Livewire (slider/input persentase)
-- [ ] Progress tersimpan otomatis ke database setiap perubahan
-- [ ] Animasi/transisi progress bar (opsional, UX enhancement)
+- [ ] Migration tabel `subtasks` (task_id, judul, is_completed)
+- [ ] Model `Subtask` + relasi ke `Task`
+- [ ] Field `progress_mode` pada tabel `tasks` (enum: manual, checklist)
+- [ ] Livewire component: progress bar + tombol `+`/`-` (kelipatan 5%) — khusus Mode Manual
+- [ ] Livewire component: Todo List/checklist sub-tugas — khusus Mode Checklist
+- [ ] Logika kalkulasi otomatis progress dari proporsi sub-tugas selesai (Mode Checklist)
+- [ ] Progress tersimpan otomatis ke database setiap perubahan, real-time via Livewire
+- [ ] Widget/indikator progress keseluruhan (agregat semua tugas) di halaman Task
 
 ## 🏠 Dashboard
 - [ ] Layout halaman utama (Dashboard) sebagai route utama
@@ -85,10 +89,11 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [ ] Random/pilih accent color per schedule card
 
 ## ⏰ Deadline Tracking
-- [ ] Logika kategorisasi otomatis (Due Today / Due Tomorrow / Upcoming / Overdue) di Model/Livewire component
-- [ ] Logika indikator warna urgensi (🟢🟡🟠🔴) berdasarkan tanggal sistem (pakai warna dari Color System di PROJECT.md)
-- [ ] Update otomatis kategori & warna secara real-time (Livewire)
-- [ ] Tampilan filter tugas berdasarkan kategori urgensi
+- [ ] Logika kalkulasi sisa hari menuju deadline
+- [ ] Logika penentuan level urgensi (`safe` ≥25 hari, `approaching` 17-24 hari, `urgent` 10-16 hari, `critical` 0-9 hari, `overdue` sudah lewat, `done` progress 100%)
+- [ ] Mapping warna per level: safe=Success, approaching=Caution, urgent=Warning, critical/overdue=Danger, done=Neutral
+- [ ] Tampilkan level urgensi sebagai label "Priority" di Task Card
+- [ ] Update otomatis level & warna secara real-time (Livewire), dihitung ulang tiap load halaman
 
 ## 💰 Finance Tracker
 - [ ] Migration tabel `finance_records` (tipe: income/expense, kategori, nominal, tanggal, catatan)
@@ -103,21 +108,33 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [ ] Tampilan riwayat transaksi (list income & expense)
 
 ## 🔍 Search, Filter & Sorting
-- [ ] Fitur search tugas berdasarkan kata kunci (Livewire real-time search)
-- [ ] Filter berdasarkan status
-- [ ] Filter berdasarkan deadline
-- [ ] Filter berdasarkan mata kuliah
-- [ ] Filter berdasarkan progress
-- [ ] Sorting: deadline terdekat
-- [ ] Sorting: progress tertinggi / terendah
-- [ ] Sorting: tugas terbaru
+- [ ] Fitur search tugas berdasarkan judul (Livewire real-time search)
+- [ ] Filter Status: Semua Status / Not Started / In Progress / Completed
+- [ ] Filter Mata Kuliah: Semua Mata Kuliah / daftar dinamis dari Subjects
+- [ ] Sorting: Deadline Terdekat
+- [ ] Sorting: Deadline Terjauh
+- [ ] Sorting: Progress Tertinggi
+- [ ] Sorting: Progress Terendah
+- [ ] Sorting: Terbaru Dibuat
+- [ ] Pastikan search + filter + sort bisa dikombinasikan sekaligus
 
 ## 🎨 Theme (Tema Pink — default)
 - [ ] Implementasi Light mode tema Pink (Tailwind color tokens sesuai PROJECT.md)
 - [ ] Implementasi Dark mode tema Pink (Tailwind `dark:` variant)
+- [ ] Konfigurasi token warna tambahan `Caution` (kuning) dan `Neutral` (abu-abu) di Tailwind config, sesuai Color System PROJECT.md
 - [ ] Toggle switch Light/Dark mode
 - [ ] Simpan preferensi Light/Dark mode (cookie/session, atau tabel `user_settings` jika ingin persist ke database)
 - [ ] Terapkan preferensi otomatis saat aplikasi dibuka kembali
+
+## 🎴 Task Card Styling (Neo-brutalist)
+- [ ] Card: border 2px + border-radius 14px + box-shadow offset (6px 6px 0px, warna sesuai aksen)
+- [ ] Badge Mata Kuliah — posisi absolute, tengah atas, "nempel" di garis border (background = Surface)
+- [ ] Badge Status — posisi absolute, kanan atas, warna sesuai token status
+- [ ] Layout body 2 kolom: kiri (judul + deskripsi), kanan (Progress + Deadline)
+- [ ] Baris tombol +/- lebarnya mengikuti lebar progress bar saja (bukan lebar penuh termasuk kolom persentase)
+- [ ] Todo List full-width di bawah 2 kolom, khusus Mode Checklist (checkbox kotak + strikethrough saat selesai)
+- [ ] Sembunyikan section Todo List jika Mode Progress = Manual
+- [ ] Pastikan komponen ini reusable/konsisten dipakai di semua card Task List
 
 ## 💾 Data Persistence
 - [ ] Pastikan seluruh migration sudah mencerminkan relasi antar tabel dengan benar
