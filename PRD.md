@@ -284,13 +284,8 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
     - **Setelah halaman di-scroll (user mulai scroll ke bawah):** Top Bar mendapatkan **background** (solid/blur sesuai token Color System), muncul dengan animasi transisi halus (fade/slide), memberi kesan "muncul" saat dibutuhkan agar tetap terbaca di atas konten yang sedang di-scroll.
 
 - **Accent Color Selector** — pemilihan tema warna (**Pink** default, serta **Blue** dan **Monochrome** pada Phase 2) ditempatkan di halaman **Pengaturan/Settings**, terpisah dari Theme Toggle Light/Dark di atas. Accent color bersifat "diatur sekali, jarang diubah", sehingga tidak perlu akses secepat toggle Light/Dark mode.
-- **Task Card** — menampilkan:
-  - Judul tugas.
-  - Icon edit dan icon hapus (di pojok kanan atas card).
-  - Mata kuliah + deadline terformat (contoh: "Networking — Deadline: Rabu, 16 September 2026").
-  - Badge status (`Not Started` / `In Progress` / `Completed`), berwarna sesuai token status masing-masing.
-  - Label "Priority" yang menampilkan level urgensi deadline (`safe` / `approaching` / `urgent` / `critical` / `overdue` / `done`), lihat FR-6.
-  - Progress bar dengan tombol `+`/`-` di kedua ujungnya (khusus Mode Progress **Manual**, kelipatan 5%) dan angka persentase; untuk Mode Progress **Checklist**, progress ditampilkan read-only (dihitung otomatis dari sub-tugas, tanpa tombol +/-).
+- **Task Card (halaman Task)** — desain lengkap & detail visual ada di section 8.7.
+- **Task Card (ringkas, khusus di Dashboard)** — versi mini dari Task Card, hanya menampilkan nama tugas, aksen warna mata kuliah, dan deadline (lihat 8.6).
 - **Progress Bar** — representasi visual progress (persentase) per tugas dan progress keseluruhan.
 - **Dashboard Summary Widget** — kartu ringkasan statistik (total tugas, status, deadline terdekat, ringkasan keuangan).
 - **Schedule Card/List** — menampilkan jadwal kuliah secara terstruktur, dengan accent color per kartu.
@@ -357,6 +352,40 @@ Section ini dipecah jadi 2 container tersusun vertikal:
   5. List Transaksi Finance
 
 > Catatan: Section Jadwal (poin 1 di atas) di dalamnya sendiri berisi 4 card jadwal — perilaku responsivenya (grid 2×2 di Tablet/Mobile) mengikuti spesifikasi yang sudah ditetapkan sebelumnya, tetap berlaku sebagai bagian dari section ini.
+
+### 8.7 Task Card Design (Halaman Task)
+
+Task Card di halaman Task (bukan versi ringkas di Dashboard) menggunakan gaya **Neo-brutalist**: border tebal berwarna aksen + hard shadow (offset, bukan blur).
+
+**Struktur luar card:**
+- Border: `2px solid`, warna mengikuti aksen (bisa warna mata kuliah, ditentukan lebih lanjut saat implementasi).
+- `border-radius: 14px`.
+- `box-shadow: 6px 6px 0px [warna aksen yang sama dengan border]` — shadow keras/solid, bukan blur, khas gaya neo-brutalist.
+- Background card mengikuti token `Surface`.
+
+**Badge yang "nempel" di garis border atas card:**
+- **Badge Mata Kuliah** — posisi tengah atas, bentuk pill, background sama dengan `Surface` card (supaya seolah "memotong" garis border), border & warna teks mengikuti aksen mata kuliah.
+- **Badge Status** (`Not Started` / `In Progress` / `Completed`) — posisi kanan atas, bentuk pill sama seperti badge Mata Kuliah, namun warna mengikuti token status masing-masing.
+- Kedua badge diposisikan `position: absolute`, sedikit naik ke atas garis border (setengah tinggi badge berada di luar card, setengah di dalam).
+
+**Body card — 2 kolom:**
+- **Kolom kiri (lebih lebar, ± 55–60%):**
+  - Judul tugas (bold, ukuran lebih besar dari teks lain).
+  - Deskripsi tugas (teks kecil, warna `Text Muted`, multi-baris/wrap).
+- **Kolom kanan (± 40–45%):**
+  - Label "Progress" (bold).
+  - Progress bar (untuk Mode **Manual**) dengan angka persentase di sisi kanan bar.
+  - Baris tombol `−` dan `+` tepat di bawah progress bar — **lebar baris tombol ini mengikuti lebar progress bar saja** (tidak melebar sampai ke kolom angka persentase); tombol `−` menempel di ujung kiri, tombol `+` menempel di ujung kanan (`justify-content: space-between` dalam container selebar progress bar).
+  - Untuk Mode **Checklist**, bagian ini menampilkan progress read-only (dihitung otomatis dari sub-tugas), tanpa tombol `+`/`−`.
+  - Label "Deadline" (bold), diikuti tanggal terformat sesuai FR-1.7 (contoh: "Rabu, 16 September 2026").
+
+**Todo List (khusus Mode Progress Checklist) — full-width di bawah 2 kolom:**
+- Label "Todo List" (bold, rata tengah).
+- Daftar sub-tugas, masing-masing dengan checkbox (kotak, bukan bulat) di kiri dan teks sub-tugas di kanan (wrap multi-baris jika perlu).
+- Sub-tugas yang sudah dicentang: teks berubah warna `Text Muted` dengan style *strikethrough*.
+- Section Todo List ini **tidak muncul** jika Mode Progress tugas adalah **Manual** (karena tidak ada sub-tugas).
+
+**Icon edit & hapus:** tetap tersedia di card ini (lihat FR-1), penempatan detail (misal di pojok kanan atas, dekat badge status) disesuaikan saat implementasi visual agar tidak bertabrakan dengan badge.
 
 ---
 
