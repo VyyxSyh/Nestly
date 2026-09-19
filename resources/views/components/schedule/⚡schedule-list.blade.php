@@ -131,7 +131,7 @@ new class extends Component
 
     <div class="space-y-3">
         @forelse ($schedules as $schedule)
-            <div class="border rounded-md p-4 border-l-4" style="border-left-color: {{ $schedule->accent_color }}">
+            <div class="border rounded-md p-4 border-l-4" style="border-left-color: {{ $schedule->subject->accent_color }}">
                 <div class="flex justify-between items-start">
                     <div>
                         <div class="font-medium">{{ $schedule->subject->name }}</div>

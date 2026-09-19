@@ -9,10 +9,39 @@ new class extends Component
     public $name = '';
     public ?int $confirmingDeleteId = null;
 
+    public $accent_color = '';
+
+    public array $accentPalette = [
+        '#E85D68', '#F07845', '#E7C23B', '#4CAF72',
+        '#35B9C4', '#4D83D1', '#8666D5', '#E7659A',
+    ];
+
     public function openModal()
     {
-        $this->reset('name');
+        $this->reset(['name', 'editingSubjectId']);
+        $this->accent_color = $this->accentPalette[array_rand($this->accentPalette)];
+        $this->isEditing = false;
         $this->showModal = true;
+    }
+
+    public function openEditModal(int $id)
+    {
+        $subject = Subject::findOrFail($id);
+        $this->editingSubjectId = $subject->id;
+        $this->name = $subject->name;
+        $this->accent_color = $subject->accent_color;
+        $this->isEditing = true;
+        $this->showModal = true;
+    }
+
+    public function selectColor(string $color)
+    {
+        $this->accent_color = $color;
+    }
+
+    public function randomizeColor()
+    {
+        $this->accent_color = $this->accentPalette[array_rand($this->accentPalette)];
     }
 
     public function closeModal()
@@ -24,9 +53,15 @@ new class extends Component
     {
         $validated = $this->validate([
             'name' => 'required|string|max:255',
+            'accent_color' => 'required|string',
         ]);
 
-        Subject::create($validated);
+        if ($this->isEditing && $this->editingSubjectId) {
+            Subject::findOrFail($this->editingSubjectId)->update($validated);
+        } else {
+            Subject::create($validated);
+        }
+
         $this->closeModal();
     }
 
@@ -79,7 +114,7 @@ new class extends Component
 
     <div class="space-y-2">
         @forelse ($subjects as $subject)
-            <div class="border rounded-md p-3 flex justify-between items-center">
+            <div class="border rounded-md p-3 flex justify-between items-center border-l-4">
                 <div>
                     <span class="font-medium">{{ $subject->name }}</span>
                     <span class="text-sm text-gray-500 ml-2">
@@ -116,6 +151,19 @@ new class extends Component
                         <label class="block text-sm mb-1">Nama Mata Kuliah</label>
                         <input type="text" wire:model="name" class="w-full border rounded-md px-3 py-2">
                         @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm mb-1">Warna Aksen</label>
+                        <div class="flex gap-2 items-center">
+                            @foreach ($accentPalette as $color)
+                                <button type="button" wire:click="selectColor('{{ $color }}')"
+                                        class="w-7 h-7 rounded-full border-2 {{ $accent_color === $color ? 'border-black' : 'border-transparent' }}"
+                                        style="background-color: {{ $color }}"></button>
+                            @endforeach
+                            <button type="button" wire:click="randomizeColor" class="text-xs text-gray-500 ml-2">
+                                <i class="fa-solid fa-shuffle"></i> Acak
+                            </button>
+                        </div>
                     </div>
                     <div class="flex justify-end gap-2 pt-2">
                         <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border">Batal</button>

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subject extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'accent_color'];
     public function tasks() {
         return $this->hasMany(Task::class);
     }
