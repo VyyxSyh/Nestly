@@ -291,14 +291,14 @@ new class extends Component
 
                         @if ($task->progress_mode === 'manual')
                             <div class="flex justify-between w-full">
-<button wire:click="decrementProgress({{ $task->id }})"
-        class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 font-bold active:scale-90 active:bg-green-100 transition-transform duration-100">
-    −
-</button>
-<button wire:click="incrementProgress({{ $task->id }})"
-        class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 font-bold active:scale-90 active:bg-green-100 transition-transform duration-100">
-    +
-</button>
+                                <button wire:click="decrementProgress({{ $task->id }})"
+                                        class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 cursor-pointer active:scale-90 active:bg-green-100 transition-transform duration-100">
+                                    <i class="fa-solid fa-minus text-xs"></i>
+                                </button>
+                                <button wire:click="incrementProgress({{ $task->id }})"
+                                        class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 cursor-pointer active:scale-90 active:bg-green-100 transition-transform duration-100">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
                             </div>
                         @endif
 
@@ -328,15 +328,15 @@ new class extends Component
                 @endif
 
                 {{-- Icon Edit/Hapus --}}
-                <div class="flex justify-evenly mt-4">
+                <div class="flex justify-center gap-5 mt-4">
                     <button wire:click="openEditModal({{ $task->id }})"
-                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-blue-500 bg-blue-500 text-transparent
+                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-blue-500 bg-blue-500 text-white cursor-pointer
                                 hover:bg-transparent hover:scale-110 hover:shadow-[0_0_10px_rgba(59,130,246,0.7)] hover:text-blue-500
                                 active:scale-90 transition-all duration-150">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                     <button wire:click="confirmDelete({{ $task->id }})"
-                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-red-500 bg-red-500 text-transparent
+                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-red-500 bg-red-500 text-white cursor-pointer
                                 hover:bg-transparent hover:scale-110 hover:shadow-[0_0_10px_rgba(239,68,68,0.7)] hover:text-red-500
                                 active:scale-90 transition-all duration-150">
                         <i class="fa-solid fa-trash"></i>

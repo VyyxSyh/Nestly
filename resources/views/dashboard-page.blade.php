@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body class="bg-gray-50 p-8">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-7xl mx-auto">
         <nav class="flex gap-4 mb-6 text-sm">
             <a href="/" class="font-medium text-teal-600">Dashboard</a>
             <a href="/tasks" class="text-gray-600">Tugas</a>

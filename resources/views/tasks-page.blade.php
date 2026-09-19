@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gray-50 p-8">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-7xl mx-auto">
         <livewire:task.task-list />
     </div>
 </body>
