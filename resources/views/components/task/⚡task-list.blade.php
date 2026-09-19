@@ -244,7 +244,7 @@ new class extends Component
         </select>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-4">
+    <div class="grid md:grid-cols-2 gap-6 mt-4">
         @forelse ($tasks as $task)
             @php
                 $accent = $task->subject?->accent_color ?? '#9CA3AF';
@@ -254,25 +254,22 @@ new class extends Component
                     default => '#9CA3AF',
                 };
             @endphp
-            <div class="relative border-2 rounded-2xl p-5 pt-7 bg-white"
+            <div class="relative border-2 rounded-2xl p-5 pt-6 bg-white mt-3"
                 style="border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};">
 
                 {{-- Badge Mata Kuliah --}}
-                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold"
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                     style="border-color: {{ $accent }}; color: {{ $accent }};">
                     {{ $task->subject?->name ?? 'Tanpa Mata Kuliah' }}
                 </div>
 
                 {{-- Badge Status --}}
-                <div class="absolute -top-3 right-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold"
+                <div class="absolute -top-3 right-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                     style="border-color: {{ $statusColor }}; color: {{ $statusColor }};">
                     {{ str($task->status)->replace('_', ' ')->title() }}
                 </div>
 
-                {{-- Icon edit/hapus --}}
-                <div class="absolute top-2 right-2 flex gap-2 text-sm" style="top: -2.75rem; right: 0;"></div>
-
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-4 mt-2">
                     {{-- Kolom kiri: judul + deskripsi --}}
                     <div>
                         <h3 class="font-bold text-lg mb-1">{{ $task->title }}</h3>
@@ -288,23 +285,20 @@ new class extends Component
                             <span class="text-sm">{{ $task->progress }}%</span>
                         </div>
 
+                        <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
+                            <div class="h-full bg-green-500" style="width: {{ $task->progress }}%"></div>
+                        </div>
+
                         @if ($task->progress_mode === 'manual')
-                            <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
-                                <div class="h-full bg-green-500" style="width: {{ $task->progress }}%"></div>
-                            </div>
-                            <div class="flex justify-between">
-                                <button wire:click="decrementProgress({{ $task->id }})"
-                                        class="w-7 h-7 flex items-center justify-center rounded-full border-2 border-green-500 text-green-600 font-bold">
-                                    −
-                                </button>
-                                <button wire:click="incrementProgress({{ $task->id }})"
-                                        class="w-7 h-7 flex items-center justify-center rounded-full border-2 border-green-500 text-green-600 font-bold">
-                                    +
-                                </button>
-                            </div>
-                        @else
-                            <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
-                                <div class="h-full bg-green-500" style="width: {{ $task->progress }}%"></div>
+                            <div class="flex justify-between w-full">
+<button wire:click="decrementProgress({{ $task->id }})"
+        class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 font-bold active:scale-90 active:bg-green-100 transition-transform duration-100">
+    −
+</button>
+<button wire:click="incrementProgress({{ $task->id }})"
+        class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 font-bold active:scale-90 active:bg-green-100 transition-transform duration-100">
+    +
+</button>
                             </div>
                         @endif
 
@@ -334,11 +328,17 @@ new class extends Component
                 @endif
 
                 {{-- Icon Edit/Hapus --}}
-                <div class="flex justify-end gap-3 mt-3 text-sm">
-                    <button wire:click="openEditModal({{ $task->id }})" class="text-blue-600">
+                <div class="flex justify-evenly mt-4">
+                    <button wire:click="openEditModal({{ $task->id }})"
+                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-blue-500 bg-blue-500 text-transparent
+                                hover:bg-transparent hover:scale-110 hover:shadow-[0_0_10px_rgba(59,130,246,0.7)] hover:text-blue-500
+                                active:scale-90 transition-all duration-150">
                         <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                    <button wire:click="confirmDelete({{ $task->id }})" class="text-red-600">
+                    <button wire:click="confirmDelete({{ $task->id }})"
+                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-red-500 bg-red-500 text-transparent
+                                hover:bg-transparent hover:scale-110 hover:shadow-[0_0_10px_rgba(239,68,68,0.7)] hover:text-red-500
+                                active:scale-90 transition-all duration-150">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
