@@ -5,6 +5,8 @@ use Livewire\Component;
 
 new class extends Component
 {
+    public bool $isEditing = false;
+    public ?int $editingSubjectId = null;
     public bool $showModal = false;
     public $name = '';
     public ?int $confirmingDeleteId = null;
@@ -114,7 +116,7 @@ new class extends Component
 
     <div class="space-y-2">
         @forelse ($subjects as $subject)
-            <div class="border rounded-md p-3 flex justify-between items-center border-l-4">
+            <div class="border rounded-md p-3 flex justify-between items-center border-l-4" style="border-left-color: {{ $subject->accent_color }}">
                 <div>
                     <span class="font-medium">{{ $subject->name }}</span>
                     <span class="text-sm text-gray-500 ml-2">

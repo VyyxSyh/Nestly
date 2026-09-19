@@ -16,12 +16,6 @@ new class extends Component
     public $end_time = '';
     public $room = '';
     public $lecturer = '';
-    public $accent_color = '';
-
-    public array $accentPalette = [
-        '#E85D68', '#F07845', '#E7C23B', '#4CAF72',
-        '#35B9C4', '#4D83D1', '#8666D5', '#E7659A',
-    ];
 
     public array $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
@@ -29,9 +23,8 @@ new class extends Component
 
     public function openCreateModal()
     {
-        $this->reset(['subject_id', 'start_time', 'end_time', 'room', 'lecturer', 'accent_color', 'editingScheduleId']);
+        $this->reset(['subject_id', 'start_time', 'end_time', 'room', 'lecturer', 'editingScheduleId']);
         $this->day = 'Senin';
-        $this->accent_color = $this->accentPalette[array_rand($this->accentPalette)];
         $this->isEditing = false;
         $this->showModal = true;
     }
@@ -47,7 +40,6 @@ new class extends Component
         $this->end_time = $schedule->end_time;
         $this->room = $schedule->room;
         $this->lecturer = $schedule->lecturer;
-        $this->accent_color = $schedule->accent_color;
         $this->isEditing = true;
         $this->showModal = true;
     }
@@ -59,16 +51,6 @@ new class extends Component
         $this->editingScheduleId = null;
     }
 
-    public function selectColor(string $color)
-    {
-        $this->accent_color = $color;
-    }
-
-    public function randomizeColor()
-    {
-        $this->accent_color = $this->accentPalette[array_rand($this->accentPalette)];
-    }
-
     public function save()
     {
         $validated = $this->validate([
@@ -78,7 +60,6 @@ new class extends Component
             'end_time' => 'required|after:start_time',
             'room' => 'nullable|string|max:255',
             'lecturer' => 'nullable|string|max:255',
-            'accent_color' => 'required|string',
         ]);
 
         if ($this->isEditing && $this->editingScheduleId) {
@@ -216,20 +197,6 @@ new class extends Component
                     <div>
                         <label class="block text-sm mb-1">Dosen</label>
                         <input type="text" wire:model="lecturer" class="w-full border rounded-md px-3 py-2">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm mb-1">Warna Aksen</label>
-                        <div class="flex gap-2 items-center">
-                            @foreach ($accentPalette as $color)
-                                <button type="button" wire:click="selectColor('{{ $color }}')"
-                                        class="w-7 h-7 rounded-full border-2 {{ $accent_color === $color ? 'border-black' : 'border-transparent' }}"
-                                        style="background-color: {{ $color }}"></button>
-                            @endforeach
-                            <button type="button" wire:click="randomizeColor" class="text-xs text-gray-500 ml-2">
-                                <i class="fa-solid fa-shuffle"></i> Acak
-                            </button>
-                        </div>
                     </div>
 
                     <div class="flex justify-end gap-2 pt-2">

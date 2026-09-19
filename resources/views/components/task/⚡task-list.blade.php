@@ -244,93 +244,103 @@ new class extends Component
         </select>
     </div>
 
-    <div class="space-y-3">
+    <div class="grid md:grid-cols-2 gap-4">
         @forelse ($tasks as $task)
-            <div class="border rounded-md p-4 border-l-4"
-                style="border-left-color:
-                    @if($task->urgency_color === 'red') #E85D68
-                    @elseif($task->urgency_color === 'orange') #F07845
-                    @elseif($task->urgency_color === 'yellow') #E7C23B
-                    @elseif($task->urgency_color === 'gray') #9AA9A4
-                    @else #4CAF72
-                    @endif">
+            @php
+                $accent = $task->subject?->accent_color ?? '#9CA3AF';
+                $statusColor = match($task->status) {
+                    'completed' => '#22C55E',
+                    'in_progress' => '#3B82F6',
+                    default => '#9CA3AF',
+                };
+            @endphp
+            <div class="relative border-2 rounded-2xl p-5 pt-7 bg-white"
+                style="border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};">
 
-                <div class="flex justify-between items-start">
+                {{-- Badge Mata Kuliah --}}
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold"
+                    style="border-color: {{ $accent }}; color: {{ $accent }};">
+                    {{ $task->subject?->name ?? 'Tanpa Mata Kuliah' }}
+                </div>
+
+                {{-- Badge Status --}}
+                <div class="absolute -top-3 right-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold"
+                    style="border-color: {{ $statusColor }}; color: {{ $statusColor }};">
+                    {{ str($task->status)->replace('_', ' ')->title() }}
+                </div>
+
+                {{-- Icon edit/hapus --}}
+                <div class="absolute top-2 right-2 flex gap-2 text-sm" style="top: -2.75rem; right: 0;"></div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    {{-- Kolom kiri: judul + deskripsi --}}
                     <div>
-                        <div class="font-medium">{{ $task->title }}</div>
-                        <div class="text-sm text-gray-500">
-                            {{ $task->subject?->name ?? 'Tanpa mata kuliah' }} — Deadline: {{ $task->deadline_formatted }}
-                        </div>
+                        <h3 class="font-bold text-lg mb-1">{{ $task->title }}</h3>
                         @if ($task->description)
-                            <div class="text-sm text-gray-600 mt-1">{{ $task->description }}</div>
+                            <p class="text-sm text-gray-500">{{ $task->description }}</p>
                         @endif
                     </div>
-                    <div class="flex gap-3 text-lg">
-                        <button wire:click="openEditModal({{ $task->id }})" class="text-blue-600" title="Edit">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button wire:click="confirmDelete({{ $task->id }})" class="text-red-600" title="Hapus">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+
+                    {{-- Kolom kanan: progress + deadline --}}
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-semibold text-sm">Progress</span>
+                            <span class="text-sm">{{ $task->progress }}%</span>
+                        </div>
+
+                        @if ($task->progress_mode === 'manual')
+                            <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
+                                <div class="h-full bg-green-500" style="width: {{ $task->progress }}%"></div>
+                            </div>
+                            <div class="flex justify-between">
+                                <button wire:click="decrementProgress({{ $task->id }})"
+                                        class="w-7 h-7 flex items-center justify-center rounded-full border-2 border-green-500 text-green-600 font-bold">
+                                    −
+                                </button>
+                                <button wire:click="incrementProgress({{ $task->id }})"
+                                        class="w-7 h-7 flex items-center justify-center rounded-full border-2 border-green-500 text-green-600 font-bold">
+                                    +
+                                </button>
+                            </div>
+                        @else
+                            <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
+                                <div class="h-full bg-green-500" style="width: {{ $task->progress }}%"></div>
+                            </div>
+                        @endif
+
+                        <div class="mt-3">
+                            <div class="font-semibold text-sm">Deadline</div>
+                            <div class="text-sm text-gray-500">{{ $task->deadline_formatted }}</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="text-sm mt-2 flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded-full text-xs font-medium
-                        @if($task->status === 'completed') bg-green-100 text-green-700
-                        @elseif($task->status === 'in_progress') bg-yellow-100 text-yellow-700
-                        @else bg-gray-100 text-gray-600
-                        @endif">
-                        {{ str($task->status)->replace('_', ' ')->title() }}
-                    </span>
-                    <span class="text-gray-500">Priority: {{ $task->priority }}</span>
-                </div>
-
-                <div class="mt-3">
-                    @if ($task->progress_mode === 'manual')
-                        <div class="flex items-center gap-3">
-                            <button wire:click="decrementProgress({{ $task->id }})"
-                                    class="w-7 h-7 flex items-center justify-center rounded-full border text-gray-600 hover:bg-gray-100">
-                                −
-                            </button>
-
-                            <div class="flex gap-0.5 flex-1">
-                                @for ($i = 0; $i < 10; $i++)
-                                    @php
-                                        $segmentStart = $i * 10;
-                                        $filled = $task->progress >= $segmentStart + 10;
-                                        $half = ! $filled && $task->progress > $segmentStart;
-                                    @endphp
-                                    <div class="relative h-3 flex-1 rounded-sm bg-gray-200 overflow-hidden">
-                                        @if ($filled)
-                                            <div class="absolute inset-0 bg-teal-500"></div>
-                                        @elseif ($half)
-                                            <div class="absolute inset-0 bg-teal-500" style="clip-path: polygon(0 100%, 100% 0, 100% 100%);"></div>
-                                        @endif
-                                    </div>
-                                @endfor
-                            </div>
-
-                            <button wire:click="incrementProgress({{ $task->id }})"
-                                    class="w-7 h-7 flex items-center justify-center rounded-full border text-gray-600 hover:bg-gray-100">
-                                +
-                            </button>
-
-                            <span class="text-sm w-10 text-right">{{ $task->progress }}%</span>
-                        </div>
-                    @else
+                {{-- Todo List (khusus checklist) --}}
+                @if ($task->progress_mode === 'checklist')
+                    <div class="mt-4 pt-3 border-t">
+                        <div class="text-center font-semibold text-sm mb-2">Todo List</div>
                         <div class="space-y-1">
                             @forelse ($task->checklistItems as $item)
                                 <label class="flex items-center gap-2 text-sm">
-                                    <input type="checkbox" wire:click="toggleChecklistItem({{ $item->id }})" @checked($item->is_done)>
+                                    <input type="checkbox" wire:click="toggleChecklistItem({{ $item->id }})" @checked($item->is_done)
+                                        class="w-4 h-4 rounded border-2" style="accent-color: {{ $accent }}">
                                     <span class="{{ $item->is_done ? 'line-through text-gray-400' : '' }}">{{ $item->title }}</span>
                                 </label>
                             @empty
-                                <p class="text-sm text-gray-400">Belum ada checklist item. Klik Edit untuk menambahkan.</p>
+                                <p class="text-sm text-gray-400 text-center">Belum ada checklist item.</p>
                             @endforelse
-                            <div class="text-sm text-gray-500 mt-1">Progress: {{ $task->progress }}%</div>
                         </div>
-                    @endif
+                    </div>
+                @endif
+
+                {{-- Icon Edit/Hapus --}}
+                <div class="flex justify-end gap-3 mt-3 text-sm">
+                    <button wire:click="openEditModal({{ $task->id }})" class="text-blue-600">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button wire:click="confirmDelete({{ $task->id }})" class="text-red-600">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </div>
 
                 @if ($confirmingDeleteId === $task->id)
@@ -338,15 +348,13 @@ new class extends Component
                         <span class="text-sm text-red-700">Yakin mau hapus tugas ini?</span>
                         <div class="flex gap-2">
                             <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border">Batal</button>
-                            <button wire:click="delete({{ $task->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">
-                                <i class="fa-solid fa-trash"></i> Hapus
-                            </button>
+                            <button wire:click="delete({{ $task->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">Hapus</button>
                         </div>
                     </div>
                 @endif
             </div>
         @empty
-            <p class="text-gray-500">Belum ada tugas.</p>
+            <p class="text-gray-500 col-span-2">Belum ada tugas.</p>
         @endforelse
     </div>
 
