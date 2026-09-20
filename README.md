@@ -34,8 +34,9 @@ Nestly is built as a **full stack application** using **Laravel** for both backe
 
 ### 📝 Task Management
 - Create, edit, delete, and categorize academic tasks
-- Track status: `Not Started` → `In Progress` → `Completed`
-- Set deadlines, priority levels, and progress percentage (0–100%)
+- Track status: `Not Started` → `In Progress` → `Completed` (auto-completed once progress reaches 100%)
+- Two progress modes: **Manual** (adjust in 5% increments) or **Checklist** (auto-calculated from subtask completion)
+- Set deadlines (date required, time optional) and add a description
 
 ### 📊 Progress & Dashboard
 - Card-grid dashboard layout: Schedule highlight, quick summary, upcoming task deadlines, recent finance transactions, personal greeting, and profile card
@@ -49,11 +50,13 @@ Nestly is built as a **full stack application** using **Laravel** for both backe
 - Notification badge on the Task icon (e.g. overdue task count) across all breakpoints
 
 ### ⏰ Deadline Tracking
-- Smart urgency indicators, updated automatically based on the current date:
-  - 🟢 **Green** — Safe & on track
-  - 🟡 **Yellow** — Approaching deadline
-  - 🟠 **Orange** — High priority, needs attention soon
-  - 🔴 **Red** — Overdue / Critical
+- Smart urgency levels, recalculated automatically based on the current date. Checked in order: a task at 100% progress is always `done`, otherwise a passed deadline is `overdue`, otherwise the level is based on days remaining:
+  - 🟢 **Safe** — more than 20 days left
+  - 🟡 **Approaching** — 13–20 days left
+  - 🟠 **Urgent** — 6–12 days left
+  - 🔴 **Critical** — 0–5 days left
+  - 🔴 **Overdue** — past the deadline
+  - ⚪ **Done** — progress at 100%, regardless of the deadline
 
 ### 📚 Subjects
 - Manage course/subject reference data (add, edit, delete)
@@ -97,7 +100,7 @@ Nestly is built as a **full stack application** using **Laravel** for both backe
 
 ## 🎨 Color System
 
-Nestly's default theme is **Pink**, with dedicated Light Mode and Dark Mode token sets (12 tokens each: Primary, Secondary, Tertiary, Background, Surface, Text, Text Muted, Border, Success, Danger, Warning, Info).
+Nestly's default theme is **Pink**, with dedicated Light Mode and Dark Mode token sets (12 tokens each: Primary, Secondary, Tertiary, Background, Surface, Text, Text Muted, Border, Success, Danger, Warning, Caution, Neutral, Info).
 
 Full color tokens are documented in [`PROJECT.md`](./PROJECT.md#12-color-system).
 

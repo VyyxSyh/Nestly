@@ -144,18 +144,18 @@ Informasi dapat mencakup:
 
 ### 4.6 Deadline Tracking
 
-Sistem menghitung urgensi tugas secara otomatis berdasarkan sisa hari menuju deadline, ditampilkan sebagai label "Priority" di Task Card:
+Sistem menghitung urgensi tugas secara otomatis, ditampilkan sebagai label "Priority" di Task Card. Urutan pengecekan: progress ≥100% → `done` (prioritas tertinggi, override semua), lalu cek apakah sudah lewat deadline → `overdue`, baru dihitung sisa hari untuk level lainnya:
 
 | Level | Rentang Sisa Hari | Warna |
 |---|---|---|
-| `safe` | ≥ 25 hari (default) | Success (hijau) |
-| `approaching` | 17–24 hari | Caution (kuning) |
-| `urgent` | 10–16 hari | Warning (oranye) |
-| `critical` | 0–9 hari | Danger (merah) |
-| `overdue` | Sudah lewat deadline | Danger (merah) |
-| `done` | Progress 100% (berapapun sisa harinya) | Neutral (abu-abu) |
+| `critical` | 0–5 hari | Danger (merah) |
+| `urgent` | 6–12 hari | Warning (oranye) |
+| `approaching` | 13–20 hari | Caution (kuning) |
+| `safe` | > 20 hari (default) | Success (hijau) |
+| `overdue` | Tanggal sekarang sudah melewati deadline | Danger (merah) |
+| `done` | Progress ≥ 100% (dicek pertama, override semua level lain) | Neutral (abu-abu) |
 
-Level `done` menggantikan level urgensi lain begitu progress tugas mencapai 100%, terlepas dari sisa hari deadline-nya. Level dihitung ulang otomatis berdasarkan tanggal sistem setiap kali halaman dibuka/direfresh.
+Level `done` menggantikan level urgensi lain begitu progress tugas mencapai 100%, terlepas dari sisa hari atau status deadline-nya. Level dihitung ulang otomatis berdasarkan tanggal sistem setiap kali halaman dibuka/direfresh.
 
 Tujuannya agar pengguna dapat mengetahui tugas mana yang perlu diprioritaskan hanya dengan melihat indikator visual, tanpa perlu field prioritas manual terpisah.
 

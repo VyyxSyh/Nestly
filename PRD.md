@@ -106,19 +106,22 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-5.4 Setiap Schedule Card memiliki accent color (lihat Schedule Card Accent Colors di `PROJECT.md` section 12) yang diterapkan pada border dan badge Hari.
 
 ### FR-6 — Deadline Tracking
-- FR-6.1 Sistem menghitung urgensi tugas secara otomatis berdasarkan sisa hari menuju deadline, dengan level berikut (dari paling aman ke paling kritis):
+- FR-6.1 Sistem menghitung urgensi tugas secara otomatis, dengan urutan pengecekan sebagai berikut (dari prioritas tertinggi):
+  1. Jika progress tugas ≥ 100% → level `done` (mengabaikan kondisi lain).
+  2. Jika tanggal sekarang sudah melewati deadline → level `overdue`.
+  3. Jika belum, hitung sisa hari menuju deadline dan tentukan level berdasarkan tabel berikut:
 
   | Level | Rentang Sisa Hari | Warna |
   |---|---|---|
-  | `safe` | ≥ 25 hari (default) | Success (hijau) |
-  | `approaching` | 17–24 hari | Caution (kuning) |
-  | `urgent` | 10–16 hari | Warning (oranye) |
-  | `critical` | 0–9 hari | Danger (merah) |
-  | `overdue` | Sudah lewat deadline (sisa hari negatif) | Danger (merah) |
-  | `done` | Progress 100% (berapapun sisa harinya) | Neutral (abu-abu) |
+  | `critical` | 0–5 hari | Danger (merah) |
+  | `urgent` | 6–12 hari | Warning (oranye) |
+  | `approaching` | 13–20 hari | Caution (kuning) |
+  | `safe` | > 20 hari (default) | Success (hijau) |
+  | `overdue` | Tanggal sekarang sudah melewati deadline | Danger (merah) |
+  | `done` | Progress ≥ 100% (dicek pertama, override semua level lain) | Neutral (abu-abu) |
 
-- FR-6.2 Level `done` menggantikan/override level urgensi lain begitu progress tugas mencapai 100%, terlepas dari sisa hari deadline-nya.
-- FR-6.3 Level `overdue` dan `critical` menggunakan warna yang sama (Danger/merah), namun secara logis tetap dua kondisi berbeda (lewat deadline vs mendekati deadline).
+- FR-6.2 Level `done` menggantikan/override level urgensi lain begitu progress tugas mencapai 100%, terlepas dari sisa hari atau status deadline-nya.
+- FR-6.3 Level `overdue` dan `critical` menggunakan warna yang sama (Danger/merah), namun secara logis tetap dua kondisi berbeda (sudah lewat deadline vs mendekati deadline).
 - FR-6.4 Level urgensi ditampilkan di UI sebagai label "Priority" pada Task Card (lihat 8.4), meskipun secara teknis ini adalah hasil kalkulasi urgensi deadline, bukan field prioritas manual yang diinput pengguna.
 - FR-6.5 Level urgensi dihitung ulang secara otomatis (real-time) berdasarkan tanggal sistem saat ini setiap kali halaman dibuka/direfresh.
 
