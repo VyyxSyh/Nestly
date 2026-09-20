@@ -110,28 +110,55 @@ new class extends Component
         </button>
     </div>
 
-    <div class="space-y-3">
+    <div class="grid md:grid-cols-3 gap-6 mt-4">
         @forelse ($schedules as $schedule)
-            <div class="border rounded-md p-4 border-l-4" style="border-left-color: {{ $schedule->subject->accent_color }}">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <div class="font-medium">{{ $schedule->subject->name }}</div>
-                        <div class="text-sm text-gray-500">
-                            {{ $schedule->day }}, {{ substr($schedule->start_time, 0, 5) }} - {{ substr($schedule->end_time, 0, 5) }}
-                        </div>
-                        <div class="text-sm text-gray-500">
-                            @if ($schedule->room) Ruang {{ $schedule->room }} @endif
-                            @if ($schedule->lecturer) — {{ $schedule->lecturer }} @endif
-                        </div>
+            @php $accent = $schedule->subject->accent_color; @endphp
+            <div class="relative border-2 rounded-2xl px-5 py-6 bg-white"
+                style="border-color: {{ $accent }}; box-shadow: 5px 5px 0px {{ $accent }};">
+
+                {{-- Badge Hari --}}
+                <div class="absolute -top-3 left-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                    style="border-color: {{ $accent }}; color: {{ $accent }};">
+                    {{ $schedule->day }}
+                </div>
+
+                <div class="flex items-start gap-4 mt-2">
+                    {{-- Blok waktu boarding pass --}}
+                    <div class="flex flex-col items-center pr-4 border-r-2" style="border-color: {{ $accent }};">
+                        <span class="text-3xl font-bold leading-none" style="color: {{ $accent }};">
+                            {{ substr($schedule->start_time, 0, 2) }}
+                        </span>
+                        <span class="text-sm text-gray-400 mt-1">{{ substr($schedule->start_time, 3, 2) }}</span>
+                        <div class="w-px h-4 bg-gray-300 my-1"></div>
+                        <span class="text-sm text-gray-400">{{ substr($schedule->end_time, 0, 5) }}</span>
                     </div>
-                    <div class="flex gap-3 text-lg">
-                        <button wire:click="openEditModal({{ $schedule->id }})" class="text-blue-600" title="Edit">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button wire:click="confirmDelete({{ $schedule->id }})" class="text-red-600" title="Hapus">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+
+                    {{-- Info mata kuliah --}}
+                    <div class="flex-1">
+                        <div class="font-bold text-lg mb-1">{{ $schedule->subject->name }}</div>
+                        @if ($schedule->room)
+                            <div class="text-sm text-gray-500">{{ $schedule->room }}</div>
+                        @endif
+                        @if ($schedule->lecturer)
+                            <div class="text-sm text-gray-500">{{ $schedule->lecturer }}</div>
+                        @endif
                     </div>
+                </div>
+
+                {{-- Icon Edit/Hapus --}}
+                <div class="flex justify-center gap-5 mt-4">
+                    <button wire:click="openEditModal({{ $schedule->id }})"
+                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-blue-500 bg-blue-500 text-white cursor-pointer
+                                hover:bg-transparent hover:scale-110 hover:shadow-[0_0_10px_rgba(59,130,246,0.7)] hover:text-blue-500
+                                active:scale-90 transition-all duration-150">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button wire:click="confirmDelete({{ $schedule->id }})"
+                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-red-500 bg-red-500 text-white cursor-pointer
+                                hover:bg-transparent hover:scale-110 hover:shadow-[0_0_10px_rgba(239,68,68,0.7)] hover:text-red-500
+                                active:scale-90 transition-all duration-150">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </div>
 
                 @if ($confirmingDeleteId === $schedule->id)
@@ -139,15 +166,13 @@ new class extends Component
                         <span class="text-sm text-red-700">Yakin mau hapus jadwal ini?</span>
                         <div class="flex gap-2">
                             <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border">Batal</button>
-                            <button wire:click="delete({{ $schedule->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">
-                                <i class="fa-solid fa-trash"></i> Hapus
-                            </button>
+                            <button wire:click="delete({{ $schedule->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">Hapus</button>
                         </div>
                     </div>
                 @endif
             </div>
         @empty
-            <p class="text-gray-500">Belum ada jadwal.</p>
+            <p class="text-gray-500 col-span-2">Belum ada jadwal.</p>
         @endforelse
     </div>
 
