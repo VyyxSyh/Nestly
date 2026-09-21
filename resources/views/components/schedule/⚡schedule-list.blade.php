@@ -110,10 +110,10 @@ new class extends Component
         </button>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6 mt-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         @forelse ($schedules as $schedule)
             @php $accent = $schedule->subject->accent_color; @endphp
-            <div class="relative border-2 rounded-2xl px-5 py-6 bg-white"
+                <div class="relative border-2 rounded-2xl px-4 py-5 bg-white"
                 style="border-color: {{ $accent }}; box-shadow: 5px 5px 0px {{ $accent }};">
 
                 {{-- Badge Hari --}}
