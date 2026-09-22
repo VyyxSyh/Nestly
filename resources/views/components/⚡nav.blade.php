@@ -27,12 +27,13 @@ new class extends Component
 
 <div>
     {{-- Desktop & Tablet Bottom Nav --}}
-    <nav class="hidden sm:flex fixed bottom-0 inset-x-0 z-50 bg-surface border-t-2 border-border px-6 py-3 items-center justify-between">
-        <div class="flex items-center gap-2 font-bold text-lg text-text">
-            <i class="fa-solid fa-graduation-cap text-primary"></i> Nestly
-        </div>
+    <nav class="hidden sm:flex fixed bottom-4 inset-x-0 z-50 justify-center">
+        <div class="flex items-center gap-10 bg-surface border border-border rounded-full px-6 py-3 shadow-lg">
+            <div class="flex items-center gap-2 font-bold text-text">
+                <i class="fa-solid fa-graduation-cap text-primary"></i> Nestly
+            </div>
 
-        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-2">
             @php
                 $menus = [
                     ['route' => 'dashboard', 'label' => 'Home', 'icon' => 'fa-house', 'url' => '/'],
@@ -46,14 +47,14 @@ new class extends Component
             @foreach ($menus as $menu)
                 @php $isActive = $currentRoute === $menu['route']; @endphp
                 <a href="{{ $menu['url'] }}"
-                   class="relative flex items-center gap-2 pb-1 border-b-2 text-sm font-medium
-                          {{ $isActive ? 'border-primary text-primary' : 'border-transparent text-text-muted hover:text-text' }}">
+                   class="relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors
+                          {{ $isActive ? 'bg-tertiary text-primary' : 'text-text-muted hover:text-text' }}">
                     @if ($isActive)
                         <i class="fa-solid {{ $menu['icon'] }}"></i>
                     @endif
                     {{ $menu['label'] }}
                     @if ($menu['route'] === 'tasks' && $taskBadgeCount > 0)
-                        <span class="absolute -top-2 -right-3 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                        <span class="absolute -top-1 -right-1 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
                             {{ $taskBadgeCount }}
                         </span>
                     @endif
@@ -62,12 +63,31 @@ new class extends Component
         </div>
 
         <div class="flex items-center gap-3">
-            <button wire:click="toggleDarkMode" class="w-9 h-9 rounded-full border-2 border-border flex items-center justify-center text-text cursor-pointer">
-                <i class="fa-solid {{ session('dark_mode', true) ? 'fa-sun' : 'fa-moon' }}"></i>
-            </button>
-            <div class="w-9 h-9 rounded-full bg-tertiary flex items-center justify-center text-primary">
-                <i class="fa-solid fa-user"></i>
-            </div>
+            <label class="switch">
+                <input type="checkbox" wire:click="toggleDarkMode" {{ session('dark_mode', true) ? 'checked' : '' }} />
+                <div class="slider">
+                    <div class="sun-moon">
+                        <svg id="moon-dot-1" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="moon-dot-2" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="moon-dot-3" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="light-ray-1" class="light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="light-ray-2" class="light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="light-ray-3" class="light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="cloud-1" class="cloud-dark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="cloud-2" class="cloud-dark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="cloud-3" class="cloud-dark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="cloud-4" class="cloud-light" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="cloud-5" class="cloud-light" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                        <svg id="cloud-6" class="cloud-light" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
+                    </div>
+                    <div class="stars">
+                        <svg id="star-1" class="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+                        <svg id="star-2" class="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+                        <svg id="star-3" class="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+                        <svg id="star-4" class="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
+                    </div>
+                </div>
+            </label>
         </div>
     </nav>
 
