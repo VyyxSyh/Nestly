@@ -255,7 +255,7 @@ new class extends Component
 <div>
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-semibold">Daftar Tugas</h1>
-        <button wire:click="openCreateModal" class="bg-teal-600 text-white px-4 py-2 rounded-md">
+        <button wire:click="openCreateModal" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md cursor-pointer transition-colors">
             + Tambah Tugas
         </button>
     </div>
@@ -344,17 +344,17 @@ new class extends Component
                                 </div>
 
                                 <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
-                                    <div class="h-full bg-green-500" style="width: {{ $task->progress }}%"></div>
+                                    <div class="h-full bg-primary" style="width: {{ $task->progress }}%"></div>
                                 </div>
 
                                 @if ($task->progress_mode === 'manual')
                                     <div class="flex justify-between w-full">
                                         <button wire:click="decrementProgress({{ $task->id }})"
-                                                class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 cursor-pointer active:scale-90 active:bg-green-100 transition-transform duration-100">
+                                                class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-primary text-primary cursor-pointer active:scale-90 active:bg-tertiary transition-transform duration-100">
                                             <i class="fa-solid fa-minus text-xs"></i>
                                         </button>
                                         <button wire:click="incrementProgress({{ $task->id }})"
-                                                class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 cursor-pointer active:scale-90 active:bg-green-100 transition-transform duration-100">
+                                                class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-primary text-primary cursor-pointer active:scale-90 active:bg-tertiary transition-transform duration-100">
                                             <i class="fa-solid fa-plus text-xs"></i>
                                         </button>
                                     </div>
@@ -645,7 +645,7 @@ new class extends Component
 
                     <div class="flex justify-end gap-2 pt-2">
                         <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border">Batal</button>
-                        <button type="submit" class="px-4 py-2 rounded-md bg-teal-600 text-white">Simpan</button>
+                        <button type="submit" class="px-4 py-2 rounded-md bg-primary hover:bg-secondary text-white cursor-pointer transition-colors">Simpan</button>
                     </div>
                 </form>
             </div>
