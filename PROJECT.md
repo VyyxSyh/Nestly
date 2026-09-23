@@ -104,6 +104,8 @@ Dashboard disusun menggunakan **card grid** dengan prioritas visual: Jadwal dite
 
 > Detail lengkap struktur grid, posisi tiap section, dan perilaku responsive (Desktop/Tablet/Mobile) didokumentasikan di `PRD.md` section 8.6.
 
+**Calendar View *(Phase 2, belum dikerjakan di Phase 1)*:** section tambahan di bagian paling bawah Dashboard, terpisah dari grid 6×4. Menampilkan kalender bulanan dengan indikator titik pada tanggal yang punya deadline tugas. Klik tanggal akan expand inline di bawah kalender, menampilkan jadwal kuliah dan tugas dengan deadline pada tanggal tersebut.
+
 Contoh konsep (statistik tugas di card List Tugas):
 
 ```text
@@ -315,6 +317,7 @@ Fokus:
 * Deadline urgency indicator.
 * Light/Dark mode.
 * Multi color theme — tambahan tema **Blue** dan **Monochrome** (masing-masing Light Mode + Dark Mode), selain tema Pink default dari Phase 1.
+* Calendar View di Dashboard — kalender bulanan dengan indikator deadline tugas dan detail expand per tanggal.
 * Perbaikan validasi data & UX secara keseluruhan.
 
 ### Phase 3 — Enhancement (Future)

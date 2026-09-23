@@ -1,7 +1,7 @@
 # Product Requirements Document (PRD)
 ## Nestly — Student Task & Study Dashboard
 
-**Version:** 1.1 (Full Stack)
+**Version:** 1.0 (Full Stack)
 **Author:** Syukron Raffiansyah (Vyy)
 **Status:** In Development
 **Last Updated:** 2026
@@ -36,7 +36,6 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - Dashboard menampilkan ringkasan aktivitas (total tugas, status, progress keseluruhan, deadline terdekat, ringkasan keuangan) tanpa perlu reload halaman (real-time via Livewire).
 - Sistem memberi indikator urgensi visual (warna) otomatis berdasarkan kedekatan deadline.
 - Sistem memberi indikator visual otomatis ketika pengeluaran mendekati/melebihi budget bulanan yang ditentukan.
-- Pengguna dapat melihat sebaran jadwal & deadline tugas dalam tampilan kalender bulanan langsung dari Dashboard, tanpa perlu berpindah halaman.
 - Seluruh data (tugas, progress, jadwal, keuangan, tema) tersimpan secara persisten di database (MySQL), tidak bergantung pada penyimpanan browser.
 
 ---
@@ -93,7 +92,11 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-3.6 Pengguna dapat mengkustomisasi Kata Sapaan (dipilih dari daftar pilihan, misal: Hai, Hii, Halo, Alloww, Heyy) melalui tombol edit pada section Greeting.
 - FR-3.7 Pengguna dapat mengkustomisasi Nama Panggilan yang ditampilkan pada Greeting.
 - FR-3.8 Preferensi Kata Sapaan dan Nama Panggilan tersimpan di database dan diterapkan otomatis setiap kali Dashboard dibuka.
-- FR-3.9 Dashboard menampilkan section **Calendar** di bagian paling bawah, menampilkan kalender bulanan dengan penanda visual (dot) pada tanggal yang memiliki deadline tugas — lihat detail lengkap di **FR-12**.
+- FR-3.9 *(Phase 2)* Menampilkan Calendar View sebagai section ke-7, terpisah dari grid 6×4, diposisikan di bagian paling bawah Dashboard.
+- FR-3.10 *(Phase 2)* Kalender menampilkan tampilan bulanan (month view).
+- FR-3.11 *(Phase 2)* Tanggal yang memiliki tugas dengan deadline pada tanggal tersebut ditandai dengan indikator titik pada kalender.
+- FR-3.12 *(Phase 2)* Pengguna dapat mengklik sebuah tanggal untuk melihat detail: jadwal kuliah (berdasarkan hari yang sesuai) dan tugas dengan deadline pada tanggal tersebut.
+- FR-3.13 *(Phase 2)* Detail tanggal yang diklik ditampilkan dengan cara expand inline di bawah kalender (mendorong konten di bawahnya), bukan sebagai modal/popup.
 
 ### FR-4 — Subjects (Mata Kuliah)
 - FR-4.1 Pengguna dapat menambahkan data mata kuliah (nama mata kuliah) sebagai data referensi.
@@ -159,24 +162,6 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - FR-11.6 Top Bar pada Mobile tampil transparan saat halaman berada di posisi paling atas, dan menampilkan background dengan animasi transisi saat halaman di-scroll.
 - FR-11.7 Icon menu Task menampilkan badge notifikasi berupa angka (misal jumlah tugas overdue/due today), pada seluruh breakpoint.
 
-### FR-12 — Dashboard Calendar
-- FR-12.1 Dashboard menampilkan section **Calendar** di posisi paling bawah halaman (di bawah seluruh section lain yang sudah ada di 8.6), berupa kalender bulanan (grid tanggal standar 7 kolom × baris sesuai jumlah minggu).
-- FR-12.2 Kalender menampilkan bulan berjalan (sesuai tanggal sistem) secara default saat Dashboard dibuka.
-- FR-12.3 Pengguna dapat berpindah bulan (sebelumnya/selanjutnya) lewat tombol navigasi (`<` `>`) di header section Calendar, tanpa reload halaman (real-time via Livewire).
-- FR-12.4 Tanggal hari ini ditandai secara visual berbeda dari tanggal lain (misal outline/warna latar khusus), agar mudah dikenali.
-- FR-12.5 Setiap tanggal yang memiliki **minimal satu tugas dengan deadline jatuh pada tanggal tersebut** ditandai dengan indikator **dot** kecil di bawah/dekat angka tanggal.
-  - Jika ada lebih dari satu tugas dengan deadline pada tanggal yang sama, tetap ditampilkan sebagai satu dot (bukan menumpuk banyak dot), untuk menjaga tampilan tetap bersih.
-  - Dot **tidak** ditampilkan untuk tanggal yang hanya memiliki jadwal kuliah tanpa deadline tugas (jadwal kuliah bersifat rutin mingguan, bukan "kejadian" bertanggal — lihat FR-12.7 untuk detail asosiasi jadwal ke tanggal).
-- FR-12.6 Pengguna dapat mengklik/tap sebuah tanggal pada kalender untuk membuka **Detail Tanggal**, ditampilkan dalam bentuk popup/modal (lihat 8.9 untuk detail visual), berisi:
-  - Tanggal lengkap yang dipilih (format sama seperti FR-1.7, contoh: "Rabu, 16 September 2026").
-  - **Jadwal Kuliah** pada tanggal tersebut — diambil dari data Schedule (FR-5) yang `hari`-nya cocok dengan hari dari tanggal yang dipilih (contoh: tanggal yang jatuh di hari Rabu akan menampilkan seluruh jadwal dengan `hari = Rabu`).
-  - **Tugas Deadline** pada tanggal tersebut — daftar tugas (FR-1) yang tanggal deadline-nya persis sama dengan tanggal yang dipilih.
-  - Jika tidak ada jadwal maupun tugas pada tanggal tersebut, tampilkan empty state pada masing-masing bagian (contoh: "Tidak ada jadwal kuliah" / "Tidak ada deadline tugas").
-- FR-12.7 Asosiasi Jadwal Kuliah ke tanggal kalender bersifat **rekuren mingguan** — sebuah jadwal dengan `hari = Senin` akan otomatis muncul di *setiap* tanggal Senin pada kalender yang sedang ditampilkan, tanpa perlu disimpan per-tanggal secara terpisah di database.
-- FR-12.8 Item Tugas Deadline pada Detail Tanggal menampilkan minimal: nama tugas, aksen warna mata kuliah terkait, dan label urgensi (mengikuti sistem warna FR-6).
-- FR-12.9 Item Jadwal pada Detail Tanggal menampilkan minimal: nama mata kuliah, jam mulai–selesai, dan ruangan.
-- FR-12.10 Detail Tanggal dapat ditutup lewat tombol close, klik di luar area popup/modal (overlay), atau tombol `Esc` (khusus Desktop/Tablet dengan keyboard).
-
 ---
 
 ## 5. Non-Functional Requirements
@@ -208,7 +193,6 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - Finance tracker (pemasukan, pengeluaran, budget bulanan, indikator saldo).
 - Search, filter & sorting tugas.
 - Theme preference (Light/Dark mode).
-- Dashboard Calendar (kalender bulanan + dot indicator deadline + detail per tanggal).
 - Data persistence via database MySQL.
 - Responsive interface (Mobile, Tablet, Desktop).
 
@@ -219,6 +203,7 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - Penyempurnaan indikator urgensi deadline.
 - Penyempurnaan dark/light mode & aksesibilitas.
 - Multi color theme — tambahan tema Blue dan Monochrome (masing-masing Light Mode + Dark Mode), selain tema Pink default dari Phase 1.
+- Calendar View di Dashboard — kalender bulanan dengan indikator deadline tugas dan detail expand per tanggal.
 
 **Phase 3 — Enhancement:**
 - User authentication (login/register).
@@ -227,7 +212,7 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 - Advanced analytics (laporan akademik & keuangan lebih mendalam).
 - Kemungkinan deployment ke hosting/cloud untuk akses publik.
 
-> Catatan: Fitur-fitur di atas TIDAK termasuk dalam scope PRD versi 1.1 ini, namun struktur database & arsitektur Laravel pada Phase 1 dirancang agar kompatibel untuk pengembangan ke fase tersebut (contoh: tabel sudah siap ditambahkan relasi `user_id`).
+> Catatan: Fitur-fitur di atas TIDAK termasuk dalam scope PRD versi 1.0 ini, namun struktur database & arsitektur Laravel pada Phase 1 dirancang agar kompatibel untuk pengembangan ke fase tersebut (contoh: tabel sudah siap ditambahkan relasi `user_id`).
 
 ---
 
@@ -247,7 +232,6 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 | 10 | Data Persistence | Simpan semua data ke database MySQL | Must Have |
 | 11 | Responsive Design | Optimal di Mobile, Tablet, Desktop | Must Have |
 | 12 | Navigation | Bottom Nav (semua device) + Top Bar khusus Mobile, dengan animasi & badge notifikasi | Must Have |
-| 13 | Dashboard Calendar | Kalender bulanan di Dashboard, dot indicator deadline, popup detail per tanggal (jadwal + tugas) | Should Have |
 
 ---
 
@@ -318,7 +302,6 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
 - **Schedule Card/List** — menampilkan jadwal kuliah secara terstruktur, dengan accent color per kartu.
 - **Finance Summary Widget** — kartu ringkasan pemasukan, pengeluaran, dan sisa saldo, dengan indikator progress terhadap budget.
 - **Filter & Sort Bar** — kontrol untuk pencarian, filter, dan pengurutan tugas.
-- **Dashboard Calendar Widget** — kalender bulanan dengan dot indicator deadline, dan popup Detail Tanggal saat sebuah tanggal diklik. Lihat detail visual di 8.9.
 
 Referensi warna lengkap (hex code untuk Light & Dark mode, serta accent color untuk Schedule Card) mengikuti **Color System** yang telah ditetapkan di `PROJECT.md`.
 
@@ -346,8 +329,6 @@ Dashboard menggunakan **CSS Grid 6 kolom × 4 baris** (gap 10px) pada tampilan D
 | 5 | **Profil** | Kolom 5–6, Baris 3–4 | Foto profil (bentuk lingkaran), Nama, Kelas |
 | 6 | **Greeting** | Kolom 5–6, Baris 2 | Sapaan custom (lihat detail di bawah) |
 
-> Section **Calendar** (lihat FR-12 & 8.9) ditempatkan **di luar grid 6×4 di atas**, sebagai section full-width tersendiri yang berada tepat **di bawah** grid tersebut (posisi paling bawah halaman Dashboard, di seluruh breakpoint).
-
 **Detail Section 3 — List Tugas Terdekat Deadline:**
 
 Section ini dipecah jadi 2 container tersusun vertikal:
@@ -372,17 +353,24 @@ Section ini dipecah jadi 2 container tersusun vertikal:
 - Sebuah **tombol edit** ditempatkan di sisi **paling kanan** section ini (tetap berada di dalam batas section 6) untuk membuka pengaturan kustomisasi kata sapaan & nama panggilan.
 
 **Responsiveness:**
-- **Desktop:** grid 6×4 seperti tabel di atas, dengan section Calendar full-width di bawahnya.
-- **Tablet:** grid & proporsi yang sama, seluruh elemen di-scale lebih kecil (tidak ada perubahan susunan); section Calendar tetap full-width di bawah.
+- **Desktop:** grid 6×4 seperti tabel di atas.
+- **Tablet:** grid & proporsi yang sama, seluruh elemen di-scale lebih kecil (tidak ada perubahan susunan).
 - **Mobile:** grid ditata ulang total menjadi **1 kolom vertikal (stacked)**, dengan urutan dari atas ke bawah:
   1. Greeting + Profil (digabung sebagai header personal di paling atas)
   2. Jadwal
   3. Ringkasan Singkat
   4. List Tugas Terdekat Deadline
   5. List Transaksi Finance
-  6. **Calendar** (tetap paling bawah)
 
 > Catatan: Section Jadwal (poin 1 di atas) di dalamnya sendiri berisi 4 card jadwal — perilaku responsivenya (grid 2×2 di Tablet/Mobile) mengikuti spesifikasi yang sudah ditetapkan sebelumnya, tetap berlaku sebagai bagian dari section ini.
+
+**Section 7 — Calendar View *(Phase 2, belum dikerjakan di Phase 1)*:**
+- Ditempatkan **terpisah di bagian paling bawah Dashboard**, di luar grid 6×4 (bukan bagian dari 6 section sebelumnya).
+- Tampilan kalender bulanan (month view).
+- Tanggal dengan deadline tugas ditandai indikator titik.
+- Klik tanggal → **expand inline di bawah kalender** (mendorong konten lain ke bawah, bukan modal/popup), menampilkan:
+  - Jadwal kuliah pada hari yang sesuai dengan tanggal tersebut.
+  - Tugas dengan deadline pada tanggal tersebut.
 
 ### 8.7 Task Card Design (Halaman Task)
 
@@ -452,42 +440,11 @@ Schedule Card menggunakan gaya visual yang konsisten dengan Task Card (neo-bruta
 
 ---
 
-### 8.9 Dashboard Calendar Widget Design
-
-Section Calendar berada full-width di paling bawah Dashboard (lihat 8.6), menggunakan style card yang konsisten dengan komponen lain (border + shadow ringan mengikuti token `Surface`, tidak perlu se-tebal neo-brutalist Task Card agar tidak terlalu ramai di posisi bawah halaman).
-
-**Header Calendar:**
-- Menampilkan nama bulan & tahun berjalan (contoh: "September 2026"), rata tengah atau kiri.
-- Tombol navigasi `<` (bulan sebelumnya) dan `>` (bulan selanjutnya) di kedua sisi nama bulan.
-
-**Grid Kalender:**
-- Header hari (Min–Sab atau Sen–Min, konsisten dengan konvensi kalender Indonesia) di baris paling atas grid.
-- Tanggal disusun grid 7 kolom, jumlah baris menyesuaikan jumlah minggu di bulan tersebut.
-- Tanggal dari bulan sebelumnya/selanjutnya yang "bocor" mengisi sel di awal/akhir grid ditampilkan dengan opacity lebih rendah (`Text Muted`), tetap bisa diklik untuk pindah ke bulan terkait.
-- **Tanggal hari ini:** ditandai dengan outline atau background token `Primary` (warna aksen tema aktif).
-- **Dot indicator deadline:** dot kecil (bulat solid, warna mengikuti token Danger/Warning — atau warna aksen mata kuliah paling urgent pada tanggal itu, ditentukan saat implementasi), diposisikan di bawah angka tanggal, hanya muncul pada tanggal dengan ≥1 deadline tugas (sesuai FR-12.5).
-- Tanggal bersifat clickable (cursor pointer saat hover di Desktop), seluruh sel tanggal — tidak hanya dot-nya — dapat diklik untuk membuka Detail Tanggal.
-
-**Detail Tanggal (Popup/Modal):**
-- Muncul sebagai modal center-screen (Desktop/Tablet) atau bottom-sheet (Mobile, slide-up dari bawah) saat sebuah tanggal diklik.
-- **Header popup:** tanggal lengkap terpilih (format sesuai FR-1.7) + tombol close (ikon "X") di pojok kanan atas.
-- **Body popup**, terbagi 2 bagian tersusun vertikal:
-  1. **Jadwal Kuliah** (label section, bold) — list jadwal hari itu, tiap item menampilkan nama mata kuliah, jam mulai–selesai, ruangan (gaya ringkas, tidak perlu selengkap Schedule Card di 8.8).
-  2. **Tugas Deadline** (label section, bold) — list tugas dengan deadline di tanggal itu, tiap item menampilkan nama tugas, aksen warna mata kuliah, dan label urgensi (warna sesuai 8.3).
-  - Masing-masing bagian menampilkan empty state singkat (teks `Text Muted`) jika datanya kosong.
-- Overlay gelap semi-transparan di belakang popup; klik di area overlay atau tombol close menutup popup.
-
-**Responsiveness:**
-- **Desktop & Tablet:** grid kalender ditampilkan penuh (7 kolom), ukuran sel cukup besar agar dot & angka tanggal nyaman diklik.
-- **Mobile:** grid tetap 7 kolom namun sel diperkecil; Detail Tanggal tampil sebagai bottom-sheet alih-alih modal center agar lebih nyaman diakses satu tangan.
-
----
-
 ## Appendix — Referensi Tambahan (dari PROJECT.md & README.md)
 
 - **Data yang disimpan di database (MySQL):** Task, Progress, Deadline, Status, Schedule, Data keuangan (income, expense, budget), Theme preference, Pengaturan pengguna.
 - **Roadmap Pengembangan:**
-  - Phase 1 (🟢 Current) — Core Full Stack Build (Task, Schedule, Finance Tracker, Dashboard, Dashboard Calendar, Livewire integration).
+  - Phase 1 (🟢 Current) — Core Full Stack Build (Task, Schedule, Finance Tracker, Dashboard, Livewire integration).
   - Phase 2 (🟡 Future) — Refinement & UX Polish (search/filter/sorting, urgency indicator, dark/light mode, multi color theme Blue & Monochrome).
   - Phase 3 (🔵 Future) — Enhancement (Authentication, multi-user, notifications, advanced analytics, kemungkinan deployment ke hosting/cloud).
 - **Deployment (Saat Ini):** Local development via Laragon, database dikelola via HeidiSQL — digunakan sebagai project pembelajaran/portofolio pribadi.
