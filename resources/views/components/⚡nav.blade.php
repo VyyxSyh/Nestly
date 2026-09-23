@@ -20,6 +20,13 @@ new class extends Component
         return [
             'currentRoute' => request()->route()?->getName(),
             'taskBadgeCount' => $overdueCount,
+            'menus' => [
+                ['route' => 'dashboard', 'label' => 'Home', 'icon' => 'fa-house', 'url' => '/'],
+                ['route' => 'tasks', 'label' => 'Task', 'icon' => 'fa-list-check', 'url' => '/tasks'],
+                ['route' => 'schedules', 'label' => 'Schedule', 'icon' => 'fa-calendar-days', 'url' => '/schedules'],
+                ['route' => 'subjects', 'label' => 'Subjects', 'icon' => 'fa-book', 'url' => '/subjects'],
+                ['route' => 'finance', 'label' => 'Finance', 'icon' => 'fa-wallet', 'url' => '/finance'],
+            ],
         ];
     }
 };
@@ -27,42 +34,31 @@ new class extends Component
 
 <div>
     {{-- Desktop & Tablet Bottom Nav --}}
-    <nav class="hidden sm:flex fixed bottom-4 inset-x-0 z-50 justify-center">
-        <div class="flex items-center gap-10 bg-surface border border-border rounded-full px-6 py-3 shadow-lg">
+    <nav class="hidden sm:flex fixed bottom-4 inset-x-0 z-50 justify-center px-4">
+        <div class="flex items-center justify-between w-full max-w-6xl bg-surface border border-border rounded-full px-6 py-3 shadow-lg">
             <div class="flex items-center gap-2 font-bold text-text">
                 <i class="fa-solid fa-graduation-cap text-primary"></i> Nestly
             </div>
 
-            <div class="flex items-center gap-2">
-            @php
-                $menus = [
-                    ['route' => 'dashboard', 'label' => 'Home', 'icon' => 'fa-house', 'url' => '/'],
-                    ['route' => 'tasks', 'label' => 'Task', 'icon' => 'fa-list-check', 'url' => '/tasks'],
-                    ['route' => 'schedules', 'label' => 'Schedule', 'icon' => 'fa-calendar-days', 'url' => '/schedules'],
-                    ['route' => 'subjects', 'label' => 'Subjects', 'icon' => 'fa-book', 'url' => '/subjects'],
-                    ['route' => 'finance', 'label' => 'Finance', 'icon' => 'fa-wallet', 'url' => '/finance'],
-                ];
-            @endphp
+            <div class="flex items-center gap-2 mx-auto">
+                @foreach ($menus as $menu)
+                    @php $isActive = $currentRoute === $menu['route']; @endphp
+                    <a href="{{ $menu['url'] }}"
+                    class="relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors
+                            {{ $isActive ? 'bg-tertiary text-primary' : 'text-text-muted hover:text-text' }}">
+                        @if ($isActive)
+                            <i class="fa-solid {{ $menu['icon'] }}"></i>
+                        @endif
+                        {{ $menu['label'] }}
+                        @if ($menu['route'] === 'tasks' && $taskBadgeCount > 0)
+                            <span class="absolute -top-1 -right-1 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                                {{ $taskBadgeCount }}
+                            </span>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
 
-            @foreach ($menus as $menu)
-                @php $isActive = $currentRoute === $menu['route']; @endphp
-                <a href="{{ $menu['url'] }}"
-                   class="relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors
-                          {{ $isActive ? 'bg-tertiary text-primary' : 'text-text-muted hover:text-text' }}">
-                    @if ($isActive)
-                        <i class="fa-solid {{ $menu['icon'] }}"></i>
-                    @endif
-                    {{ $menu['label'] }}
-                    @if ($menu['route'] === 'tasks' && $taskBadgeCount > 0)
-                        <span class="absolute -top-1 -right-1 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                            {{ $taskBadgeCount }}
-                        </span>
-                    @endif
-                </a>
-            @endforeach
-        </div>
-
-        <div class="flex items-center gap-3">
             <label class="switch">
                 <input type="checkbox" wire:click="toggleDarkMode" {{ session('dark_mode', true) ? 'checked' : '' }} />
                 <div class="slider">
