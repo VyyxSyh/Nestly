@@ -177,6 +177,11 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [ ] Buat tema warna **Blue** (Light Mode + Dark Mode) mengikuti struktur 12-token yang sama
 - [ ] Buat tema warna **Monochrome** (Light Mode + Dark Mode) mengikuti struktur 12-token yang sama
 - [ ] Buat mekanisme pilih & simpan preferensi tema warna (terpisah dari preferensi Light/Dark mode)
+- [ ] Livewire component: Calendar View — section ke-7 di bagian paling bawah Dashboard (terpisah dari grid 6x4)
+- [ ] Tampilan kalender bulanan (month view)
+- [ ] Logika penandaan tanggal yang punya deadline tugas dengan indikator titik
+- [ ] Fitur klik tanggal → expand inline di bawah kalender (bukan modal/popup)
+- [ ] Query jadwal kuliah (berdasarkan hari yang sesuai) dan tugas dengan deadline pada tanggal yang diklik
 
 **Phase 3 — Enhancement**
 - [ ] Implementasi User Authentication (Laravel Breeze/Fortify)

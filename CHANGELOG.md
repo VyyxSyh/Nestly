@@ -49,6 +49,7 @@ Melengkapi v1.0 dengan seluruh tampilan visual final, sehingga Phase 1 (Core Ful
 - Penyempurnaan indikator urgensi & aksesibilitas warna
 - Multi color theme: tema **Blue** dan **Monochrome** (masing-masing Light/Dark), selain Pink default
 - Mekanisme pilih & simpan preferensi tema warna (terpisah dari preferensi Light/Dark mode)
+- **Calendar View di Dashboard** — section baru (ke-7, terpisah dari grid 6×4 yang sudah ada) di bagian paling bawah Dashboard, menampilkan kalender bulanan. Tanggal yang punya deadline tugas ditandai dengan titik indikator. Klik tanggal akan expand inline di bawah kalender, menampilkan jadwal kuliah dan tugas dengan deadline pada tanggal tersebut.
 
 ---
 
