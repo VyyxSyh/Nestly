@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body class="bg-bg pb-24 pt-20 sm:pt-6 sm:pb-24">
-    <livewire:nav />
+    @persist('nav')
+        <livewire:nav />
+    @endpersist
     <div class="max-w-7xl mx-auto px-4">
         <livewire:finance-tracker />
     </div>
