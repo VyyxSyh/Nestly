@@ -110,9 +110,9 @@ new class extends Component
                 @endif
             </a>
         @endforeach
-        <a href="#" aria-label="Akun"
+        <!-- <a href="#" aria-label="Akun"
            class="flex flex-1 min-w-0 items-center justify-center rounded-full h-10 text-base min-[360px]:text-lg text-text-muted">
             <i class="fa-solid fa-user"></i>
-        </a>
+        </a> -->
     </nav>
 </div>
