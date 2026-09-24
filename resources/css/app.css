@@ -149,3 +149,17 @@
     80% { transform: scale(0.8); }
     100% { transform: scale(1); }
 }
+
+/* Transisi warna halus saat ganti tema (class dipasang sementara oleh theme-toggle) */
+html.theme-transition,
+html.theme-transition :not(.switch, .switch *),
+html.theme-transition :not(.switch, .switch *)::before,
+html.theme-transition :not(.switch, .switch *)::after {
+    transition:
+        background-color 0.8s ease,
+        color 0.8s ease,
+        border-color 0.8s ease,
+        fill 0.8s ease,
+        stroke 0.8s ease,
+        box-shadow 0.8s ease;
+}

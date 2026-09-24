@@ -5,9 +5,13 @@
         x-bind:checked="dark"
         x-on:change="
             const isDark = $event.target.checked;
+            const root = document.documentElement;
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            root.classList.add('theme-transition');
+            root.classList.toggle('dark', isDark);
+            clearTimeout(window.themeTimer);
+            window.themeTimer = setTimeout(() => root.classList.remove('theme-transition'), 900);
             $dispatch('theme-changed', isDark);
-            setTimeout(() => document.documentElement.classList.toggle('dark', isDark), 300);
         " />
     <div class="slider">
         <div class="sun-moon">

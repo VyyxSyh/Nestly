@@ -29,7 +29,7 @@ new class extends Component
 <div>
     {{-- Desktop & Tablet Bottom Nav --}}
     <nav class="hidden sm:flex fixed bottom-4 inset-x-0 z-50 justify-center px-4">
-        <div class="flex items-center justify-between w-full max-w-6xl bg-surface border border-border rounded-full px-6 py-3 shadow-lg">
+        <div class="flex items-center justify-between w-full max-w-7xl bg-surface border border-border rounded-full px-6 py-3 shadow-lg">
             <div class="flex items-center gap-2 font-bold text-text cursor-pointer">
                 <img src="{{ asset('logo.png') }}" alt="Nestly" class="h-8 w-auto">
                 Nestly
