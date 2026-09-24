@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Schedule;
 use App\Models\Task;
 use Livewire\Component;
 
@@ -7,13 +8,13 @@ new class extends Component
 {
     public function with(): array
     {
-        $overdueCount = Task::all()->filter(function ($task) {
-            return in_array($task->priority, ['overdue', 'critical']) && $task->progress < 100;
-        })->count();
+        $hariIni = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][now()->dayOfWeekIso - 1];
 
         return [
-            'currentRoute' => request()->route()?->getName(),
-            'taskBadgeCount' => $overdueCount,
+            'badges' => [
+                'tasks' => Task::where('progress', '<', 100)->count(),
+                'schedules' => Schedule::where('day', $hariIni)->count(),
+            ],
             'menus' => [
                 ['route' => 'dashboard', 'label' => 'Home', 'icon' => 'fa-house', 'url' => '/'],
                 ['route' => 'tasks', 'label' => 'Task', 'icon' => 'fa-list-check', 'url' => '/tasks'],
@@ -66,9 +67,9 @@ new class extends Component
                                :class="is('{{ $menu['url'] }}') ? 'translate-x-0' : 'translate-x-full'"></i>
                         </span>
                         {{ $menu['label'] }}
-                        @if ($menu['route'] === 'tasks' && $taskBadgeCount > 0)
-                            <span class="absolute -top-1 -right-1 bg-danger text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                                {{ $taskBadgeCount }}
+                        @if (($badges[$menu['route']] ?? 0) > 0)
+                            <span class="absolute -top-1 -right-1 {{ $menu['route'] === 'tasks' ? 'bg-danger' : 'bg-primary' }} text-white text-[10px] rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
+                                {{ $badges[$menu['route']] > 99 ? '99+' : $badges[$menu['route']] }}
                             </span>
                         @endif
                     </a>
@@ -103,9 +104,9 @@ new class extends Component
                       :class="is('{{ $menu['url'] }}') ? 'max-w-20 ml-1.5 opacity-100' : 'max-w-0 ml-0 opacity-0'">
                     {{ $menu['label'] }}
                 </span>
-                @if ($menu['route'] === 'tasks' && $taskBadgeCount > 0)
-                    <span class="absolute top-0 right-1 bg-danger text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center">
-                        {{ $taskBadgeCount }}
+                @if (($badges[$menu['route']] ?? 0) > 0)
+                    <span class="absolute top-0 right-1 {{ $menu['route'] === 'tasks' ? 'bg-danger' : 'bg-primary' }} text-white text-[9px] rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
+                        {{ $badges[$menu['route']] > 99 ? '99+' : $badges[$menu['route']] }}
                     </span>
                 @endif
             </a>
