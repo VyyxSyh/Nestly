@@ -36,8 +36,9 @@ new class extends Component
     {{-- Desktop & Tablet Bottom Nav --}}
     <nav class="hidden sm:flex fixed bottom-4 inset-x-0 z-50 justify-center px-4">
         <div class="flex items-center justify-between w-full max-w-6xl bg-surface border border-border rounded-full px-6 py-3 shadow-lg">
-            <div class="flex items-center gap-2 font-bold text-text">
-                <i class="fa-solid fa-graduation-cap text-primary"></i> Nestly
+            <div class="flex items-center gap-2 font-bold text-text cursor-pointer">
+                <img src="{{ asset('logo.png') }}" alt="Nestly" class="h-8 w-auto">
+                Nestly
             </div>
 
             <div class="flex items-center gap-2 mx-auto">
@@ -45,7 +46,7 @@ new class extends Component
                     @php $isActive = $currentRoute === $menu['route']; @endphp
                     <a href="{{ $menu['url'] }}"
                     class="relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors
-                            {{ $isActive ? 'bg-tertiary text-primary' : 'text-text-muted hover:text-text' }}">
+                            {{ $isActive ? 'bg-primary text-white' : 'text-text-muted hover:text-text' }}">
                         @if ($isActive)
                             <i class="fa-solid {{ $menu['icon'] }}"></i>
                         @endif
