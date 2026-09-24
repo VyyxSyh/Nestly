@@ -5,12 +5,6 @@ use Livewire\Component;
 
 new class extends Component
 {
-    public function toggleDarkMode()
-    {
-        session(['dark_mode' => ! session('dark_mode', true)]);
-        $this->redirect(request()->fullUrl());
-    }
-
     public function with(): array
     {
         $overdueCount = Task::all()->filter(function ($task) {
@@ -60,31 +54,7 @@ new class extends Component
                 @endforeach
             </div>
 
-            <label class="switch">
-                <input type="checkbox" wire:click="toggleDarkMode" {{ session('dark_mode', true) ? 'checked' : '' }} />
-                <div class="slider">
-                    <div class="sun-moon">
-                        <svg id="moon-dot-1" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="moon-dot-2" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="moon-dot-3" class="moon-dot" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="light-ray-1" class="light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="light-ray-2" class="light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="light-ray-3" class="light-ray" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="cloud-1" class="cloud-dark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="cloud-2" class="cloud-dark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="cloud-3" class="cloud-dark" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="cloud-4" class="cloud-light" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="cloud-5" class="cloud-light" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                        <svg id="cloud-6" class="cloud-light" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"></circle></svg>
-                    </div>
-                    <div class="stars">
-                        <svg id="star-1" class="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
-                        <svg id="star-2" class="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
-                        <svg id="star-3" class="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
-                        <svg id="star-4" class="star" viewBox="0 0 20 20"><path d="M 0 10 C 10 10,10 10 ,0 10 C 10 10 , 10 10 , 10 20 C 10 10 , 10 10 , 20 10 C 10 10 , 10 10 , 10 0 C 10 10,10 10 ,0 10 Z"></path></svg>
-                    </div>
-                </div>
-            </label>
+            <x-theme-toggle />
         </div>
     </nav>
 
@@ -93,9 +63,7 @@ new class extends Component
         <div class="flex items-center gap-2 font-bold text-text">
             <i class="fa-solid fa-graduation-cap text-primary"></i> Nestly
         </div>
-        <button wire:click="toggleDarkMode" class="w-8 h-8 rounded-full border-2 border-border flex items-center justify-center text-text cursor-pointer">
-            <i class="fa-solid {{ session('dark_mode', true) ? 'fa-sun' : 'fa-moon' }} text-sm"></i>
-        </button>
+        <x-theme-toggle />
     </div>
 
     {{-- Mobile Bottom Nav (icon-only) --}}
