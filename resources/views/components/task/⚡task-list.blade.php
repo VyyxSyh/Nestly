@@ -22,7 +22,7 @@ new class extends Component
     public $filterStatus = '';
     public $filterSubject = '';
     public $sortBy = 'deadline_asc';
-    
+
     public array $pendingNewItems = [];
     public array $pendingDeleteIds = [];
     public array $pendingEdits = [];
@@ -252,7 +252,26 @@ new class extends Component
 };
 ?>
 
-<div>
+@php
+    $taskCard = function ($task) {
+        $accent = $task->subject?->accent_color ?? '#9CA3AF';
+        $statusColor = match ($task->status) {
+            'completed' => '#22C55E',
+            'in_progress' => '#3B82F6',
+            default => '#9CA3AF',
+        };
+        $urgencyHex = match ($task->urgency_color) {
+            'red' => '#EF4444',
+            'orange' => '#F59E0B',
+            'yellow' => '#EAB308',
+            'gray' => '#9CA3AF',
+            default => '#22C55E',
+        };
+        return [$accent, $statusColor, $urgencyHex];
+    };
+@endphp
+
+<div class="text-text">
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-semibold">Daftar Tugas</h1>
         <button wire:click="openCreateModal" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md cursor-pointer transition-colors">
@@ -262,23 +281,23 @@ new class extends Component
 
     <div class="flex flex-wrap gap-2 mb-4">
         <input type="text" wire:model.live="search" placeholder="Cari judul tugas..."
-            class="border rounded-md px-3 py-2 text-sm flex-1 min-w-[150px]">
+            class="border border-border bg-surface text-text placeholder:text-text-muted rounded-md px-3 py-2 text-sm flex-1 min-w-[150px]">
 
-        <select wire:model.live="filterStatus" class="border rounded-md px-3 py-2 text-sm">
+        <select wire:model.live="filterStatus" class="border border-border bg-surface text-text rounded-md px-3 py-2 text-sm">
             <option value="">Semua Status</option>
             <option value="not_started">Not Started</option>
             <option value="in_progress">In Progress</option>
             <option value="completed">Completed</option>
         </select>
 
-        <select wire:model.live="filterSubject" class="border rounded-md px-3 py-2 text-sm">
+        <select wire:model.live="filterSubject" class="border border-border bg-surface text-text rounded-md px-3 py-2 text-sm">
             <option value="">Semua Mata Kuliah</option>
             @foreach ($subjects as $subject)
                 <option value="{{ $subject->id }}">{{ $subject->name }}</option>
             @endforeach
         </select>
 
-        <select wire:model.live="sortBy" class="border rounded-md px-3 py-2 text-sm">
+        <select wire:model.live="sortBy" class="border border-border bg-surface text-text rounded-md px-3 py-2 text-sm">
             <option value="deadline_asc">Deadline Terdekat</option>
             <option value="deadline_desc">Deadline Terjauh</option>
             <option value="progress_desc">Progress Tertinggi</option>
@@ -289,42 +308,28 @@ new class extends Component
     </div>
 
     @if ($tasks->isEmpty())
-        <p class="text-gray-500 mt-4">Belum ada tugas.</p>
+        <p class="text-text-muted mt-4">Belum ada tugas.</p>
     @else
         <div class="flex flex-col md:flex-row gap-6 mt-4">
             {{-- Kolom kiri: index genap (0, 2, 4, ...) --}}
             <div class="flex-1 flex flex-col gap-6">
                 @foreach ($tasks as $index => $task)
                     @continue($index % 2 !== 0)
-                    @php
-                        $accent = $task->subject?->accent_color ?? '#9CA3AF';
-                        $statusColor = match($task->status) {
-                            'completed' => '#22C55E',
-                            'in_progress' => '#3B82F6',
-                            default => '#9CA3AF',
-                        };
-                        $urgencyHex = match($task->urgency_color) {
-                            'red' => '#EF4444',
-                            'orange' => '#F59E0B',
-                            'yellow' => '#EAB308',
-                            'gray' => '#9CA3AF',
-                            default => '#22C55E',
-                        };
-                    @endphp
-                    <div class="relative border-2 rounded-2xl p-5 pt-6 bg-white"
+                    @php [$accent, $statusColor, $urgencyHex] = $taskCard($task); @endphp
+                    <div class="relative border-2 rounded-2xl p-5 pt-6 bg-surface"
                         style="border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};">
 
-                        <div class="absolute -top-3 left-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
+                        <div class="absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
                             style="border-color: {{ $urgencyHex }}; color: {{ $urgencyHex }};">
                             {{ $task->priority }}
                         </div>
 
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                             style="border-color: {{ $accent }}; color: {{ $accent }};">
                             {{ $task->subject?->name ?? 'Tanpa Mata Kuliah' }}
                         </div>
 
-                        <div class="absolute -top-3 right-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                        <div class="absolute -top-3 right-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                             style="border-color: {{ $statusColor }}; color: {{ $statusColor }};">
                             {{ str($task->status)->replace('_', ' ')->title() }}
                         </div>
@@ -333,7 +338,7 @@ new class extends Component
                             <div>
                                 <h3 class="font-bold text-lg mb-1">{{ $task->title }}</h3>
                                 @if ($task->description)
-                                    <p class="text-sm text-gray-500">{{ $task->description }}</p>
+                                    <p class="text-sm text-text-muted">{{ $task->description }}</p>
                                 @endif
                             </div>
 
@@ -343,7 +348,7 @@ new class extends Component
                                     <span class="text-sm">{{ $task->progress }}%</span>
                                 </div>
 
-                                <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
+                                <div class="w-full h-2 bg-border rounded-full overflow-hidden mb-2">
                                     <div class="h-full bg-primary" style="width: {{ $task->progress }}%"></div>
                                 </div>
 
@@ -362,23 +367,23 @@ new class extends Component
 
                                 <div class="mt-3">
                                     <div class="font-semibold text-sm">Deadline</div>
-                                    <div class="text-sm text-gray-500">{{ $task->deadline_formatted }}</div>
+                                    <div class="text-sm text-text-muted">{{ $task->deadline_formatted }}</div>
                                 </div>
                             </div>
                         </div>
 
                         @if ($task->progress_mode === 'checklist')
-                            <div class="mt-4 pt-3 border-t">
+                            <div class="mt-4 pt-3 border-t border-border">
                                 <div class="text-center font-semibold text-sm mb-2">Todo List</div>
                                 <div class="space-y-1">
                                     @forelse ($task->checklistItems as $item)
                                         <label class="flex items-center gap-2 text-sm">
                                             <input type="checkbox" wire:click="toggleChecklistItem({{ $item->id }})" @checked($item->is_done)
                                                 class="w-4 h-4 rounded border-2" style="accent-color: {{ $accent }}">
-                                            <span class="{{ $item->is_done ? 'line-through text-gray-400' : '' }}">{{ $item->title }}</span>
+                                            <span class="{{ $item->is_done ? 'line-through text-text-muted' : '' }}">{{ $item->title }}</span>
                                         </label>
                                     @empty
-                                        <p class="text-sm text-gray-400 text-center">Belum ada checklist item.</p>
+                                        <p class="text-sm text-text-muted text-center">Belum ada checklist item.</p>
                                     @endforelse
                                 </div>
                             </div>
@@ -400,11 +405,11 @@ new class extends Component
                         </div>
 
                         @if ($confirmingDeleteId === $task->id)
-                            <div class="mt-3 bg-red-50 border border-red-200 rounded-md p-3 flex justify-between items-center">
-                                <span class="text-sm text-red-700">Yakin mau hapus tugas ini?</span>
+                            <div class="mt-3 bg-danger/10 border border-danger/40 rounded-md p-3 flex justify-between items-center">
+                                <span class="text-sm text-danger">Yakin mau hapus tugas ini?</span>
                                 <div class="flex gap-2">
-                                    <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border">Batal</button>
-                                    <button wire:click="delete({{ $task->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">Hapus</button>
+                                    <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border border-border text-text">Batal</button>
+                                    <button wire:click="delete({{ $task->id }})" class="text-sm px-3 py-1 rounded-md bg-danger text-white">Hapus</button>
                                 </div>
                             </div>
                         @endif
@@ -416,35 +421,21 @@ new class extends Component
             <div class="flex-1 flex flex-col gap-6">
                 @foreach ($tasks as $index => $task)
                     @continue($index % 2 === 0)
-                    @php
-                        $accent = $task->subject?->accent_color ?? '#9CA3AF';
-                        $statusColor = match($task->status) {
-                            'completed' => '#22C55E',
-                            'in_progress' => '#3B82F6',
-                            default => '#9CA3AF',
-                        };
-                        $urgencyHex = match($task->urgency_color) {
-                            'red' => '#EF4444',
-                            'orange' => '#F59E0B',
-                            'yellow' => '#EAB308',
-                            'gray' => '#9CA3AF',
-                            default => '#22C55E',
-                        };
-                    @endphp
-                    <div class="relative border-2 rounded-2xl p-5 pt-6 bg-white"
+                    @php [$accent, $statusColor, $urgencyHex] = $taskCard($task); @endphp
+                    <div class="relative border-2 rounded-2xl p-5 pt-6 bg-surface"
                         style="border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};">
 
-                        <div class="absolute -top-3 left-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
+                        <div class="absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
                             style="border-color: {{ $urgencyHex }}; color: {{ $urgencyHex }};">
                             {{ $task->priority }}
                         </div>
 
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                             style="border-color: {{ $accent }}; color: {{ $accent }};">
                             {{ $task->subject?->name ?? 'Tanpa Mata Kuliah' }}
                         </div>
 
-                        <div class="absolute -top-3 right-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                        <div class="absolute -top-3 right-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                             style="border-color: {{ $statusColor }}; color: {{ $statusColor }};">
                             {{ str($task->status)->replace('_', ' ')->title() }}
                         </div>
@@ -453,7 +444,7 @@ new class extends Component
                             <div>
                                 <h3 class="font-bold text-lg mb-1">{{ $task->title }}</h3>
                                 @if ($task->description)
-                                    <p class="text-sm text-gray-500">{{ $task->description }}</p>
+                                    <p class="text-sm text-text-muted">{{ $task->description }}</p>
                                 @endif
                             </div>
 
@@ -463,18 +454,18 @@ new class extends Component
                                     <span class="text-sm">{{ $task->progress }}%</span>
                                 </div>
 
-                                <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
+                                <div class="w-full h-2 bg-border rounded-full overflow-hidden mb-2">
                                     <div class="h-full bg-green-500" style="width: {{ $task->progress }}%"></div>
                                 </div>
 
                                 @if ($task->progress_mode === 'manual')
                                     <div class="flex justify-between w-full">
                                         <button wire:click="decrementProgress({{ $task->id }})"
-                                                class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 cursor-pointer active:scale-90 active:bg-green-100 transition-transform duration-100">
+                                                class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 cursor-pointer active:scale-90 active:bg-green-500/20 transition-transform duration-100">
                                             <i class="fa-solid fa-minus text-xs"></i>
                                         </button>
                                         <button wire:click="incrementProgress({{ $task->id }})"
-                                                class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 cursor-pointer active:scale-90 active:bg-green-100 transition-transform duration-100">
+                                                class="w-8 h-8 flex items-center justify-center rounded-lg border-2 border-green-500 text-green-600 cursor-pointer active:scale-90 active:bg-green-500/20 transition-transform duration-100">
                                             <i class="fa-solid fa-plus text-xs"></i>
                                         </button>
                                     </div>
@@ -482,23 +473,23 @@ new class extends Component
 
                                 <div class="mt-3">
                                     <div class="font-semibold text-sm">Deadline</div>
-                                    <div class="text-sm text-gray-500">{{ $task->deadline_formatted }}</div>
+                                    <div class="text-sm text-text-muted">{{ $task->deadline_formatted }}</div>
                                 </div>
                             </div>
                         </div>
 
                         @if ($task->progress_mode === 'checklist')
-                            <div class="mt-4 pt-3 border-t">
+                            <div class="mt-4 pt-3 border-t border-border">
                                 <div class="text-center font-semibold text-sm mb-2">Todo List</div>
                                 <div class="space-y-1">
                                     @forelse ($task->checklistItems as $item)
                                         <label class="flex items-center gap-2 text-sm">
                                             <input type="checkbox" wire:click="toggleChecklistItem({{ $item->id }})" @checked($item->is_done)
                                                 class="w-4 h-4 rounded border-2" style="accent-color: {{ $accent }}">
-                                            <span class="{{ $item->is_done ? 'line-through text-gray-400' : '' }}">{{ $item->title }}</span>
+                                            <span class="{{ $item->is_done ? 'line-through text-text-muted' : '' }}">{{ $item->title }}</span>
                                         </label>
                                     @empty
-                                        <p class="text-sm text-gray-400 text-center">Belum ada checklist item.</p>
+                                        <p class="text-sm text-text-muted text-center">Belum ada checklist item.</p>
                                     @endforelse
                                 </div>
                             </div>
@@ -520,11 +511,11 @@ new class extends Component
                         </div>
 
                         @if ($confirmingDeleteId === $task->id)
-                            <div class="mt-3 bg-red-50 border border-red-200 rounded-md p-3 flex justify-between items-center">
-                                <span class="text-sm text-red-700">Yakin mau hapus tugas ini?</span>
+                            <div class="mt-3 bg-danger/10 border border-danger/40 rounded-md p-3 flex justify-between items-center">
+                                <span class="text-sm text-danger">Yakin mau hapus tugas ini?</span>
                                 <div class="flex gap-2">
-                                    <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border">Batal</button>
-                                    <button wire:click="delete({{ $task->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">Hapus</button>
+                                    <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border border-border text-text">Batal</button>
+                                    <button wire:click="delete({{ $task->id }})" class="text-sm px-3 py-1 rounded-md bg-danger text-white">Hapus</button>
                                 </div>
                             </div>
                         @endif
@@ -536,19 +527,19 @@ new class extends Component
 
     @if ($showModal)
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white rounded-md p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="bg-surface text-text rounded-md p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
                 <h2 class="text-lg font-semibold mb-4">{{ $isEditing ? 'Edit Tugas' : 'Tambah Tugas' }}</h2>
 
                 <form wire:submit="save" class="space-y-3">
                     <div>
                         <label class="block text-sm mb-1">Judul</label>
-                        <input type="text" wire:model="title" class="w-full border rounded-md px-3 py-2">
-                        @error('title') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <input type="text" wire:model="title" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
+                        @error('title') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm mb-1">Mata Kuliah</label>
-                        <select wire:model="subject_id" class="w-full border rounded-md px-3 py-2">
+                        <select wire:model="subject_id" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                             <option value="">-- Tanpa Mata Kuliah --</option>
                             @foreach ($subjects as $subject)
                                 <option value="{{ $subject->id }}">{{ $subject->name }}</option>
@@ -558,31 +549,31 @@ new class extends Component
 
                     <div>
                         <label class="block text-sm mb-1">Deskripsi</label>
-                        <textarea wire:model="description" class="w-full border rounded-md px-3 py-2"></textarea>
+                        <textarea wire:model="description" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2"></textarea>
                     </div>
 
                     <div class="flex gap-2">
                         <div class="flex-1">
                             <label class="block text-sm mb-1">Deadline (tanggal)</label>
-                            <input type="date" wire:model="deadline" class="w-full border rounded-md px-3 py-2">
-                            @error('deadline') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            <input type="date" wire:model="deadline" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
+                            @error('deadline') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                         </div>
                         <div class="flex-1">
                             <label class="block text-sm mb-1">Jam (opsional)</label>
-                            <input type="time" wire:model="deadline_time" class="w-full border rounded-md px-3 py-2">
+                            <input type="time" wire:model="deadline_time" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-sm mb-1">Mode Progress</label>
-                        <select wire:model="progress_mode" class="w-full border rounded-md px-3 py-2">
+                        <select wire:model="progress_mode" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                             <option value="manual">Manual (+/- 5%)</option>
                             <option value="checklist">Checklist (otomatis dari sub-tugas)</option>
                         </select>
                     </div>
 
                     @if ($progress_mode === 'checklist')
-                        <div class="border-t pt-3 mt-1">
+                        <div class="border-t border-border pt-3 mt-1">
                             <label class="block text-sm mb-2 font-medium">Checklist Item</label>
 
                             <div class="space-y-1 mb-2">
@@ -592,11 +583,11 @@ new class extends Component
                                         <div class="flex items-center gap-2 text-sm">
                                             @if ($editingItemId === $item->id)
                                                 <input type="text" wire:model="editingItemTitle" wire:keydown.enter.prevent="confirmEditExisting"
-                                                    class="flex-1 border rounded-md px-2 py-1 text-sm">
-                                                <button type="button" wire:click="confirmEditExisting" class="text-green-600 text-xs">
+                                                    class="flex-1 border border-border bg-bg text-text rounded-md px-2 py-1 text-sm">
+                                                <button type="button" wire:click="confirmEditExisting" class="text-success text-xs">
                                                     <i class="fa-solid fa-check"></i>
                                                 </button>
-                                                <button type="button" wire:click="cancelEditExisting" class="text-gray-400 text-xs">
+                                                <button type="button" wire:click="cancelEditExisting" class="text-text-muted text-xs">
                                                     <i class="fa-solid fa-xmark"></i>
                                                 </button>
                                             @else
@@ -604,7 +595,7 @@ new class extends Component
                                                 <button type="button" wire:click="startEditExisting({{ $item->id }}, '{{ addslashes($pendingEdits[$item->id] ?? $item->title) }}')" class="text-blue-500 text-xs">
                                                     <i class="fa-solid fa-pen"></i>
                                                 </button>
-                                                <button type="button" wire:click="stageDeleteExistingItem({{ $item->id }})" class="text-red-500 text-xs">
+                                                <button type="button" wire:click="stageDeleteExistingItem({{ $item->id }})" class="text-danger text-xs">
                                                     <i class="fa-solid fa-xmark"></i>
                                                 </button>
                                             @endif
@@ -615,7 +606,7 @@ new class extends Component
                                 {{-- item ditandai untuk dihapus (bisa dibatalkan) --}}
                                 @foreach ($editingTaskExistingItems as $item)
                                     @if (in_array($item->id, $pendingDeleteIds))
-                                        <div class="flex items-center justify-between text-sm text-gray-400">
+                                        <div class="flex items-center justify-between text-sm text-text-muted">
                                             <span class="line-through">{{ $item->title }} (akan dihapus)</span>
                                             <button type="button" wire:click="unstageDeleteExistingItem({{ $item->id }})" class="text-blue-500 text-xs">
                                                 Batal
@@ -629,9 +620,9 @@ new class extends Component
                                     <div class="flex items-center gap-2">
                                         <input type="text" wire:model.live="pendingNewItems.{{ $index }}"
                                             placeholder="Tambah item checklist..."
-                                            class="flex-1 border rounded-md px-2 py-1 text-sm">
+                                            class="flex-1 border border-border bg-bg text-text placeholder:text-text-muted rounded-md px-2 py-1 text-sm">
                                         @if (count($pendingNewItems) > 1)
-                                            <button type="button" wire:click="unstageNewChecklistItem({{ $index }})" class="text-red-500 text-xs">
+                                            <button type="button" wire:click="unstageNewChecklistItem({{ $index }})" class="text-danger text-xs">
                                                 <i class="fa-solid fa-xmark"></i>
                                             </button>
                                         @endif
@@ -639,12 +630,12 @@ new class extends Component
                                 @endforeach
                             </div>
 
-                            <p class="text-xs text-gray-400 mt-1">Perubahan checklist baru tersimpan permanen setelah klik "Simpan".</p>
+                            <p class="text-xs text-text-muted mt-1">Perubahan checklist baru tersimpan permanen setelah klik "Simpan".</p>
                         </div>
                     @endif
 
                     <div class="flex justify-end gap-2 pt-2">
-                        <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border">Batal</button>
+                        <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border border-border text-text">Batal</button>
                         <button type="submit" class="px-4 py-2 rounded-md bg-primary hover:bg-secondary text-white cursor-pointer transition-colors">Simpan</button>
                     </div>
                 </form>
