@@ -102,10 +102,10 @@ new class extends Component
 };
 ?>
 
-<div>
+<div class="text-text">
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-semibold">Jadwal Kuliah</h1>
-        <button wire:click="openCreateModal" class="bg-teal-600 text-white px-4 py-2 rounded-md">
+        <button wire:click="openCreateModal" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md cursor-pointer transition-colors">
             + Tambah Jadwal
         </button>
     </div>
@@ -113,11 +113,11 @@ new class extends Component
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         @forelse ($schedules as $schedule)
             @php $accent = $schedule->subject->accent_color; @endphp
-                <div class="relative border-2 rounded-2xl px-4 py-5 bg-white"
+                <div class="relative border-2 rounded-2xl px-4 py-5 bg-surface"
                 style="border-color: {{ $accent }}; box-shadow: 5px 5px 0px {{ $accent }};">
 
                 {{-- Badge Hari --}}
-                <div class="absolute -top-3 left-4 bg-white px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                <div class="absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                     style="border-color: {{ $accent }}; color: {{ $accent }};">
                     {{ $schedule->day }}
                 </div>
@@ -128,19 +128,19 @@ new class extends Component
                         <span class="text-3xl font-bold leading-none" style="color: {{ $accent }};">
                             {{ substr($schedule->start_time, 0, 2) }}
                         </span>
-                        <span class="text-sm text-gray-400 mt-1">{{ substr($schedule->start_time, 3, 2) }}</span>
-                        <div class="w-px h-4 bg-gray-300 my-1"></div>
-                        <span class="text-sm text-gray-400">{{ substr($schedule->end_time, 0, 5) }}</span>
+                        <span class="text-sm text-text-muted mt-1">{{ substr($schedule->start_time, 3, 2) }}</span>
+                        <div class="w-px h-4 bg-border my-1"></div>
+                        <span class="text-sm text-text-muted">{{ substr($schedule->end_time, 0, 5) }}</span>
                     </div>
 
                     {{-- Info mata kuliah --}}
                     <div class="flex-1">
                         <div class="font-bold text-lg mb-1">{{ $schedule->subject->name }}</div>
                         @if ($schedule->room)
-                            <div class="text-sm text-gray-500">{{ $schedule->room }}</div>
+                            <div class="text-sm text-text-muted">{{ $schedule->room }}</div>
                         @endif
                         @if ($schedule->lecturer)
-                            <div class="text-sm text-gray-500">{{ $schedule->lecturer }}</div>
+                            <div class="text-sm text-text-muted">{{ $schedule->lecturer }}</div>
                         @endif
                     </div>
                 </div>
@@ -162,40 +162,40 @@ new class extends Component
                 </div>
 
                 @if ($confirmingDeleteId === $schedule->id)
-                    <div class="mt-3 bg-red-50 border border-red-200 rounded-md p-3 flex justify-between items-center">
-                        <span class="text-sm text-red-700">Yakin mau hapus jadwal ini?</span>
+                    <div class="mt-3 bg-danger/10 border border-danger/40 rounded-md p-3 flex justify-between items-center">
+                        <span class="text-sm text-danger">Yakin mau hapus jadwal ini?</span>
                         <div class="flex gap-2">
-                            <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border">Batal</button>
-                            <button wire:click="delete({{ $schedule->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">Hapus</button>
+                            <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border border-border text-text">Batal</button>
+                            <button wire:click="delete({{ $schedule->id }})" class="text-sm px-3 py-1 rounded-md bg-danger text-white">Hapus</button>
                         </div>
                     </div>
                 @endif
             </div>
         @empty
-            <p class="text-gray-500 col-span-2">Belum ada jadwal.</p>
+            <p class="text-text-muted col-span-2">Belum ada jadwal.</p>
         @endforelse
     </div>
 
     @if ($showModal)
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white rounded-md p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="bg-surface text-text rounded-md p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
                 <h2 class="text-lg font-semibold mb-4">{{ $isEditing ? 'Edit Jadwal' : 'Tambah Jadwal' }}</h2>
 
                 <form wire:submit="save" class="space-y-3">
                     <div>
                         <label class="block text-sm mb-1">Mata Kuliah</label>
-                        <select wire:model="subject_id" class="w-full border rounded-md px-3 py-2">
+                        <select wire:model="subject_id" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                             <option value="">-- Pilih Mata Kuliah --</option>
                             @foreach ($subjects as $subject)
                                 <option value="{{ $subject->id }}">{{ $subject->name }}</option>
                             @endforeach
                         </select>
-                        @error('subject_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        @error('subject_id') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
                         <label class="block text-sm mb-1">Hari</label>
-                        <select wire:model="day" class="w-full border rounded-md px-3 py-2">
+                        <select wire:model="day" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                             @foreach ($days as $d)
                                 <option value="{{ $d }}">{{ $d }}</option>
                             @endforeach
@@ -205,28 +205,28 @@ new class extends Component
                     <div class="flex gap-2">
                         <div class="flex-1">
                             <label class="block text-sm mb-1">Jam Mulai</label>
-                            <input type="time" wire:model="start_time" class="w-full border rounded-md px-3 py-2">
+                            <input type="time" wire:model="start_time" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                         </div>
                         <div class="flex-1">
                             <label class="block text-sm mb-1">Jam Selesai</label>
-                            <input type="time" wire:model="end_time" class="w-full border rounded-md px-3 py-2">
+                            <input type="time" wire:model="end_time" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                         </div>
                     </div>
-                    @error('end_time') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('end_time') <span class="text-danger text-sm">{{ $message }}</span> @enderror
 
                     <div>
                         <label class="block text-sm mb-1">Ruangan</label>
-                        <input type="text" wire:model="room" class="w-full border rounded-md px-3 py-2">
+                        <input type="text" wire:model="room" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                     </div>
 
                     <div>
                         <label class="block text-sm mb-1">Dosen</label>
-                        <input type="text" wire:model="lecturer" class="w-full border rounded-md px-3 py-2">
+                        <input type="text" wire:model="lecturer" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                     </div>
 
                     <div class="flex justify-end gap-2 pt-2">
-                        <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border">Batal</button>
-                        <button type="submit" class="px-4 py-2 rounded-md bg-teal-600 text-white">Simpan</button>
+                        <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border border-border text-text">Batal</button>
+                        <button type="submit" class="px-4 py-2 rounded-md bg-primary hover:bg-secondary text-white cursor-pointer transition-colors">Simpan</button>
                     </div>
                 </form>
             </div>
