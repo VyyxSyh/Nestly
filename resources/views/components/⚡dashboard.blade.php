@@ -141,32 +141,50 @@ new class extends Component
         </div>
 
         <div>
-            <h2 class="text-sm lg:text-base font-bold mb-2">Deadline Terdekat</h2>
-            @forelse ($nearestTasks as $task)
-                @php
-                    $accent = $task->subject?->accent_color ?? '#9CA3AF';
-                    $overdue = $task->priority === 'overdue';
-                @endphp
-                <div class="mb-2.5 mr-1 flex items-center justify-between gap-3 rounded-xl border-2 bg-surface px-3 py-2"
-                     style="border-color: {{ $accent }}; box-shadow: 3px 3px 0px {{ $accent }};">
-                    <div class="min-w-0">
-                        <div class="truncate text-xs lg:text-sm font-semibold">{{ $task->title }}</div>
-                        <div class="text-[10px] lg:text-xs {{ $overdue ? 'text-danger' : 'text-text-muted' }}">
-                            {{ $task->deadline_formatted }}
-                        </div>
-                    </div>
-                    @if ($task->subject)
-                        <span class="hidden sm:inline-block max-w-[40%] shrink-0 truncate rounded-full border px-2 py-0.5 text-[10px] lg:text-xs font-medium"
-                              style="border-color: {{ $accent }}; color: {{ $accent }};">
-                            {{ $task->subject->name }}
-                        </span>
-                    @endif
-                </div>
-            @empty
+            <h2 class="text-sm lg:text-base font-bold mb-3">Deadline Terdekat</h2>
+            @if ($nearestTasks->isEmpty())
                 <p class="text-xs lg:text-sm text-text-muted">
                     {{ $totalTasks === 0 ? 'Belum ada tugas.' : 'Semua tugas sudah selesai.' }}
                 </p>
-            @endforelse
+            @else
+                <div class="columns-1 md:columns-2 gap-3 [&>*]:mb-3 [&>*]:break-inside-avoid">
+                    @foreach ($nearestTasks as $task)
+                        @php
+                            $accent = $task->subject?->accent_color ?? '#9CA3AF';
+                            $urgencyHex = match ($task->urgency_color) {
+                                'red' => '#EF4444',
+                                'orange' => '#F59E0B',
+                                'yellow' => '#EAB308',
+                                'gray' => '#9CA3AF',
+                                default => '#22C55E',
+                            };
+                        @endphp
+                        <div class="relative rounded-xl border-2 bg-surface px-3 pt-4 pb-2.5"
+                             style="border-color: {{ $accent }}; box-shadow: 3px 3px 0px {{ $accent }};">
+                            @if ($task->subject)
+                                <span class="absolute -top-2.5 right-3 max-w-[75%] truncate rounded-full border-2 bg-surface px-2 py-0.5 text-[10px] font-semibold"
+                                      style="border-color: {{ $accent }}; color: {{ $accent }};">
+                                    {{ $task->subject->name }}
+                                </span>
+                            @endif
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="min-w-0">
+                                    <div class="truncate text-xs lg:text-sm font-semibold">{{ $task->title }}</div>
+                                    <div class="flex items-center gap-1.5 text-[10px] lg:text-xs text-text-muted">
+                                        <span>{{ $task->deadline_formatted }}</span>
+                                        <span class="font-semibold capitalize" style="color: {{ $urgencyHex }}">
+                                            · {{ $task->priority }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <span class="shrink-0 text-sm lg:text-base font-bold" style="color: {{ $accent }}">
+                                    {{ $task->progress }}%
+                                </span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
 
