@@ -20,7 +20,7 @@ new class extends Component
             ->where('progress', '<', 100)
             ->orderBy('deadline')
             ->orderBy('deadline_time')
-            ->limit(5)
+            ->limit(10)
             ->get();
 
         // --- Jadwal hari ini ---

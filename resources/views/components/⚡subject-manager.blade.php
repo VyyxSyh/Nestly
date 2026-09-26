@@ -14,7 +14,7 @@ new class extends Component
     public $accent_color = '';
 
     public array $accentPalette = [
-        '#E85D68', '#F07845', '#E7C23B', '#4CAF72',
+        '#ff0026', '#F07845', '#E7C23B', '#4CAF72',
         '#35B9C4', '#4D83D1', '#8666D5', '#E7659A',
     ];
 

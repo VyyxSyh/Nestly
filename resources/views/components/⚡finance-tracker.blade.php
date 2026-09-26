@@ -175,12 +175,12 @@ new class extends Component
 };
 ?>
 
-<div>
+<div class="text-text">
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-semibold">Finance Tracker — {{ now()->translatedFormat('F Y') }}</h1>
         <div class="flex gap-2">
-            <button wire:click="openBudgetModal" class="border px-4 py-2 rounded-md">Atur Budget</button>
-            <button wire:click="openRecordModal" class="bg-teal-600 text-white px-4 py-2 rounded-md">
+            <button wire:click="openBudgetModal" class="border border-border text-text px-4 py-2 rounded-md cursor-pointer">Atur Budget</button>
+            <button wire:click="openRecordModal" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md cursor-pointer transition-colors">
                 + Tambah Transaksi
             </button>
         </div>
@@ -188,17 +188,17 @@ new class extends Component
 
     {{-- Summary --}}
     <div class="grid grid-cols-3 gap-3 mb-4">
-        <div class="border rounded-md p-3">
-            <div class="text-sm text-gray-500">Pemasukan</div>
-            <div class="font-semibold text-green-600">Rp{{ number_format($totalIncome, 0, ',', '.') }}</div>
+        <div class="border border-border bg-surface rounded-md p-3">
+            <div class="text-sm text-text-muted">Pemasukan</div>
+            <div class="font-semibold text-success">Rp{{ number_format($totalIncome, 0, ',', '.') }}</div>
         </div>
-        <div class="border rounded-md p-3">
-            <div class="text-sm text-gray-500">Pengeluaran</div>
-            <div class="font-semibold text-red-600">Rp{{ number_format($totalExpense, 0, ',', '.') }}</div>
+        <div class="border border-border bg-surface rounded-md p-3">
+            <div class="text-sm text-text-muted">Pengeluaran</div>
+            <div class="font-semibold text-danger">Rp{{ number_format($totalExpense, 0, ',', '.') }}</div>
         </div>
-        <div class="border rounded-md p-3">
-            <div class="text-sm text-gray-500">Sisa Saldo</div>
-            <div class="font-semibold {{ $netBalance < 0 ? 'text-red-600' : 'text-gray-800' }}">
+        <div class="border border-border bg-surface rounded-md p-3">
+            <div class="text-sm text-text-muted">Sisa Saldo</div>
+            <div class="font-semibold {{ $netBalance < 0 ? 'text-danger' : 'text-text' }}">
                 Rp{{ number_format($netBalance, 0, ',', '.') }}
             </div>
         </div>
@@ -211,61 +211,61 @@ new class extends Component
                 <span>
                     Budget Belanja Bulan Ini: Rp{{ number_format($budgetAmount, 0, ',', '.') }} (sisa Rp{{ number_format($budgetRemaining, 0, ',', '.') }})
                     @if ($isInheritedBudget)
-                        <span class="text-xs text-gray-400 italic">(dari bulan sebelumnya)</span>
+                        <span class="text-xs text-text-muted italic">(dari bulan sebelumnya)</span>
                     @endif
                 </span>
-                <span class="{{ $isOverBudget ? 'text-red-600 font-medium' : 'text-gray-500' }}">
+                <span class="{{ $isOverBudget ? 'text-danger font-medium' : 'text-text-muted' }}">
                     {{ $percentUsed }}% terpakai @if($isOverBudget) (melebihi budget!) @endif
                 </span>
             </div>
-            <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-                <div class="h-full {{ $isOverBudget ? 'bg-red-500' : ($percentUsed >= 80 ? 'bg-orange-400' : 'bg-teal-500') }}"
+            <div class="w-full h-3 bg-border rounded-full overflow-hidden">
+                <div class="h-full {{ $isOverBudget ? 'bg-danger' : ($percentUsed >= 80 ? 'bg-warning' : 'bg-primary') }}"
                     style="width: {{ $percentUsed }}%"></div>
             </div>
         </div>
     @else
-        <p class="text-sm text-gray-400 mb-4">Belum ada budget. Klik "Atur Budget" untuk menentukan.</p>
+        <p class="text-sm text-text-muted mb-4">Belum ada budget. Klik "Atur Budget" untuk menentukan.</p>
     @endif
 
     {{-- Records list, grouped by month --}}
     <div class="space-y-6">
         @forelse ($groupedRecords as $monthLabel => $monthRecords)
             <div>
-                <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wide border-b pb-1 mb-2">
+                <h2 class="text-sm font-semibold text-text-muted uppercase tracking-wide border-b border-border pb-1 mb-2">
                     {{ $monthLabel }}
                 </h2>
 
                 <div class="space-y-2">
                     @foreach ($monthRecords as $record)
-                        <div class="border rounded-md p-3 flex justify-between items-center">
+                        <div class="border border-border bg-surface rounded-md p-3 flex justify-between items-center">
                             <div>
                                 <div class="font-medium">
                                     {{ $record->category }}
-                                    <span class="text-xs px-2 py-0.5 rounded-full {{ $record->type === 'income' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                    <span class="text-xs px-2 py-0.5 rounded-full {{ $record->type === 'income' ? 'bg-success/15 text-success' : 'bg-danger/15 text-danger' }}">
                                         {{ $record->type === 'income' ? 'Pemasukan' : 'Pengeluaran' }}
                                     </span>
                                 </div>
-                                <div class="text-sm text-gray-500">{{ $record->date->format('d M Y') }} @if($record->note) — {{ $record->note }} @endif</div>
+                                <div class="text-sm text-text-muted">{{ $record->date->format('d M Y') }} @if($record->note) — {{ $record->note }} @endif</div>
                             </div>
                             <div class="flex items-center gap-3">
-                                <span class="font-medium {{ $record->type === 'income' ? 'text-green-600' : 'text-red-600' }}">
+                                <span class="font-medium {{ $record->type === 'income' ? 'text-success' : 'text-danger' }}">
                                     Rp{{ number_format($record->amount, 0, ',', '.') }}
                                 </span>
-                                <button wire:click="openEditRecordModal({{ $record->id }})" class="text-blue-600">
+                                <button wire:click="openEditRecordModal({{ $record->id }})" class="text-blue-500">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
-                                <button wire:click="confirmDelete({{ $record->id }})" class="text-red-600">
+                                <button wire:click="confirmDelete({{ $record->id }})" class="text-danger">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
                         </div>
 
                         @if ($confirmingDeleteId === $record->id)
-                            <div class="bg-red-50 border border-red-200 rounded-md p-3 flex justify-between items-center -mt-1">
-                                <span class="text-sm text-red-700">Yakin hapus transaksi ini?</span>
+                            <div class="bg-danger/10 border border-danger/40 rounded-md p-3 flex justify-between items-center -mt-1">
+                                <span class="text-sm text-danger">Yakin hapus transaksi ini?</span>
                                 <div class="flex gap-2">
-                                    <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border">Batal</button>
-                                    <button wire:click="deleteRecord({{ $record->id }})" class="text-sm px-3 py-1 rounded-md bg-red-600 text-white">Hapus</button>
+                                    <button wire:click="cancelDelete" class="text-sm px-3 py-1 rounded-md border border-border text-text">Batal</button>
+                                    <button wire:click="deleteRecord({{ $record->id }})" class="text-sm px-3 py-1 rounded-md bg-danger text-white">Hapus</button>
                                 </div>
                             </div>
                         @endif
@@ -273,44 +273,44 @@ new class extends Component
                 </div>
             </div>
         @empty
-            <p class="text-gray-500">Belum ada transaksi sama sekali.</p>
+            <p class="text-text-muted">Belum ada transaksi sama sekali.</p>
         @endforelse
     </div>
 
     {{-- Modal tambah/edit transaksi --}}
     @if ($showRecordModal)
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white rounded-md p-6 w-full max-w-sm">
+            <div class="bg-surface text-text rounded-md p-6 w-full max-w-sm">
                 <h2 class="text-lg font-semibold mb-4">{{ $isEditingRecord ? 'Edit Transaksi' : 'Tambah Transaksi' }}</h2>
                 <form wire:submit="saveRecord" class="space-y-3">
                     <div>
                         <label class="block text-sm mb-1">Tipe</label>
-                        <select wire:model="type" class="w-full border rounded-md px-3 py-2">
+                        <select wire:model="type" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                             <option value="expense">Pengeluaran</option>
                             <option value="income">Pemasukan</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm mb-1">Kategori</label>
-                        <input type="text" wire:model="category" class="w-full border rounded-md px-3 py-2" placeholder="misal: makan, transport, uang saku">
-                        @error('category') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <input type="text" wire:model="category" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2" placeholder="misal: makan, transport, uang saku">
+                        @error('category') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-sm mb-1">Nominal (Rp)</label>
-                        <input type="number" wire:model="amount" class="w-full border rounded-md px-3 py-2">
-                        @error('amount') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <input type="number" wire:model="amount" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
+                        @error('amount') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-sm mb-1">Tanggal</label>
-                        <input type="date" wire:model="date" class="w-full border rounded-md px-3 py-2">
+                        <input type="date" wire:model="date" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                     </div>
                     <div>
                         <label class="block text-sm mb-1">Catatan (opsional)</label>
-                        <textarea wire:model="note" class="w-full border rounded-md px-3 py-2"></textarea>
+                        <textarea wire:model="note" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2"></textarea>
                     </div>
                     <div class="flex justify-end gap-2 pt-2">
-                        <button type="button" wire:click="closeRecordModal" class="px-4 py-2 rounded-md border">Batal</button>
-                        <button type="submit" class="px-4 py-2 rounded-md bg-teal-600 text-white">Simpan</button>
+                        <button type="button" wire:click="closeRecordModal" class="px-4 py-2 rounded-md border border-border text-text">Batal</button>
+                        <button type="submit" class="px-4 py-2 rounded-md bg-primary hover:bg-secondary text-white cursor-pointer transition-colors">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -320,17 +320,17 @@ new class extends Component
     {{-- Modal atur budget --}}
     @if ($showBudgetModal)
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-white rounded-md p-6 w-full max-w-sm">
+            <div class="bg-surface text-text rounded-md p-6 w-full max-w-sm">
                 <h2 class="text-lg font-semibold mb-4">Atur Budget — {{ now()->translatedFormat('F Y') }}</h2>
                 <form wire:submit="saveBudget" class="space-y-3">
                     <div>
                         <label class="block text-sm mb-1">Nominal Budget (Rp)</label>
-                        <input type="number" wire:model="budget_amount" class="w-full border rounded-md px-3 py-2">
-                        @error('budget_amount') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <input type="number" wire:model="budget_amount" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
+                        @error('budget_amount') <span class="text-danger text-sm">{{ $message }}</span> @enderror
                     </div>
                     <div class="flex justify-end gap-2 pt-2">
-                        <button type="button" wire:click="closeBudgetModal" class="px-4 py-2 rounded-md border">Batal</button>
-                        <button type="submit" class="px-4 py-2 rounded-md bg-teal-600 text-white">Simpan</button>
+                        <button type="button" wire:click="closeBudgetModal" class="px-4 py-2 rounded-md border border-border text-text">Batal</button>
+                        <button type="submit" class="px-4 py-2 rounded-md bg-primary hover:bg-secondary text-white cursor-pointer transition-colors">Simpan</button>
                     </div>
                 </form>
             </div>
