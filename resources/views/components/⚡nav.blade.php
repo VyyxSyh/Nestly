@@ -98,14 +98,14 @@ new class extends Component
         @foreach ($menus as $menu)
             <a href="{{ $menu['url'] }}" wire:navigate
                class="relative flex min-w-0 items-center justify-center rounded-full h-10 text-base min-[360px]:text-lg transition-all duration-300 ease-out"
-               :class="is('{{ $menu['url'] }}') ? 'flex-[2.4] bg-tertiary text-primary' : 'flex-1 text-text-muted'">
+               :class="is('{{ $menu['url'] }}') ? 'flex-[2.4] border-2 border-primary text-primary font-bold' : 'flex-1 text-text-muted hover:text-text'">
                 <i class="fa-solid {{ $menu['icon'] }} shrink-0"></i>
                 <span class="overflow-hidden whitespace-nowrap text-[11px] min-[360px]:text-xs font-semibold transition-all duration-300"
                       :class="is('{{ $menu['url'] }}') ? 'max-w-20 ml-1.5 opacity-100' : 'max-w-0 ml-0 opacity-0'">
                     {{ $menu['label'] }}
                 </span>
                 @if (($badges[$menu['route']] ?? 0) > 0)
-                    <span class="absolute top-0 right-1 {{ $menu['route'] === 'tasks' ? 'bg-danger' : 'bg-primary' }} text-white text-[9px] rounded-full min-w-4 h-4 px-1 flex items-center justify-center">
+                    <span class="absolute top-0 right-1 {{ $menu['route'] === 'tasks' ? 'bg-danger' : 'bg-primary' }} text-white text-[9px] rounded-full min-w-4 h-4 px-1 flex items-center justify-center font-bold">
                         {{ $badges[$menu['route']] > 99 ? '99+' : $badges[$menu['route']] }}
                     </span>
                 @endif
