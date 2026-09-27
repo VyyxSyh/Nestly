@@ -176,11 +176,11 @@ new class extends Component
 ?>
 
 <div class="text-text">
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
         <h1 class="text-xl font-semibold">Finance Tracker — {{ now()->translatedFormat('F Y') }}</h1>
         <div class="flex gap-2">
-            <button wire:click="openBudgetModal" class="border border-border text-text px-4 py-2 rounded-md cursor-pointer">Atur Budget</button>
-            <button wire:click="openRecordModal" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md cursor-pointer transition-colors">
+            <button wire:click="openBudgetModal" class="flex-1 sm:flex-none border border-border text-text px-4 py-2 rounded-md cursor-pointer whitespace-nowrap">Atur Budget</button>
+            <button wire:click="openRecordModal" class="flex-1 sm:flex-none bg-primary hover:bg-secondary text-white px-4 py-2 rounded-md cursor-pointer transition-colors whitespace-nowrap">
                 + Tambah Transaksi
             </button>
         </div>
@@ -207,14 +207,14 @@ new class extends Component
     {{-- Budget bar --}}
     @if ($budgetAmount > 0)
         <div class="mb-4">
-            <div class="flex justify-between text-sm mb-1">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1 text-sm mb-1">
                 <span>
                     Budget Belanja Bulan Ini: Rp{{ number_format($budgetAmount, 0, ',', '.') }} (sisa Rp{{ number_format($budgetRemaining, 0, ',', '.') }})
                     @if ($isInheritedBudget)
                         <span class="text-xs text-text-muted italic">(dari bulan sebelumnya)</span>
                     @endif
                 </span>
-                <span class="{{ $isOverBudget ? 'text-danger font-medium' : 'text-text-muted' }}">
+                <span class="shrink-0 {{ $isOverBudget ? 'text-danger font-medium' : 'text-text-muted' }}">
                     {{ $percentUsed }}% terpakai @if($isOverBudget) (melebihi budget!) @endif
                 </span>
             </div>
