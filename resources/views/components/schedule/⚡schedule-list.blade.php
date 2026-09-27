@@ -110,10 +110,10 @@ new class extends Component
         </button>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-5 md:mt-6">
         @forelse ($schedules as $schedule)
             @php $accent = $schedule->subject->accent_color; @endphp
-                <div class="relative border-2 rounded-2xl px-4 py-5 bg-surface"
+                <div class="relative border-2 rounded-2xl px-4 pt-4 pb-3.5 md:py-5 bg-surface"
                 style="border-color: {{ $accent }}; box-shadow: 5px 5px 0px {{ $accent }};">
 
                 {{-- Badge Hari --}}
@@ -124,40 +124,40 @@ new class extends Component
 
                 <div class="flex items-start gap-4 mt-2">
                     {{-- Blok waktu boarding pass --}}
-                    <div class="flex flex-col items-center pr-4 border-r-2" style="border-color: {{ $accent }};">
-                        <span class="text-3xl font-bold leading-none" style="color: {{ $accent }};">
+                    <div class="flex flex-col items-center pr-3 md:pr-4 border-r-2" style="border-color: {{ $accent }};">
+                        <span class="text-2xl md:text-3xl font-bold leading-none" style="color: {{ $accent }};">
                             {{ substr($schedule->start_time, 0, 2) }}
                         </span>
-                        <span class="text-sm text-text-muted mt-1">{{ substr($schedule->start_time, 3, 2) }}</span>
-                        <div class="w-px h-4 bg-border my-1"></div>
-                        <span class="text-sm text-text-muted">{{ substr($schedule->end_time, 0, 5) }}</span>
+                        <span class="text-xs md:text-sm text-text-muted mt-1">{{ substr($schedule->start_time, 3, 2) }}</span>
+                        <div class="w-px h-3 md:h-4 bg-border my-1"></div>
+                        <span class="text-xs md:text-sm text-text-muted">{{ substr($schedule->end_time, 0, 5) }}</span>
                     </div>
 
                     {{-- Info mata kuliah --}}
                     <div class="flex-1">
-                        <div class="font-bold text-lg mb-1">{{ $schedule->subject->name }}</div>
+                        <div class="font-bold text-base md:text-lg mb-1">{{ $schedule->subject->name }}</div>
                         @if ($schedule->room)
-                            <div class="text-sm text-text-muted">{{ $schedule->room }}</div>
+                            <div class="text-xs md:text-sm text-text-muted">{{ $schedule->room }}</div>
                         @endif
                         @if ($schedule->lecturer)
-                            <div class="text-sm text-text-muted">{{ $schedule->lecturer }}</div>
+                            <div class="text-xs md:text-sm text-text-muted">{{ $schedule->lecturer }}</div>
                         @endif
                     </div>
                 </div>
 
                 {{-- Icon Edit/Hapus --}}
-                <div class="flex justify-center gap-5 mt-4">
+                <div class="flex justify-center gap-4 md:gap-5 mt-3 md:mt-4">
                     <button wire:click="openEditModal({{ $schedule->id }})"
-                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-blue-500 bg-blue-500 text-white cursor-pointer
+                            class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-lg border-2 border-blue-500 bg-blue-500 text-white cursor-pointer
                                 hover:bg-transparent hover:scale-110 hover:shadow-[0_0_10px_rgba(59,130,246,0.7)] hover:text-blue-500
                                 active:scale-90 transition-all duration-150">
-                        <i class="fa-solid fa-pen-to-square"></i>
+                        <i class="fa-solid fa-pen-to-square text-sm md:text-base"></i>
                     </button>
                     <button wire:click="confirmDelete({{ $schedule->id }})"
-                            class="w-9 h-9 flex items-center justify-center rounded-lg border-2 border-red-500 bg-red-500 text-white cursor-pointer
+                            class="w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-lg border-2 border-red-500 bg-red-500 text-white cursor-pointer
                                 hover:bg-transparent hover:scale-110 hover:shadow-[0_0_10px_rgba(239,68,68,0.7)] hover:text-red-500
                                 active:scale-90 transition-all duration-150">
-                        <i class="fa-solid fa-trash"></i>
+                        <i class="fa-solid fa-trash text-sm md:text-base"></i>
                     </button>
                 </div>
 
