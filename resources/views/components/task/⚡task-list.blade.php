@@ -316,22 +316,35 @@ new class extends Component
                 @foreach ($tasks as $index => $task)
                     @continue($index % 2 !== 0)
                     @php [$accent, $statusColor, $urgencyHex] = $taskCard($task); @endphp
-                    <div class="relative border-2 rounded-2xl p-5 pt-6 bg-surface"
+                    <div class="relative border-2 rounded-2xl p-4 sm:p-5 pt-5 sm:pt-6 bg-surface"
                         style="border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};">
 
-                        <div class="absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
+                        {{-- Badges desktop di border --}}
+                        <div class="hidden lg:block absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
                             style="border-color: {{ $urgencyHex }}; color: {{ $urgencyHex }};">
                             {{ $task->priority }}
                         </div>
 
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap max-w-[80%] truncate"
                             style="border-color: {{ $accent }}; color: {{ $accent }};">
                             {{ $task->subject?->name ?? 'Tanpa Mata Kuliah' }}
                         </div>
 
-                        <div class="absolute -top-3 right-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                        <div class="hidden lg:block absolute -top-3 right-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                             style="border-color: {{ $statusColor }}; color: {{ $statusColor }};">
                             {{ str($task->status)->replace('_', ' ')->title() }}
+                        </div>
+
+                        {{-- Badges mobile & tablet di dalam card sejajar kanan-kiri --}}
+                        <div class="flex lg:hidden justify-between items-center mb-3">
+                            <div class="bg-surface px-2.5 py-0.5 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
+                                style="border-color: {{ $urgencyHex }}; color: {{ $urgencyHex }};">
+                                {{ $task->priority }}
+                            </div>
+                            <div class="bg-surface px-2.5 py-0.5 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                                style="border-color: {{ $statusColor }}; color: {{ $statusColor }};">
+                                {{ str($task->status)->replace('_', ' ')->title() }}
+                            </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4 mt-2">
@@ -422,22 +435,35 @@ new class extends Component
                 @foreach ($tasks as $index => $task)
                     @continue($index % 2 === 0)
                     @php [$accent, $statusColor, $urgencyHex] = $taskCard($task); @endphp
-                    <div class="relative border-2 rounded-2xl p-5 pt-6 bg-surface"
+                    <div class="relative border-2 rounded-2xl p-4 sm:p-5 pt-5 sm:pt-6 bg-surface"
                         style="border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};">
 
-                        <div class="absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
+                        {{-- Badges desktop di border --}}
+                        <div class="hidden lg:block absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
                             style="border-color: {{ $urgencyHex }}; color: {{ $urgencyHex }};">
                             {{ $task->priority }}
                         </div>
 
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap max-w-[80%] truncate"
                             style="border-color: {{ $accent }}; color: {{ $accent }};">
                             {{ $task->subject?->name ?? 'Tanpa Mata Kuliah' }}
                         </div>
 
-                        <div class="absolute -top-3 right-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                        <div class="hidden lg:block absolute -top-3 right-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
                             style="border-color: {{ $statusColor }}; color: {{ $statusColor }};">
                             {{ str($task->status)->replace('_', ' ')->title() }}
+                        </div>
+
+                        {{-- Badges mobile & tablet di dalam card sejajar kanan-kiri --}}
+                        <div class="flex lg:hidden justify-between items-center mb-3">
+                            <div class="bg-surface px-2.5 py-0.5 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
+                                style="border-color: {{ $urgencyHex }}; color: {{ $urgencyHex }};">
+                                {{ $task->priority }}
+                            </div>
+                            <div class="bg-surface px-2.5 py-0.5 rounded-full border-2 text-xs font-semibold whitespace-nowrap"
+                                style="border-color: {{ $statusColor }}; color: {{ $statusColor }};">
+                                {{ str($task->status)->replace('_', ' ')->title() }}
+                            </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-4 mt-2">
