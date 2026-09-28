@@ -68,6 +68,7 @@ new class extends Component
             Schedule::create($validated);
         }
 
+        $this->dispatch('badges-updated');
         $this->closeModal();
     }
 
@@ -84,6 +85,7 @@ new class extends Component
     public function delete(int $scheduleId)
     {
         Schedule::findOrFail($scheduleId)->delete();
+        $this->dispatch('badges-updated');
         $this->confirmingDeleteId = null;
     }
 
@@ -110,7 +112,25 @@ new class extends Component
         </button>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-5 md:mt-6">
+    @php $groupedSchedules = $schedules->groupBy('day'); @endphp
+    <div x-data="{ mode: 'all', openDays: @js($days) }">
+        <div class="flex justify-end mb-4">
+            <div class="inline-flex rounded-full border border-border bg-surface p-1 text-sm">
+                <button type="button" @click="mode = 'all'"
+                        class="rounded-full px-3 py-1.5 transition-colors"
+                        :class="mode === 'all' ? 'bg-primary text-white' : 'text-text-muted hover:text-text'">
+                    Semua Jadwal
+                </button>
+                <button type="button" @click="mode = 'day'"
+                        class="rounded-full px-3 py-1.5 transition-colors"
+                        :class="mode === 'day' ? 'bg-primary text-white' : 'text-text-muted hover:text-text'">
+                    Per Hari
+                </button>
+            </div>
+        </div>
+
+    <div class="mt-5 md:mt-6">
+        <div x-show="mode === 'all'" x-cloak class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
         @forelse ($schedules as $schedule)
             @php $accent = $schedule->subject->accent_color; @endphp
                 <div class="relative border-2 rounded-2xl px-4 pt-4 pb-3.5 md:py-5 bg-surface"
@@ -174,6 +194,28 @@ new class extends Component
         @empty
             <p class="text-text-muted col-span-2">Belum ada jadwal.</p>
         @endforelse
+        </div>
+
+        <div x-show="mode === 'day'" x-cloak class="space-y-8">
+            @foreach ($groupedSchedules as $day => $daySchedules)
+                <section>
+                    <button type="button"
+                            @click="openDays.includes(@js($day)) ? openDays = openDays.filter(value => value !== @js($day)) : openDays.push(@js($day))"
+                            class="flex w-full items-center justify-between rounded-xl border border-border bg-surface/60 px-4 py-3 text-left font-semibold">
+                        <span>{{ $day }} ({{ $daySchedules->count() }})</span>
+                        <i class="fa-solid fa-chevron-down transition-transform duration-200"
+                           :class="openDays.includes(@js($day)) ? 'rotate-180' : ''"></i>
+                    </button>
+                    <div x-show="openDays.includes(@js($day))" x-collapse class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-5">
+                        @foreach ($daySchedules as $schedule)
+                            @php $accent = $schedule->subject->accent_color; @endphp
+                            @include('components.schedule.schedule-card', ['schedule' => $schedule, 'accent' => $accent, 'showDayBadge' => false])
+                        @endforeach
+                    </div>
+                </section>
+            @endforeach
+        </div>
+    </div>
     </div>
 
     @if ($showModal)
