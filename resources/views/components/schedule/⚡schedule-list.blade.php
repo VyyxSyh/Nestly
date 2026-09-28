@@ -198,7 +198,7 @@ new class extends Component
 
         <div x-show="mode === 'day'" x-cloak class="space-y-8">
             @foreach ($groupedSchedules as $day => $daySchedules)
-                <section>
+                <section class="mb-4 last:mb-0">
                     <button type="button"
                             @click="openDays.includes(@js($day)) ? openDays = openDays.filter(value => value !== @js($day)) : openDays.push(@js($day))"
                             class="flex w-full items-center justify-between rounded-xl border border-border bg-surface/60 px-4 py-3 text-left font-semibold">
@@ -206,7 +206,7 @@ new class extends Component
                         <i class="fa-solid fa-chevron-down transition-transform duration-200"
                            :class="openDays.includes(@js($day)) ? 'rotate-180' : ''"></i>
                     </button>
-                    <div x-show="openDays.includes(@js($day))" x-collapse class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-5">
+                    <div x-show="openDays.includes(@js($day))" x-collapse class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 mt-5 mb-3">
                         @foreach ($daySchedules as $schedule)
                             @php $accent = $schedule->subject->accent_color; @endphp
                             @include('components.schedule.schedule-card', ['schedule' => $schedule, 'accent' => $accent, 'showDayBadge' => false])
