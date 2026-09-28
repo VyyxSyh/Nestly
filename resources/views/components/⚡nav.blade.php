@@ -3,9 +3,13 @@
 use App\Models\Schedule;
 use App\Models\Task;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 new class extends Component
 {
+    #[On('badges-updated')]
+    public function refreshBadges(): void {}
+
     public function with(): array
     {
         $hariIni = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][now()->dayOfWeekIso - 1];
@@ -99,7 +103,7 @@ new class extends Component
 >
     {{-- Desktop & Tablet Bottom Nav --}}
     <nav class="hidden sm:flex fixed bottom-3 lg:bottom-4 inset-x-0 z-50 justify-center px-4">
-        <div class="grid grid-cols-[1fr_auto_1fr] items-center w-full max-w-7xl bg-surface/30 backdrop-blur-sm border border-border/70 rounded-full px-5 py-2.5 lg:px-6 lg:py-3 shadow-lg">
+        <div class="grid grid-cols-[1fr_auto_1fr] items-center w-full max-w-7xl bg-surface/20 backdrop-blur-xs border border-border/70 rounded-full px-5 py-2.5 lg:px-6 lg:py-3 shadow-lg">
 
             {{-- Kiri: logo + teks --}}
             <div class="flex items-center gap-2 font-bold text-sm md:text-base text-text">
@@ -141,7 +145,7 @@ new class extends Component
     </nav>
 
     {{-- Mobile Top Bar --}}
-    <div class="sm:hidden fixed top-0 inset-x-0 z-50 flex items-center justify-between rounded-b-2xl px-4 py-3 bg-surface/30 backdrop-blur-sm border-b border-border/70 shadow-md transition-all duration-300">
+    <div class="sm:hidden fixed top-0 inset-x-0 z-50 flex items-center justify-between rounded-b-2xl px-4 py-3 bg-surface/20 backdrop-blur-xs border-b border-border/70 shadow-md transition-all duration-300">
         <div class="flex items-center gap-2 font-bold text-text">
             <img src="{{ asset('logo.png') }}" alt="Nestly" class="h-7 w-auto">
             Nestly
@@ -150,7 +154,7 @@ new class extends Component
     </div>
 
     {{-- Mobile Bottom Nav (pill melayang, lebar dibagi otomatis, label muncul di menu aktif) --}}
-    <nav class="sm:hidden fixed bottom-3 inset-x-2 min-[360px]:inset-x-3 z-50 bg-surface/30 backdrop-blur-sm border border-border/70 rounded-full shadow-lg px-1.5 min-[360px]:px-2 py-1.5">
+    <nav class="sm:hidden fixed bottom-3 inset-x-2 min-[360px]:inset-x-3 z-50 bg-surface/20 backdrop-blur-xs border border-border/70 rounded-full shadow-lg px-1.5 min-[360px]:px-2 py-1.5">
         <div x-ref="mobileNav" class="relative flex items-center w-full">
             {{-- Sliding Indicator Pill Mobile --}}
                 <div class="absolute h-10 border-2 border-primary rounded-full transition-all duration-300 ease-out pointer-events-none"
