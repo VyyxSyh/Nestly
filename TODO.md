@@ -22,8 +22,8 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Model `Task` + relasi ke `Subject`
 - [x] Livewire component: form tambah tugas (judul, dropdown mata kuliah, deskripsi/textarea, deadline, dropdown mode progress)
 - [x] Input deadline: date picker (wajib) + time picker (opsional)
-- [ ] Livewire component: daftar tugas (Task List) dengan Task Card sesuai desain PRD.md 8.7
-- [ ] Layout Task List: 2 kolom masonry (Desktop & Tablet), 1 kolom stack (Mobile) — lihat PRD.md FR-1.10
+- [x] Livewire component: daftar tugas (Task List) dengan Task Card sesuai desain PRD.md 8.7
+- [x] Layout Task List: 2 kolom masonry (Desktop & Tablet), 1 kolom stack (Mobile) — lihat PRD.md FR-1.10
 - [x] Fitur edit tugas (icon edit di card)
 - [x] Fitur hapus tugas (icon hapus + konfirmasi)
 - [x] Logika status `Completed` otomatis ter-set saat progress mencapai 100% (bukan field manual terpisah)
@@ -57,14 +57,14 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [ ] Responsive: Mobile — restrukturisasi jadi 1 kolom vertikal (urutan: Greeting+Profil → Jadwal → Ringkasan → List Tugas → List Transaksi)
 
 ## 🧭 Navigation
-- [ ] Livewire/Blade component: Bottom Nav (tampil di semua halaman)
+- [x] Livewire/Blade component: Bottom Nav (tampil di semua halaman)
 - [ ] Desktop & Tablet — 3 section: logo+teks (kiri), menu label Home/Task/Schedule/Subjects/Finance (tengah), icon akun + toggle Light/Dark (kanan)
 - [ ] Animasi icon slide-in dari belakang label saat menu aktif (dan slide-out saat pindah halaman)
 - [ ] Styling border & warna berbeda untuk menu yang sedang aktif (pakai token Primary)
 - [ ] Tablet — scaled down version dari layout Desktop
 - [ ] Mobile — Bottom Nav icon-only (Home, Task, Schedule, Subjects, Finance, Account), label muncul saat menu aktif
 - [ ] Badge notifikasi (angka) di icon Task — semua breakpoint
-- [ ] Mobile — Top Bar terpisah: logo+teks (kiri), toggle Light/Dark (kanan)
+- [x] Mobile — Top Bar terpisah: logo+teks (kiri), toggle Light/Dark (kanan)
 - [ ] Top Bar `position: sticky`, border-radius hanya di bottom-left & bottom-right
 - [ ] Animasi Top Bar: transparan di posisi awal, muncul background saat halaman di-scroll
 - [ ] Routing/state management untuk menandai menu mana yang sedang aktif
@@ -88,9 +88,9 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Fitur hapus jadwal
 - [ ] Tampilan jadwal per hari/minggu
 - [x] Random/pilih accent color per schedule card
-- [ ] Styling Schedule Card: border 2px + border-radius 14px + box-shadow offset 5px 5px 0px (neo-brutalist, sesuai PRD.md 8.8)
-- [ ] Badge Hari — posisi kiri atas, nempel di garis border (background = Surface), bentuk pill outline
-- [ ] Layout body: blok waktu "boarding pass" (jam mulai besar, menit kecil, garis pemisah, jam selesai) di kiri; nama matkul (font besar) + ruangan + dosen (2 baris terpisah) di kanan
+- [x] Styling Schedule Card: border 2px + border-radius 14px + box-shadow offset 5px 5px 0px (neo-brutalist, sesuai PRD.md 8.8)
+- [x] Badge Hari — posisi kiri atas, nempel di garis border (background = Surface), bentuk pill outline
+- [x] Layout body: blok waktu "boarding pass" (jam mulai besar, menit kecil, garis pemisah, jam selesai) di kiri; nama matkul (font besar) + ruangan + dosen (2 baris terpisah) di kanan
 
 ## ⏰ Deadline Tracking
 - [x] Logika kalkulasi sisa hari menuju deadline
