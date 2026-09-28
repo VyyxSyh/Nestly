@@ -198,7 +198,7 @@ new class extends Component
 
         <div x-show="mode === 'day'" x-cloak class="space-y-8">
             @foreach ($groupedSchedules as $day => $daySchedules)
-                <section class="mb-4 last:mb-0">
+                <section class="mb-2 md:mb-4 last:mb-0">
                     <button type="button"
                             @click="openDays.includes(@js($day)) ? openDays = openDays.filter(value => value !== @js($day)) : openDays.push(@js($day))"
                             class="flex w-full items-center justify-between rounded-xl border border-border bg-surface/60 px-4 py-3 text-left font-semibold">
