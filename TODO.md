@@ -38,7 +38,7 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Livewire component: Todo List/checklist sub-tugas — khusus Mode Checklist
 - [x] Logika kalkulasi otomatis progress dari proporsi sub-tugas selesai (Mode Checklist)
 - [x] Progress tersimpan otomatis ke database setiap perubahan, real-time via Livewire
-- [ ] Widget/indikator progress keseluruhan (agregat semua tugas) di halaman Task
+- [x] Widget/indikator progress keseluruhan (agregat semua tugas) di halaman Task
 
 ## 🏠 Dashboard
 - [ ] Layout halaman utama (Dashboard) sebagai route utama
@@ -58,17 +58,17 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 
 ## 🧭 Navigation
 - [x] Livewire/Blade component: Bottom Nav (tampil di semua halaman)
-- [ ] Desktop & Tablet — 3 section: logo+teks (kiri), menu label Home/Task/Schedule/Subjects/Finance (tengah), icon akun + toggle Light/Dark (kanan)
-- [ ] Animasi icon slide-in dari belakang label saat menu aktif (dan slide-out saat pindah halaman)
-- [ ] Styling border & warna berbeda untuk menu yang sedang aktif (pakai token Primary)
-- [ ] Tablet — scaled down version dari layout Desktop
-- [ ] Mobile — Bottom Nav icon-only (Home, Task, Schedule, Subjects, Finance, Account), label muncul saat menu aktif
-- [ ] Badge notifikasi (angka) di icon Task — semua breakpoint
+- [x] Desktop & Tablet — 3 section: logo+teks (kiri), menu label Home/Task/Schedule/Subjects/Finance (tengah), icon akun + toggle Light/Dark (kanan)
+- [x] Animasi icon slide-in dari belakang label saat menu aktif (dan slide-out saat pindah halaman)
+- [x] Styling border & warna berbeda untuk menu yang sedang aktif (pakai token Primary)
+- [x] Tablet — scaled down version dari layout Desktop
+- [x] Mobile — Bottom Nav icon-only (Home, Task, Schedule, Subjects, Finance), label muncul saat menu aktif
+- [x] Badge notifikasi (angka) di icon Task & Schedule — semua breakpoint
 - [x] Mobile — Top Bar terpisah: logo+teks (kiri), toggle Light/Dark (kanan)
-- [ ] Top Bar `position: sticky`, border-radius hanya di bottom-left & bottom-right
-- [ ] Animasi Top Bar: transparan di posisi awal, muncul background saat halaman di-scroll
-- [ ] Routing/state management untuk menandai menu mana yang sedang aktif
-- [ ] Pastikan konten halaman punya padding cukup agar tidak tertutup Bottom Nav/Top Bar (fixed/sticky)
+- [x] Top Bar `position: fixed`, border-radius hanya di bottom-left & bottom-right
+- [x] Animasi Top Bar: transparan di posisi awal, muncul background saat halaman di-scroll
+- [x] Routing/state management untuk menandai menu mana yang sedang aktif
+- [x] Pastikan konten halaman punya padding cukup agar tidak tertutup Bottom Nav/Top Bar (fixed/sticky)
 
 ## 📚 Subjects (Mata Kuliah)
 - [x] Migration tabel `subjects` (nama mata kuliah)
@@ -123,22 +123,22 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Pastikan search + filter + sort bisa dikombinasikan sekaligus
 
 ## 🎨 Theme (Tema Pink — default)
-- [ ] Implementasi Light mode tema Pink (Tailwind color tokens sesuai PROJECT.md)
-- [ ] Implementasi Dark mode tema Pink (Tailwind `dark:` variant)
-- [ ] Konfigurasi token warna tambahan `Caution` (kuning) dan `Neutral` (abu-abu) di Tailwind config, sesuai Color System PROJECT.md
-- [ ] Toggle switch Light/Dark mode
-- [ ] Simpan preferensi Light/Dark mode (cookie/session, atau tabel `user_settings` jika ingin persist ke database)
-- [ ] Terapkan preferensi otomatis saat aplikasi dibuka kembali
+- [x] Implementasi Light mode tema Pink (Tailwind color tokens sesuai PROJECT.md)
+- [x] Implementasi Dark mode tema Pink (Tailwind `dark:` variant)
+- [x] Konfigurasi token warna tambahan `Caution` (kuning) dan `Neutral` (abu-abu) di Tailwind config, sesuai Color System PROJECT.md
+- [x] Toggle switch Light/Dark mode
+- [x] Simpan preferensi Light/Dark mode (localStorage)
+- [x] Terapkan preferensi otomatis saat aplikasi dibuka kembali
 
 ## 🎴 Task Card Styling (Neo-brutalist)
-- [ ] Card: border 2px + border-radius 14px + box-shadow offset (6px 6px 0px, warna sesuai aksen)
-- [ ] Badge Mata Kuliah — posisi absolute, tengah atas, "nempel" di garis border (background = Surface)
-- [ ] Badge Status — posisi absolute, kanan atas, warna sesuai token status
-- [ ] Layout body 2 kolom: kiri (judul + deskripsi), kanan (Progress + Deadline)
-- [ ] Baris tombol +/- lebarnya mengikuti lebar progress bar saja (bukan lebar penuh termasuk kolom persentase)
-- [ ] Todo List full-width di bawah 2 kolom, khusus Mode Checklist (checkbox kotak + strikethrough saat selesai)
-- [ ] Sembunyikan section Todo List jika Mode Progress = Manual
-- [ ] Pastikan komponen ini reusable/konsisten dipakai di semua card Task List
+- [x] Card: border 2px + border-radius 14px + box-shadow offset (6px 6px 0px, warna sesuai aksen)
+- [x] Badge Mata Kuliah — posisi absolute, tengah atas, "nempel" di garis border (background = Surface)
+- [x] Badge Status — posisi absolute, kanan atas, warna sesuai token status
+- [x] Layout body 2 kolom: kiri (judul + deskripsi), kanan (Progress + Deadline)
+- [x] Baris tombol +/- lebarnya mengikuti lebar progress bar saja (bukan lebar penuh termasuk kolom persentase)
+- [x] Todo List full-width di bawah 2 kolom, khusus Mode Checklist (checkbox kotak + strikethrough saat selesai)
+- [x] Sembunyikan section Todo List jika Mode Progress = Manual
+- [x] Pastikan komponen ini reusable/konsisten dipakai di semua card Task List
 
 ## 💾 Data Persistence
 - [ ] Pastikan seluruh migration sudah mencerminkan relasi antar tabel dengan benar
