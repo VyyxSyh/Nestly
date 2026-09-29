@@ -165,6 +165,7 @@ new class extends Component
         }
 
         $this->recalculateProgress($task->id);
+        $this->dispatch('badges-updated');
         $this->closeModal();
     }
 
@@ -172,12 +173,14 @@ new class extends Component
     {
         $task = Task::findOrFail($taskId);
         $task->update(['progress' => min(100, $task->progress + 5)]);
+        $this->dispatch('badges-updated');
     }
 
     public function decrementProgress(int $taskId)
     {
         $task = Task::findOrFail($taskId);
         $task->update(['progress' => max(0, $task->progress - 5)]);
+        $this->dispatch('badges-updated');
     }
 
     public function toggleChecklistItem(int $itemId)
@@ -185,6 +188,7 @@ new class extends Component
         $item = TaskChecklistItem::findOrFail($itemId);
         $item->update(['is_done' => ! $item->is_done]);
         $this->recalculateProgress($item->task_id);
+        $this->dispatch('badges-updated');
     }
 
     private function recalculateProgress(int $taskId): void
@@ -210,6 +214,7 @@ new class extends Component
     public function delete(int $taskId)
     {
         Task::findOrFail($taskId)->delete();
+        $this->dispatch('badges-updated');
         $this->confirmingDeleteId = null;
     }
 
@@ -312,12 +317,11 @@ new class extends Component
     @else
         <div class="flex flex-col md:flex-row gap-6 mt-4">
             {{-- Kolom kiri: index genap (0, 2, 4, ...) --}}
-            <div class="flex-1 flex flex-col gap-6">
+            <div class="contents md:flex-1 md:flex md:flex-col md:gap-6">
                 @foreach ($tasks as $index => $task)
                     @continue($index % 2 !== 0)
                     @php [$accent, $statusColor, $urgencyHex] = $taskCard($task); @endphp
-                    <div class="relative border-2 rounded-2xl p-4 sm:p-5 pt-5 sm:pt-6 bg-surface"
-                        style="border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};">
+                    <div style="--mobile-order: {{ $index }}; border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};" class="[order:var(--mobile-order)] md:order-none relative border-2 rounded-2xl p-4 sm:p-5 pt-5 sm:pt-6 bg-surface">
 
                         {{-- Badges desktop di border --}}
                         <div class="hidden lg:block absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
@@ -431,12 +435,11 @@ new class extends Component
             </div>
 
             {{-- Kolom kanan: index ganjil (1, 3, 5, ...) --}}
-            <div class="flex-1 flex flex-col gap-6">
+            <div class="contents md:flex-1 md:flex md:flex-col md:gap-6">
                 @foreach ($tasks as $index => $task)
                     @continue($index % 2 === 0)
                     @php [$accent, $statusColor, $urgencyHex] = $taskCard($task); @endphp
-                    <div class="relative border-2 rounded-2xl p-4 sm:p-5 pt-5 sm:pt-6 bg-surface"
-                        style="border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};">
+                    <div style="--mobile-order: {{ $index }}; border-color: {{ $accent }}; box-shadow: 6px 6px 0px {{ $accent }};" class="[order:var(--mobile-order)] md:order-none relative border-2 rounded-2xl p-4 sm:p-5 pt-5 sm:pt-6 bg-surface">
 
                         {{-- Badges desktop di border --}}
                         <div class="hidden lg:block absolute -top-3 left-4 bg-surface px-3 py-1 rounded-full border-2 text-xs font-semibold capitalize whitespace-nowrap"
