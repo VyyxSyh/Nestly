@@ -1,8 +1,9 @@
 <?php
 
-use App\Models\Task;
 use App\Models\Subject;
+use App\Models\Task;
 use App\Models\TaskChecklistItem;
+use Carbon\Carbon;
 use Livewire\Component;
 
 new class extends Component
@@ -49,7 +50,7 @@ new class extends Component
         $this->title = $task->title;
         $this->description = $task->description;
         $this->deadline = $task->deadline->format('Y-m-d');
-        $this->deadline_time = $task->deadline_time ? \Carbon\Carbon::parse($task->deadline_time)->format('H:i') : '';
+        $this->deadline_time = $task->deadline_time ? Carbon::parse($task->deadline_time)->format('H:i') : '';
         $this->progress_mode = $task->progress_mode;
         $this->pendingNewItems = [''];
         $this->pendingDeleteIds = [];
@@ -72,6 +73,10 @@ new class extends Component
 
     public function updated($property, $value)
     {
+        if ($property === 'progress_mode' && $value === 'checklist' && empty($this->pendingNewItems)) {
+            $this->pendingNewItems = [''];
+        }
+
         if (str_starts_with($property, 'pendingNewItems.')) {
             $lastIndex = array_key_last($this->pendingNewItems);
             if (trim($this->pendingNewItems[$lastIndex]) !== '') {
@@ -223,7 +228,7 @@ new class extends Component
         $query = Task::with(['subject', 'checklistItems']);
 
         if ($this->search) {
-            $query->where('title', 'like', '%' . $this->search . '%');
+            $query->where('title', 'like', '%'.$this->search.'%');
         }
 
         if ($this->filterSubject) {
@@ -595,7 +600,7 @@ new class extends Component
 
                     <div>
                         <label class="block text-sm mb-1">Mode Progress</label>
-                        <select wire:model="progress_mode" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
+                        <select wire:model.change.live="progress_mode" class="w-full border border-border bg-bg text-text rounded-md px-3 py-2">
                             <option value="manual">Manual (+/- 5%)</option>
                             <option value="checklist">Checklist (otomatis dari sub-tugas)</option>
                         </select>
@@ -664,7 +669,7 @@ new class extends Component
                     @endif
 
                     <div class="flex justify-end gap-2 pt-2">
-                        <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border border-border text-text">Batal</button>
+                        <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border border-border  cursor-pointer text-text">Batal</button>
                         <button type="submit" class="px-4 py-2 rounded-md bg-primary hover:bg-secondary text-white cursor-pointer transition-colors">Simpan</button>
                     </div>
                 </form>

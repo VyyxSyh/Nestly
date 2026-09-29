@@ -86,7 +86,7 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Tampilan daftar/tabel jadwal
 - [x] Fitur edit jadwal
 - [x] Fitur hapus jadwal
-- [ ] Tampilan jadwal per hari/minggu
+- [x] Tampilan jadwal per hari/minggu
 - [x] Random/pilih accent color per schedule card
 - [x] Styling Schedule Card: border 2px + border-radius 14px + box-shadow offset 5px 5px 0px (neo-brutalist, sesuai PRD.md 8.8)
 - [x] Badge Hari — posisi kiri atas, nempel di garis border (background = Surface), bentuk pill outline
