@@ -250,6 +250,7 @@ new class extends Component
             'subject' => $tasks->sortBy(fn ($t) => $t->subject?->name ?? 'zzz'),
             default => $tasks->sortBy('deadline'),
         };
+        $tasks = $tasks->sortBy(fn ($task) => $task->status === 'completed');
 
         return [
             'tasks' => $tasks->values(),
