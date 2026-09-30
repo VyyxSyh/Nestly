@@ -290,25 +290,25 @@ new class extends Component
         </button>
     </div>
 
-    <div class="flex flex-wrap gap-2 mb-4">
+    <div class="grid grid-cols-2 md:flex md:flex-wrap gap-2 mb-4">
         <input type="text" wire:model.live="search" placeholder="Cari judul tugas..."
-            class="border border-border bg-surface text-text placeholder:text-text-muted rounded-md px-3 py-2 text-sm flex-1 min-w-[150px]">
+            class="col-span-1 border border-border bg-surface text-text placeholder:text-text-muted rounded-md px-3 py-2 text-sm min-w-0 md:flex-1 md:min-w-[150px]">
 
-        <select wire:model.live="filterStatus" class="border border-border bg-surface text-text rounded-md px-3 py-2 text-sm">
+        <select wire:model.live="filterStatus" class="col-span-1 min-w-0 border border-border bg-surface text-text rounded-md px-3 py-2 text-sm">
             <option value="">Semua Status</option>
             <option value="not_started">Not Started</option>
             <option value="in_progress">In Progress</option>
             <option value="completed">Completed</option>
         </select>
 
-        <select wire:model.live="filterSubject" class="border border-border bg-surface text-text rounded-md px-3 py-2 text-sm">
+        <select wire:model.live="filterSubject" class="col-span-1 min-w-0 border border-border bg-surface text-text rounded-md px-3 py-2 text-sm md:flex-1">
             <option value="">Semua Mata Kuliah</option>
             @foreach ($subjects as $subject)
                 <option value="{{ $subject->id }}">{{ $subject->name }}</option>
             @endforeach
         </select>
 
-        <select wire:model.live="sortBy" class="border border-border bg-surface text-text rounded-md px-3 py-2 text-sm">
+        <select wire:model.live="sortBy" class="col-span-1 min-w-0 border border-border bg-surface text-text rounded-md px-3 py-2 text-sm md:flex-1">
             <option value="deadline_asc">Deadline Terdekat</option>
             <option value="deadline_desc">Deadline Terjauh</option>
             <option value="progress_desc">Progress Tertinggi</option>
