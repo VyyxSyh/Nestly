@@ -46,8 +46,8 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Livewire component: section Jadwal (kolom 1-5, baris 1) — 4 card jadwal sejajar
 - [x] Livewire component: section Ringkasan Singkat (kolom 6, baris 1) — jumlah tugas belum selesai + % budget terpakai
 - [x] Livewire component: section List Tugas Terdekat Deadline (kolom 1-2, baris 2-4) — nama, aksen warna mata kuliah, deadline (3-5 item)
-- [ ] Livewire component: section List Transaksi Finance (kolom 3-4, baris 2-4) — 3-5 transaksi bulan berjalan
-- [ ] Empty state untuk List Transaksi Finance jika belum ada transaksi bulan ini
+- [x] Livewire component: section List Transaksi Finance (kolom 3-4, baris 2-4) — 3-5 transaksi bulan berjalan
+- [x] Empty state untuk List Transaksi Finance jika belum ada transaksi bulan ini
 - [ ] Livewire component: section Profil (kolom 5-6, baris 3-4) — foto profil (lingkaran), nama, kelas
 - [ ] Livewire component: section Greeting (kolom 5-6, baris 2) — format "[Kata Sapaan], [Nama Panggilan]!"
 - [ ] Fitur edit Kata Sapaan (dropdown/select: Hai, Hii, Halo, Alloww, Heyy, dll) + tombol edit di kanan section Greeting
