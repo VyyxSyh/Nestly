@@ -48,13 +48,8 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Livewire component: section List Tugas Terdekat Deadline (kolom 1-2, baris 2-4) — nama, aksen warna mata kuliah, deadline (3-5 item)
 - [x] Livewire component: section List Transaksi Finance (kolom 3-4, baris 2-4) — 3-5 transaksi bulan berjalan
 - [x] Empty state untuk List Transaksi Finance jika belum ada transaksi bulan ini
-- [ ] Livewire component: section Profil (kolom 5-6, baris 3-4) — foto profil (lingkaran), nama, kelas
-- [ ] Livewire component: section Greeting (kolom 5-6, baris 2) — format "[Kata Sapaan], [Nama Panggilan]!"
-- [ ] Fitur edit Kata Sapaan (dropdown/select: Hai, Hii, Halo, Alloww, Heyy, dll) + tombol edit di kanan section Greeting
-- [ ] Fitur edit Nama Panggilan, tersimpan ke database
-- [ ] Migration & model untuk menyimpan preferensi Greeting (Kata Sapaan + Nama Panggilan) per pengguna
 - [ ] Responsive: Tablet — scale down grid 6x4 tanpa ubah susunan
-- [ ] Responsive: Mobile — restrukturisasi jadi 1 kolom vertikal (urutan: Greeting+Profil → Jadwal → Ringkasan → List Tugas → List Transaksi)
+- [ ] Responsive: Mobile — restrukturisasi section Dashboard yang sudah ada jadi 1 kolom vertikal
 
 ## 🧭 Navigation
 - [x] Livewire/Blade component: Bottom Nav (tampil di semua halaman)
@@ -184,6 +179,10 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [ ] Query jadwal kuliah (berdasarkan hari yang sesuai) dan tugas dengan deadline pada tanggal yang diklik
 
 **Phase 3 — Enhancement**
+- [ ] Profil: foto profil, nama, kelas
+- [ ] Greeting: tampilkan sapaan dan nama panggilan di Dashboard
+- [ ] Edit sapaan dan nama panggilan, simpan sebagai preferensi pengguna
+- [ ] Migration & model preferensi profil/Greeting per pengguna
 - [ ] Implementasi User Authentication (Laravel Breeze/Fortify)
 - [ ] Role management
 - [ ] Migrasi struktur data agar mendukung multi-user (`user_id` di setiap tabel relevan)
