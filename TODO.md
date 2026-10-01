@@ -41,8 +41,8 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Widget/indikator progress keseluruhan (agregat semua tugas) di halaman Task
 
 ## 🏠 Dashboard
-- [ ] Layout halaman utama (Dashboard) sebagai route utama
-- [ ] Setup CSS Grid 6 kolom × 4 baris (gap 10px) untuk Desktop, sesuai spesifikasi PRD.md 8.6
+- [x] Layout halaman utama (Dashboard) sebagai route utama
+- [x] Setup CSS Grid 6 kolom × 4 baris (gap 10px) untuk Desktop, sesuai spesifikasi PRD.md 8.6
 - [ ] Livewire component: section Jadwal (kolom 1-5, baris 1) — 4 card jadwal sejajar
 - [ ] Livewire component: section Ringkasan Singkat (kolom 6, baris 1) — jumlah tugas belum selesai + % budget terpakai
 - [ ] Livewire component: section List Tugas Terdekat Deadline (kolom 1-2, baris 2-4) — nama, aksen warna mata kuliah, deadline (3-5 item)
