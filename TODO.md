@@ -141,7 +141,7 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Pastikan komponen ini reusable/konsisten dipakai di semua card Task List
 
 ## 💾 Data Persistence
-- [ ] Pastikan seluruh migration sudah mencerminkan relasi antar tabel dengan benar
+- [x] Pastikan seluruh migration sudah mencerminkan relasi antar tabel dengan benar
 - [ ] Jalankan `php artisan migrate` & verifikasi struktur tabel di HeidiSQL
 - [ ] Seeder untuk data dummy/testing (opsional, mempermudah development)
 - [ ] Handling error/edge case (validasi gagal, data tidak ditemukan, dll)
