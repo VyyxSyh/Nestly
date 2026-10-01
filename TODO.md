@@ -43,9 +43,9 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 ## 🏠 Dashboard
 - [x] Layout halaman utama (Dashboard) sebagai route utama
 - [x] Setup CSS Grid 6 kolom × 4 baris (gap 10px) untuk Desktop, sesuai spesifikasi PRD.md 8.6
-- [ ] Livewire component: section Jadwal (kolom 1-5, baris 1) — 4 card jadwal sejajar
-- [ ] Livewire component: section Ringkasan Singkat (kolom 6, baris 1) — jumlah tugas belum selesai + % budget terpakai
-- [ ] Livewire component: section List Tugas Terdekat Deadline (kolom 1-2, baris 2-4) — nama, aksen warna mata kuliah, deadline (3-5 item)
+- [x] Livewire component: section Jadwal (kolom 1-5, baris 1) — 4 card jadwal sejajar
+- [x] Livewire component: section Ringkasan Singkat (kolom 6, baris 1) — jumlah tugas belum selesai + % budget terpakai
+- [x] Livewire component: section List Tugas Terdekat Deadline (kolom 1-2, baris 2-4) — nama, aksen warna mata kuliah, deadline (3-5 item)
 - [ ] Livewire component: section List Transaksi Finance (kolom 3-4, baris 2-4) — 3-5 transaksi bulan berjalan
 - [ ] Empty state untuk List Transaksi Finance jika belum ada transaksi bulan ini
 - [ ] Livewire component: section Profil (kolom 5-6, baris 3-4) — foto profil (lingkaran), nama, kelas
