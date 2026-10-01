@@ -137,17 +137,17 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 
 ## 💾 Data Persistence
 - [x] Pastikan seluruh migration sudah mencerminkan relasi antar tabel dengan benar
-- [ ] Jalankan `php artisan migrate` & verifikasi struktur tabel di HeidiSQL
+- [x] Jalankan `php artisan migrate` & verifikasi status migration (`php artisan migrate:status`)
 - [ ] Seeder untuk data dummy/testing (opsional, mempermudah development)
 - [ ] Handling error/edge case (validasi gagal, data tidak ditemukan, dll)
-- [ ] Testing CRUD memastikan data konsisten setelah refresh/reload halaman
+- [x] Testing CRUD memastikan data konsisten setelah refresh/reload halaman
 
 ## 📱 Responsive & UX Polish
-- [ ] Uji tampilan di Mobile
-- [ ] Uji tampilan di Tablet
-- [ ] Uji tampilan di Desktop
-- [ ] Review aksesibilitas kontras warna (light/dark & indikator urgensi/budget)
-- [ ] Loading/empty state untuk setiap halaman (Task List kosong, Schedule kosong, Finance kosong, dll)
+- [x] Uji tampilan di Mobile
+- [x] Uji tampilan di Tablet
+- [x] Uji tampilan di Desktop
+- [x] Review aksesibilitas kontras warna (light/dark & indikator urgensi/budget)
+- [x] Loading/empty state untuk setiap halaman (Task List kosong, Schedule kosong, Finance kosong, dll)
 
 ## 🧪 Testing & QA
 - [ ] Manual testing seluruh fitur CRUD (Task, Schedule, Finance)
