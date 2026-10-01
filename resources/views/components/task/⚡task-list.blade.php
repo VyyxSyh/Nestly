@@ -671,7 +671,10 @@ new class extends Component
 
                     <div class="flex justify-end gap-2 pt-2">
                         <button type="button" wire:click="closeModal" class="px-4 py-2 rounded-md border border-border  cursor-pointer text-text">Batal</button>
-                        <button type="submit" class="px-4 py-2 rounded-md bg-primary hover:bg-secondary text-white cursor-pointer transition-colors">Simpan</button>
+                        <button type="submit" wire:loading.attr="disabled" wire:target="save" class="px-4 py-2 rounded-md bg-primary hover:bg-secondary text-white cursor-pointer transition-colors disabled:cursor-wait disabled:opacity-60">
+                            <span wire:loading.remove wire:target="save">Simpan</span>
+                            <span wire:loading wire:target="save">Menyimpan...</span>
+                        </button>
                     </div>
                 </form>
             </div>
