@@ -4,10 +4,51 @@ use App\Models\Budget;
 use App\Models\FinanceRecord;
 use App\Models\Schedule;
 use App\Models\Task;
+use Carbon\Carbon;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 new class extends Component
 {
+    #[Locked]
+    public int $calendarMonth;
+
+    #[Locked]
+    public int $calendarYear;
+
+    #[Locked]
+    public ?string $selectedCalendarDate = null;
+
+    public function mount(): void
+    {
+        $today = now();
+        $this->calendarMonth = $today->month;
+        $this->calendarYear = $today->year;
+    }
+
+    public function changeCalendarMonth(int $direction): void
+    {
+        $month = Carbon::create($this->calendarYear, $this->calendarMonth, 1)
+            ->addMonths($direction);
+
+        $this->calendarMonth = $month->month;
+        $this->calendarYear = $month->year;
+        $this->selectedCalendarDate = null;
+    }
+
+    public function selectCalendarDate(string $date): void
+    {
+        try {
+            $selectedDate = Carbon::createFromFormat('!Y-m-d', $date);
+        } catch (Throwable) {
+            abort(404);
+        }
+
+        abort_unless($selectedDate->format('Y-m-d') === $date, 404);
+
+        $this->selectedCalendarDate = $date;
+    }
+
     public function with(): array
     {
         // --- Tugas ---
@@ -37,6 +78,34 @@ new class extends Component
             ?? Budget::orderByDesc('year')->orderByDesc('month')->first();
         $budgetAmount = (float) ($budget?->amount ?? 0);
 
+        $calendarStart = Carbon::create($this->calendarYear, $this->calendarMonth, 1)->startOfDay();
+        $calendarEnd = $calendarStart->copy()->endOfMonth();
+        $calendarGridStart = $calendarStart->copy()->startOfWeek(Carbon::MONDAY);
+        $calendarGridEnd = $calendarEnd->copy()->endOfWeek(Carbon::SUNDAY);
+        $calendarDays = collect();
+
+        for ($day = $calendarGridStart->copy(); $day->lte($calendarGridEnd); $day->addDay()) {
+            $calendarDays->push($day->copy());
+        }
+
+        $calendarTasks = Task::with('subject')
+            ->whereDate('deadline', '>=', $calendarGridStart->toDateString())
+            ->whereDate('deadline', '<=', $calendarGridEnd->toDateString())
+            ->orderBy('deadline')
+            ->orderBy('deadline_time')
+            ->get()
+            ->groupBy(fn (Task $task) => $task->deadline->toDateString());
+
+        $selectedDate = $this->selectedCalendarDate
+            ? Carbon::createFromFormat('!Y-m-d', $this->selectedCalendarDate)
+            : null;
+        $selectedDaySchedules = $selectedDate
+            ? Schedule::with('subject')
+                ->where('day', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][$selectedDate->dayOfWeekIso - 1])
+                ->orderBy('start_time')
+                ->get()
+            : collect();
+
         return [
             'totalTasks' => $totalTasks,
             'completed' => $completed,
@@ -51,6 +120,12 @@ new class extends Component
             'netBalance' => $totalIncome - $totalExpense,
             'recentRecords' => $recentRecords,
             'budgetPercent' => $budgetAmount > 0 ? (int) round($totalExpense / $budgetAmount * 100) : null,
+            'calendarDays' => $calendarDays,
+            'calendarMonthLabel' => $calendarStart->translatedFormat('F Y'),
+            'calendarTasks' => $calendarTasks,
+            'selectedCalendarDate' => $selectedDate,
+            'selectedDaySchedules' => $selectedDaySchedules,
+            'selectedDateTasks' => $selectedDate ? $calendarTasks->get($selectedDate->toDateString(), collect()) : collect(),
         ];
     }
 };
@@ -226,4 +301,137 @@ new class extends Component
             </div>
         </div>
     </section>
+<section
+    x-data="{
+        selectedDate: null,
+        indicator: { left: 0, top: 0, width: 0, height: 0, opacity: 0 },
+        selectDate(date, target) {
+            this.selectedDate = date;
+            this.moveIndicator(target);
+        },
+        moveIndicator(target) {
+            const grid = this.$refs.calendarGrid;
+            const gridRect = grid.getBoundingClientRect();
+            const targetRect = target.getBoundingClientRect();
+            this.indicator = {
+                left: targetRect.left - gridRect.left,
+                top: targetRect.top - gridRect.top,
+                width: targetRect.width,
+                height: targetRect.height,
+                opacity: 1
+            };
+        },
+        async changeMonth(direction) {
+            this.indicator.opacity = 0;
+            this.selectedDate = null;
+            await $wire.changeCalendarMonth(direction);
+        }
+    }"
+    class="relative mt-3 overflow-hidden rounded-[20px] border-2 border-border bg-surface p-3 text-text shadow-lg shadow-primary/5 sm:col-span-6 sm:p-5"
+    aria-label="Kalender tugas"
+>
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-br from-primary/10 via-transparent to-transparent" aria-hidden="true"></div>
+    <div class="relative lg:grid lg:grid-cols-2 lg:items-start lg:gap-5">
+    <div>
+    <div class="relative mb-4 flex flex-col items-center gap-3 text-center sm:flex-row sm:justify-between sm:gap-4 sm:text-left">
+        <div class="flex w-full items-start gap-3 text-left sm:w-auto sm:items-center">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-md shadow-primary/25">
+                <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <div class="min-w-0">
+                <h2 class="text-sm font-bold sm:text-base">Kalender Deadline</h2>
+                <p class="text-[10px] text-text-muted sm:text-xs">Jadwal dan tugas dalam satu tampilan</p>
+            </div>
+        </div>
+        <div class="flex w-full max-w-64 items-center justify-between gap-2 rounded-full border border-border/70 bg-bg/70 p-1 shadow-sm sm:w-auto sm:max-w-none">
+            <button type="button" x-on:click="changeMonth(-1)" aria-label="Bulan sebelumnya"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-muted transition duration-300 hover:bg-primary hover:text-white hover:shadow-md hover:shadow-primary/20 active:scale-90">
+                <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <span class="min-w-0 flex-1 text-center text-xs font-bold capitalize sm:min-w-28 sm:text-sm">{{ $calendarMonthLabel }}</span>
+            <button type="button" x-on:click="changeMonth(1)" aria-label="Bulan berikutnya"
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-text-muted transition duration-300 hover:bg-primary hover:text-white hover:shadow-md hover:shadow-primary/20 active:scale-90">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+        </div>
+    </div>
+
+    <div x-ref="calendarGrid" class="relative grid grid-cols-7 gap-1.5 text-center sm:gap-2">
+        <div class="pointer-events-none absolute z-0 rounded-xl bg-primary shadow-md shadow-primary/25"
+            :style="`left:${indicator.left}px;top:${indicator.top}px;width:${indicator.width}px;height:${indicator.height}px;opacity:${indicator.opacity};transition:left .35s cubic-bezier(.34,1.56,.64,1),top .35s cubic-bezier(.34,1.56,.64,1),width .35s cubic-bezier(.34,1.56,.64,1),height .35s cubic-bezier(.34,1.56,.64,1),opacity .15s ease`"
+            aria-hidden="true"></div>
+        @foreach (['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'] as $weekday)
+            <div class="relative z-10 py-1.5 text-[10px] font-bold uppercase tracking-wider text-text-muted sm:text-xs">{{ $weekday }}</div>
+        @endforeach
+
+        @foreach ($calendarDays as $day)
+            @php
+                $dateKey = $day->toDateString();
+                $dayTasks = $calendarTasks->get($dateKey, collect());
+                $isCurrentMonth = $day->month === $calendarMonth;
+                $isToday = $day->isToday();
+            @endphp
+            <button type="button" wire:key="calendar-day-{{ $dateKey }}" wire:click="selectCalendarDate('{{ $dateKey }}')"
+                x-on:click="selectDate('{{ $dateKey }}', $event.currentTarget)"
+                aria-label="{{ $day->translatedFormat('l, d F Y') }}{{ $dayTasks->isNotEmpty() ? ', ada '.$dayTasks->count().' tugas' : '' }}"
+                x-bind:aria-pressed="selectedDate === '{{ $dateKey }}'"
+                class="group relative z-10 flex min-h-10 flex-col items-center justify-center gap-0.5 rounded-xl text-xs transition duration-300 hover:-translate-y-0.5 hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:min-h-12 sm:text-sm"
+                x-bind:class="selectedDate === '{{ $dateKey }}' ? 'font-bold text-white hover:bg-primary' : '{{ $isCurrentMonth ? 'text-text' : 'text-text-muted/40' }}'">
+                <span class="relative">
+                    @if ($isToday)
+                        <span class="absolute -inset-1.5 rounded-full border border-primary/50" x-bind:class="selectedDate === '{{ $dateKey }}' ? 'border-white/60' : ''" aria-hidden="true"></span>
+                    @endif
+                    <span class="relative">{{ $day->day }}</span>
+                </span>
+                @if ($dayTasks->isNotEmpty())
+                    <span class="h-1 w-1 rounded-full bg-danger" x-bind:class="selectedDate === '{{ $dateKey }}' ? 'bg-white' : ''" aria-hidden="true"></span>
+                @endif
+            </button>
+        @endforeach
+    </div>
+    </div>
+
+        <div @if ($selectedCalendarDate) wire:key="calendar-details-{{ $selectedCalendarDate->toDateString() }}" wire:transition.opacity.duration.300ms @endif class="{{ $selectedCalendarDate ? 'block' : 'hidden lg:block' }} mt-4 space-y-3 rounded-2xl border border-border/70 bg-bg/60 p-3 sm:p-4 lg:mt-0" aria-live="polite">
+            @if ($selectedCalendarDate)
+                <h3 class="text-sm font-bold capitalize sm:text-base">{{ $selectedCalendarDate->translatedFormat('l, d F Y') }}</h3>
+            @endif
+
+            <div>
+                <h4 class="mb-1 text-xs font-semibold text-text-muted">Jadwal</h4>
+                <div class="space-y-1.5">
+                    @if ($selectedCalendarDate)
+                        @forelse ($selectedDaySchedules as $schedule)
+                            <div class="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-surface px-3 py-2 text-xs shadow-sm">
+                                <span class="flex min-w-0 items-center gap-2 truncate font-medium"><i class="fa-regular fa-clock text-primary"></i>{{ $schedule->subject?->name }}</span>
+                                <span class="shrink-0 font-semibold text-text-muted">{{ substr($schedule->start_time, 0, 5) }}–{{ substr($schedule->end_time, 0, 5) }}</span>
+                            </div>
+                        @empty
+                            <p class="rounded-xl border border-dashed border-border px-3 py-2 text-xs text-text-muted">Tidak ada jadwal.</p>
+                        @endforelse
+                    @else
+                        <p class="rounded-xl border border-dashed border-border px-3 py-2 text-xs text-text-muted">Tidak ada jadwal.</p>
+                    @endif
+                </div>
+            </div>
+
+            <div>
+                <h4 class="mb-1 text-xs font-semibold text-text-muted">Deadline Tugas</h4>
+                <div class="space-y-1.5">
+                    @if ($selectedCalendarDate)
+                        @forelse ($selectedDateTasks as $task)
+                            <div class="flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-surface px-3 py-2 text-xs shadow-sm">
+                                <span class="flex min-w-0 items-center gap-2 truncate font-medium"><i class="fa-solid fa-circle-check text-primary"></i>{{ $task->title }}</span>
+                                <span class="shrink-0 rounded-full bg-primary/10 px-2 py-1 font-bold text-primary">{{ $task->progress }}%</span>
+                            </div>
+                        @empty
+                            <p class="rounded-xl border border-dashed border-border px-3 py-2 text-xs text-text-muted">Tidak ada deadline tugas.</p>
+                        @endforelse
+                    @else
+                        <p class="rounded-xl border border-dashed border-border px-3 py-2 text-xs text-text-muted">Tidak ada deadline tugas.</p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 </div>
