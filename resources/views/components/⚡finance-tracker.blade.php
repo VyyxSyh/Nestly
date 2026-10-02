@@ -43,7 +43,7 @@ new class extends Component
         $this->type = $record->type;
         $this->category = $record->category;
         $this->amount = $record->amount;
-        $this->date = $record->date->format('Y-m-d');
+        $this->date = Carbon::parse($record->date)->format('Y-m-d');
         $this->note = $record->note;
         $this->isEditingRecord = true;
         $this->showRecordModal = true;
@@ -125,10 +125,10 @@ new class extends Component
 
         $totalIncome = $currentMonthRecords->where('type', 'income')->sum('amount');
         $totalExpense = $currentMonthRecords->where('type', 'expense')->sum('amount');
-        $previousBalance = FinanceRecord::whereDate('date', '<', now()->startOfMonth())
+        $previousBalance = FinanceRecord::where('date', '<', now()->startOfMonth()->toDateString())
             ->where('type', 'income')
             ->sum('amount')
-            - FinanceRecord::whereDate('date', '<', now()->startOfMonth())
+            - FinanceRecord::where('date', '<', now()->startOfMonth()->toDateString())
                 ->where('type', 'expense')
                 ->sum('amount');
         $netBalance = $previousBalance + $totalIncome - $totalExpense;

@@ -150,10 +150,10 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Loading/empty state untuk setiap halaman (Task List kosong, Schedule kosong, Finance kosong, dll)
 
 ## 🧪 Testing & QA
-- [ ] Manual testing seluruh fitur CRUD (Task, Schedule, Finance)
-- [ ] Testing relasi antar tabel (Task ↔ Subject, Schedule ↔ Subject, Finance ↔ Budget)
-- [ ] Testing across browser (Chrome, Firefox, Edge)
-- [ ] Bug fixing round sebelum dianggap Phase 1 selesai
+- [x] Manual testing seluruh fitur CRUD (Task, Schedule, Finance)
+- [x] Testing relasi antar tabel (Task ↔ Subject, Schedule ↔ Subject, Finance ↔ Budget)
+- [x] Testing across browser (Chrome, Firefox, Edge)
+- [x] Bug fixing round sebelum dianggap Phase 1 selesai
 
 ## 🚀 Wrap-up Phase 1
 - [ ] Finalisasi README.md, PROJECT.md, PRD.md (pastikan semua konsisten dengan implementasi akhir)
