@@ -8,6 +8,7 @@ Nestly
 <a href=""><img src="https://img.shields.io/badge/Status-In%20Development-blue" alt="Status"></a>
 <a href=""><img src="https://img.shields.io/badge/Stack-Laravel%20%2B%20Livewire-red" alt="Stack"></a>
 <a href=""><img src="https://img.shields.io/badge/Data-MySQL-4479A1" alt="Data"></a>
+<a href=""><img src="https://img.shields.io/badge/Version-v1.0%20Core%20Full%20Stack%20Build-8A2BE2" alt="Version 1.0 — Core Full Stack Build"></a>
 <a href=""><img src="https://img.shields.io/badge/Theme-Pink-FF4D8D" alt="Theme"></a>
 </p>
 
