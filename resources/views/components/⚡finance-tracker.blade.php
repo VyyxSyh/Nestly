@@ -1,9 +1,8 @@
 <?php
-
-use App\Models\FinanceRecord;
 use App\Models\Budget;
-use Livewire\Component;
+use App\Models\FinanceRecord;
 use Carbon\Carbon;
+use Livewire\Component;
 
 new class extends Component
 {
@@ -126,7 +125,13 @@ new class extends Component
 
         $totalIncome = $currentMonthRecords->where('type', 'income')->sum('amount');
         $totalExpense = $currentMonthRecords->where('type', 'expense')->sum('amount');
-        $netBalance = $totalIncome - $totalExpense;
+        $previousBalance = FinanceRecord::whereDate('date', '<', now()->startOfMonth())
+            ->where('type', 'income')
+            ->sum('amount')
+            - FinanceRecord::whereDate('date', '<', now()->startOfMonth())
+                ->where('type', 'expense')
+                ->sum('amount');
+        $netBalance = $previousBalance + $totalIncome - $totalExpense;
 
         $groupedRecords = FinanceRecord::orderByDesc('date')
             ->get()
@@ -161,17 +166,15 @@ new class extends Component
         }
 
         return Budget::where(function ($query) {
-                $query->where('year', '<', now()->year)
-                    ->orWhere(function ($q) {
-                        $q->where('year', now()->year)->where('month', '<', now()->month);
-                    });
-            })
+            $query->where('year', '<', now()->year)
+                ->orWhere(function ($q) {
+                    $q->where('year', now()->year)->where('month', '<', now()->month);
+                });
+        })
             ->orderByDesc('year')
             ->orderByDesc('month')
             ->first();
     }
-
-
 };
 ?>
 
