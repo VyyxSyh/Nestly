@@ -156,9 +156,9 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 - [x] Bug fixing round sebelum dianggap Phase 1 selesai
 
 ## 🚀 Wrap-up Phase 1
-- [ ] Finalisasi README.md, PROJECT.md, PRD.md (pastikan semua konsisten dengan implementasi akhir)
-- [ ] Dokumentasikan cara setup project (clone → composer install → migrate → npm run dev/build)
-- [ ] Tag/commit milestone `v1.0 — Core Full Stack Build`
+- [x] Finalisasi README.md, PROJECT.md, PRD.md (pastikan semua konsisten dengan implementasi akhir)
+- [x] Dokumentasikan cara setup project (clone → composer install → migrate → npm run dev/build)
+- [x] Tag/commit milestone `v1.0 — Core Full Stack Build` (sudah dilakukan di folder project utama)
 
 ---
 
