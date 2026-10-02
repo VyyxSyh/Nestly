@@ -1,10 +1,10 @@
-# Nestly - Project System
+# Nestly — Project System
 
 ## 1. Project Overview
 
-**Nestly** adalah web application untuk membantu mahasiswa mengelola aktivitas perkuliahan, tugas, dan keuangan pribadi dalam satu dashboard.
+**Nestly** adalah web application untuk membantu siswa SMA/SMK dan mahasiswa mengelola tugas, jadwal belajar, progress, deadline, serta keuangan pribadi dalam satu dashboard.
 
-Project ini dirancang untuk membantu pengguna memantau tugas, deadline, progress, jadwal kuliah, serta kondisi keuangan bulanan secara lebih terorganisir.
+Project ini dirancang untuk membantu pengguna memantau tugas, deadline, progress, jadwal belajar, serta kondisi keuangan secara lebih terorganisir.
 
 Nestly dibangun sebagai **full stack application** sejak awal pengembangan, menggunakan **Laravel** (Backend & Frontend melalui Blade, Tailwind CSS, dan Livewire) dengan **MySQL** sebagai database. Aplikasi dijalankan secara lokal menggunakan **Laragon** sebagai development server, dengan **HeidiSQL** untuk pengelolaan database.
 
@@ -14,9 +14,9 @@ Nestly dibangun sebagai **full stack application** sejak awal pengembangan, meng
 
 Tujuan utama project:
 
-* Membantu mahasiswa mengorganisir tugas dan aktivitas kuliah.
-* Memudahkan pengguna memantau progress setiap tugas.
-* Membantu mahasiswa mengontrol keuangan pribadi agar tidak boros.
+* Membantu pelajar mengorganisir tugas sekolah/kuliah dan jadwal belajar.
+* Membantu pengguna mengingat deadline, menentukan prioritas, dan memantau progress tugas.
+* Membantu pengguna memantau keuangan pribadi.
 * Menampilkan informasi akademik dan finansial dalam satu dashboard.
 * Membuat pengalaman pengelolaan tugas yang sederhana dan mudah digunakan.
 * Menjadi project pembelajaran full stack development menggunakan Laravel & Livewire.
@@ -27,10 +27,10 @@ Tujuan utama project:
 
 Target utama:
 
+* Siswa SMA/SMK.
 * Mahasiswa.
-* Kelompok belajar.
-* Circle atau kelompok kecil mahasiswa.
-* Kelas yang ingin menggunakan dashboard bersama.
+* Kelompok belajar pelajar atau mahasiswa.
+* Kelas sebagai kemungkinan penggunaan bersama di fase mendatang.
 
 Versi awal digunakan secara individual (single-user, data tersimpan di database lokal).
 
@@ -42,11 +42,11 @@ Pada versi berikutnya, sistem dapat dikembangkan agar mendukung multi-user denga
 
 ### 4.1 Task Management
 
-Pengguna dapat mengelola tugas kuliah.
+Pengguna dapat mengelola tugas sekolah atau kuliah.
 
 Fitur:
 
-* Menambahkan tugas, dengan informasi: judul, mata kuliah (relasi ke Subjects), deskripsi, deadline, mode progress.
+* Menambahkan tugas dengan informasi: judul, mata pelajaran/mata kuliah (relasi ke Subjects), deskripsi, deadline, mode progress.
 * Melihat daftar tugas.
 * Mengubah informasi tugas.
 * Menghapus tugas.
@@ -92,19 +92,21 @@ Halaman Task juga menampilkan **progress keseluruhan** (agregat dari seluruh tug
 
 Dashboard menjadi halaman utama yang menampilkan ringkasan aktivitas pengguna.
 
-Informasi yang dapat ditampilkan:
+Informasi yang saat ini ditampilkan:
 
 * Jumlah tugas per status (Total, Not Started, In Progress, Completed).
-* Deadline terdekat.
-* Ringkasan keuangan bulan berjalan.
-* Greeting personal (sapaan + nama panggilan yang bisa dikustomisasi).
-* Profil singkat (foto profil, nama, kelas).
+* Jadwal hari ini (maksimal 4 jadwal, sisanya diringkas).
+* Jumlah tugas per status dan persentase budget terpakai.
+* Maksimal 10 tugas belum selesai terdekat, beserta deadline, urgensi, dan progress.
+* Ringkasan pemasukan/pengeluaran/saldo bersih bulan ini dan maksimal 5 transaksi.
 
 Dashboard disusun menggunakan **card grid** dengan prioritas visual: Jadwal ditempatkan di posisi paling menonjol, diikuti ringkasan tugas, list tugas terdekat deadline, dan list transaksi finance bulan berjalan.
 
 > Detail lengkap struktur grid, posisi tiap section, dan perilaku responsive (Desktop/Tablet/Mobile) didokumentasikan di `PRD.md` section 8.6.
 
-**Calendar View *(Phase 2, belum dikerjakan di Phase 1)*:** section tambahan di bagian paling bawah Dashboard, terpisah dari grid 6×4. Menampilkan kalender bulanan dengan indikator titik pada tanggal yang punya deadline tugas. Klik tanggal akan expand inline di bawah kalender, menampilkan jadwal kuliah dan tugas dengan deadline pada tanggal tersebut.
+**Profil dan Greeting (Phase 3):** foto profil, nama/kelas, dan sapaan yang dapat dikustomisasi.
+
+**Calendar View (Phase 2):** kalender bulanan di bawah ringkasan Dashboard, dengan penanda deadline dan detail tanggal yang expand inline.
 
 Contoh konsep (statistik tugas di card List Tugas):
 
@@ -117,30 +119,30 @@ Completed           3
 
 ---
 
-### 4.4 Subjects (Mata Kuliah)
+### 4.4 Subjects (Mata Pelajaran/Mata Kuliah)
 
-Pengguna dapat mengelola data mata kuliah sebagai **data referensi**, terpisah dari halaman Schedule.
+Pengguna dapat mengelola data mata pelajaran atau mata kuliah sebagai **data referensi**, terpisah dari halaman Schedule.
 
 Fitur:
 
-* Menambahkan mata kuliah baru (nama mata kuliah).
-* Melihat, mengedit, dan menghapus data mata kuliah.
+* Menambahkan Subject (nama mata pelajaran/mata kuliah).
+* Melihat, mengedit, dan menghapus data Subject.
 
-Data mata kuliah menjadi referensi (relasi) yang dipakai di **Task** dan **Schedule** — dipilih lewat dropdown, bukan diketik ulang manual tiap kali. Halaman ini sengaja dipisah dari Schedule karena sifatnya beda: Subjects adalah data yang jarang diubah (diisi sekali di awal semester), sementara Schedule adalah halaman operasional yang sering dicek sehari-hari.
+Data Subjects menjadi referensi (relasi) yang dipakai di **Task** dan **Schedule** — dipilih lewat dropdown, bukan diketik ulang manual tiap kali. Subjects terpisah dari Schedule karena merupakan data referensi, sedangkan Schedule rutin diperiksa.
 
 ---
 
 ### 4.5 Schedule
 
-Pengguna dapat melihat jadwal perkuliahan atau aktivitas belajar.
+Pengguna dapat mengelola jadwal pelajaran atau perkuliahan.
 
 Informasi dapat mencakup:
 
-* Mata kuliah (relasi ke Subjects).
+* Mata pelajaran/mata kuliah (relasi ke Subjects).
 * Hari.
 * Waktu.
 * Ruangan.
-* Dosen.
+* Guru/dosen.
 
 ---
 
@@ -165,14 +167,14 @@ Tujuannya agar pengguna dapat mengetahui tugas mana yang perlu diprioritaskan ha
 
 ### 4.7 Finance Tracker
 
-Dashboard menyediakan fitur pencatatan keuangan pribadi mahasiswa untuk membantu mengontrol pengeluaran bulanan.
+Fitur Finance membantu pengguna mencatat keuangan pribadi dan mengontrol pengeluaran bulanan.
 
 Fitur:
 
 * Mencatat pemasukan (contoh: uang saku, kiriman orang tua, penghasilan sampingan).
-* Mencatat pengeluaran dengan kategori (contoh: makan, transport, jajan, kebutuhan kuliah, lainnya).
+* Mencatat pengeluaran dengan kategori (contoh: makan, transport, jajan, kebutuhan sekolah/kuliah, lainnya).
 * Menentukan budget bulanan.
-* Melihat ringkasan sisa saldo secara real-time.
+* Melihat sisa saldo bersih secara real-time, termasuk saldo bersih yang terbawa dari bulan sebelumnya; budget tetap bulanan.
 * Indikator visual ketika pengeluaran mendekati atau melebihi budget yang ditentukan.
 
 Contoh konsep:
@@ -196,9 +198,9 @@ Pengguna dapat mencari dan mengatur daftar tugas.
 
 Filter Status: `Semua Status`, `Not Started`, `In Progress`, `Completed`.
 
-Filter Mata Kuliah: `Semua Mata Kuliah`, diikuti daftar dinamis dari data Subjects.
+Filter Subjects: semua atau daftar dinamis mata pelajaran/mata kuliah dari data Subjects.
 
-Sorting: `Deadline Terdekat`, `Deadline Terjauh`, `Progress Tertinggi`, `Progress Terendah`, `Terbaru Dibuat`.
+Sorting: `Deadline Terdekat`, `Deadline Terjauh`, `Progress Tertinggi`, `Progress Terendah`, `Terbaru Dibuat`, `Subjects (A-Z)`. Tugas `Completed` selalu berada di urutan bawah setelah sorting utama.
 
 Search, filter, dan sorting dapat dikombinasikan sekaligus.
 
@@ -211,7 +213,7 @@ Website mendukung:
 * Light mode.
 * Dark mode.
 
-Preferensi theme dapat disimpan sehingga pilihan pengguna tetap digunakan ketika website dibuka kembali.
+Pada single-user saat ini, preferensi tema disimpan di `localStorage` browser dan diterapkan saat website dibuka kembali. Sinkronisasi melalui akun lintas perangkat direncanakan pada Phase 3.
 
 ---
 
@@ -222,8 +224,9 @@ Nestly menggunakan pendekatan navigasi yang tidak konvensional untuk web — men
 Garis besar konsepnya:
 
 * Menu navigasi: `Home`, `Task`, `Schedule`, `Subjects`, `Finance`.
-* **Bottom Nav** tampil konsisten di seluruh halaman, dengan isi dan perilaku yang berbeda antar breakpoint (Desktop, Tablet, Mobile) — termasuk animasi transisi icon saat berpindah menu.
-* Pada **Mobile**, terdapat tambahan **Top Bar** (sticky, transparan-lalu-muncul-background saat di-scroll) sebagai tempat logo dan toggle Light/Dark, karena Bottom Nav di Mobile berbentuk icon-only tanpa ruang untuk elemen tersebut.
+* Floating liquid-glass Bottom Nav fixed di halaman Dashboard, Task, Schedule, Subjects, dan Finance; menu aktif memakai sliding indicator.
+* Pada **Mobile**, Top Bar fixed berisi logo dan toggle Light/Dark. Bottom Nav menampilkan icon semua menu dan label menu aktif.
+* Badge Task menunjukkan jumlah tugas belum selesai; badge Schedule menunjukkan jumlah jadwal hari ini.
 
 > Detail lengkap struktur, posisi tiap elemen, dan perilaku animasi didokumentasikan di `PRD.md` section 8.4 dan 8.5.
 
@@ -248,11 +251,10 @@ Data yang disimpan ke database meliputi:
 * Deadline.
 * Status.
 * Schedule.
+* Subjects.
 * Data keuangan (income, expense, budget).
-* Theme preference.
-* Pengaturan pengguna.
 
-Karena data tersimpan di database (bukan `localStorage`), data lebih terstruktur, dapat direlasikan antar tabel (contoh: Task terhubung ke Mata Kuliah), dan siap dikembangkan menjadi multi-user di tahap berikutnya.
+Data inti tersimpan di database dan dapat direlasikan antar tabel (contoh: Task terhubung ke Subject). Preferensi tema browser disimpan terpisah di `localStorage`. Backup dan pemulihan data belum termasuk scope saat ini.
 
 ---
 
@@ -297,7 +299,7 @@ User B
 
 Project dikembangkan secara bertahap, dengan fondasi full stack yang sudah dibangun sejak Phase 1.
 
-### Phase 1 — Core Full Stack Build
+### Phase 1 — Core Full Stack Build (Current)
 
 Fokus:
 
@@ -308,17 +310,13 @@ Fokus:
 * Dashboard ringkasan.
 * Integrasi Livewire untuk interaktivitas real-time.
 * UI/UX dengan Tailwind CSS, responsive design.
+* Search/filter/sorting, urgency indicators, theme toggle, responsive navigation, dan UX polish.
 
-### Phase 2 — Refinement & UX Polish
+### Phase 2 — Calendar View
 
 Fokus:
 
-* Search, filter & sorting.
-* Deadline urgency indicator.
-* Light/Dark mode.
-* Multi color theme — tambahan tema **Blue** dan **Monochrome** (masing-masing Light Mode + Dark Mode), selain tema Pink default dari Phase 1.
-* Calendar View di Dashboard — kalender bulanan dengan indikator deadline tugas dan detail expand per tanggal.
-* Perbaikan validasi data & UX secara keseluruhan.
+* Calendar View Dashboard: kalender bulanan, penanda deadline, dan detail tanggal expand inline.
 
 ### Phase 3 — Enhancement (Future)
 
@@ -339,7 +337,7 @@ Fokus:
 | Frontend & Backend | Laravel (Blade + Livewire) |
 | Styling | Tailwind CSS (dipakai di dalam file Blade) |
 | Database | MySQL |
-| Local Development Server | Laragon |
+| Local Development Server | Laragon / PHP development server |
 | Database Management Tool | HeidiSQL |
 
 Tidak menggunakan framework/library JavaScript terpisah — seluruh interaktivitas (real-time update, filter, progress bar dinamis, indikator budget) ditangani oleh **Livewire**.
@@ -358,23 +356,23 @@ Rencana deployment ke hosting/cloud dapat dipertimbangkan pada tahap pengembanga
 
 ### Included
 
-* Student dashboard.
+* Dashboard untuk siswa SMA/SMK dan mahasiswa.
 * Task management.
 * Progress tracking.
 * Deadline management.
-* Subjects (data referensi mata kuliah).
-* Schedule.
+* Subjects (data referensi mata pelajaran/mata kuliah).
+* Schedule pelajaran/kuliah.
 * Finance tracker.
 * Search, filter & sorting.
-* Theme preference.
+* Theme preference (`localStorage` pada versi single-user).
 * Responsive interface.
 
 ### Future Scope
 
 * User authentication.
 * Multi-user support.
-* Cross-device synchronization.
-* User profile.
+* Sinkronisasi preferensi melalui akun lintas perangkat.
+* Profil dan Greeting pengguna.
 * Role management.
 * Notifications.
 * Advanced analytics (akademik & keuangan).
@@ -383,7 +381,7 @@ Rencana deployment ke hosting/cloud dapat dipertimbangkan pada tahap pengembanga
 
 ## 11. Expected Result
 
-Project diharapkan menjadi web application full stack yang dapat membantu mahasiswa mengelola tugas, jadwal kuliah, dan keuangan pribadi dengan lebih terorganisir.
+Project diharapkan menjadi web application full stack yang membantu siswa SMA/SMK dan mahasiswa mengelola tugas, jadwal belajar, serta keuangan pribadi dengan lebih terorganisir.
 
 Aplikasi dibangun di atas fondasi Laravel + Livewire yang solid sejak awal, sehingga pengembangan fitur lanjutan (authentication, multi-user, notifikasi, dsb.) dapat dilakukan tanpa perlu membangun ulang arsitektur dari awal.
 
@@ -442,16 +440,6 @@ Aplikasi dibangun di atas fondasi Laravel + Livewire yang solid sejak awal, sehi
 - **Text Muted** is used for secondary information and supporting content.
 - **Border** should remain subtle and should not overpower the content.
 - **Success / Danger / Warning / Info** are reserved for semantic states (task status, deadline urgency, finance in/out, budget alerts) — should not be reused for generic brand/decorative purposes so their meaning stays consistent across the app.
-
-### Future Scope — Multi Color Theme (Phase 2)
-
-> Tidak dikerjakan di Phase 1. Direncanakan masuk **Phase 2 (Refinement & UX Polish)**.
-
-Selain tema Pink (default, sudah termasuk Light Mode & Dark Mode di Phase 1), akan ditambahkan pilihan tema warna:
-- **Blue Theme** (Light Mode + Dark Mode)
-- **Monochrome Theme** — hitam, putih, abu-abu (Light Mode + Dark Mode)
-
-Setiap tema tambahan mengikuti struktur 12-token yang sama seperti tema Pink. Implementasi ini membutuhkan mekanisme penyimpanan preferensi tema per pengguna (terpisah dari preferensi Light/Dark mode).
 
 ### Schedule Card Accent Colors
 

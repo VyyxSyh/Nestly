@@ -10,33 +10,35 @@
 
 ## 1. Problem Statement
 
-Mahasiswa umumnya mengelola tugas kuliah, deadline, jadwal, dan keuangan pribadi secara terpisah — lewat catatan manual, aplikasi to-do generik, kalender, dan pencatatan keuangan seadanya yang tidak saling terhubung. Akibatnya:
+Pelajar termasuk siswa SMA/SMK dan mahasiswa sering mengelola tugas, deadline, jadwal belajar, dan keuangan pribadi secara terpisah, atau hanya mengandalkan ingatan. Akibatnya:
 
-- Tugas dan deadline mudah terlewat karena tidak ada satu tempat yang menampilkan urgensi secara jelas.
-- Progress pengerjaan tugas sulit dipantau secara visual.
-- Jadwal kuliah tidak terintegrasi dengan daftar tugas.
-- Pengeluaran bulanan tidak terpantau, sehingga mahasiswa rentan boros dan kehabisan uang sebelum waktunya.
+- Tugas dan deadline mudah terlupakan karena tidak tercatat di satu tempat.
+- Sulit menentukan tugas mana yang harus diprioritaskan lebih dulu.
+- Progress pengerjaan tugas sulit dipantau.
+- Jadwal belajar dan tugas tidak terorganisir dalam satu tampilan.
+- Pengeluaran pribadi tidak terpantau.
 
-Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, progress, jadwal, tingkat urgensi deadline, dan kondisi keuangan secara jelas dalam satu aplikasi yang mudah digunakan.
+Pelajar membutuhkan satu dashboard terpusat yang membantu mengatur tugas, memantau progress, menyusun prioritas berdasarkan deadline, melihat jadwal, dan mencatat keuangan dengan rapi.
 
 ---
 
 ## 2. Goals & Objectives
 
 **Tujuan Utama:**
-- Membantu mahasiswa mengorganisir tugas dan aktivitas kuliah dalam satu dashboard terpusat.
-- Memudahkan pengguna memantau progress setiap tugas secara visual.
-- Membantu mahasiswa mengontrol pengeluaran bulanan agar tidak boros.
+- Membantu siswa SMA/SMK dan mahasiswa mengorganisir tugas serta jadwal belajar dalam satu dashboard.
+- Membantu User mengingat deadline dan menentukan tugas yang perlu diprioritaskan.
+- Memudahkan User memantau progress setiap tugas secara visual.
+- Membantu User mengontrol pengeluaran pribadi.
 - Menampilkan informasi akademik dan finansial dalam satu tampilan yang ringkas dan mudah dipahami.
 - Membuat pengalaman pengelolaan tugas yang sederhana dan cepat digunakan.
 - Membangun aplikasi full stack yang solid sejak awal (Laravel + Livewire + MySQL) sebagai fondasi pengembangan fitur lanjutan di masa depan.
 
 **Objectives (Terukur):**
-- Pengguna dapat menambah, mengedit, menghapus, dan melacak status tugas dalam <3 langkah interaksi.
+- User dapat menambah, mengedit, menghapus, dan melacak status tugas dalam <3 langkah interaksi.
 - Dashboard menampilkan ringkasan aktivitas (total tugas, status, progress keseluruhan, deadline terdekat, ringkasan keuangan) tanpa perlu reload halaman (real-time via Livewire).
 - Sistem memberi indikator urgensi visual (warna) otomatis berdasarkan kedekatan deadline.
 - Sistem memberi indikator visual otomatis ketika pengeluaran mendekati/melebihi budget bulanan yang ditentukan.
-- Seluruh data (tugas, progress, jadwal, keuangan, tema) tersimpan secara persisten di database (MySQL), tidak bergantung pada penyimpanan browser.
+- Data tugas, jadwal, Subjects, dan keuangan tersimpan di MySQL; preferensi tema saat ini tersimpan di `localStorage` browser (lihat FR-9.2).
 
 ---
 
@@ -44,40 +46,42 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 
 | Segmen | Deskripsi |
 |---|---|
-| **Mahasiswa (individu)** | Pengguna utama — menggunakan Nestly secara personal untuk mengelola tugas kuliah, jadwal, dan keuangan masing-masing. |
-| **Kelompok belajar / study circle** | Kelompok kecil mahasiswa yang ingin memakai konsep dashboard yang sama untuk masing-masing anggota. |
+| **Siswa SMA/SMK** | User yang perlu mencatat tugas sekolah, mengingat deadline, dan menentukan prioritas pengerjaan. |
+| **Mahasiswa** | User yang mengelola tugas kuliah, jadwal, deadline, progress, dan keuangan pribadi. |
+| **Kelompok belajar / study circle** | Kelompok pelajar atau mahasiswa yang ingin mengelola aktivitas belajar masing-masing. |
 | **Kelas** | Berpotensi menggunakan dashboard bersama pada pengembangan lanjutan (Phase 3) saat multi-user/authentication sudah tersedia. |
 
 **Karakteristik pengguna:**
-- Memiliki banyak tugas kuliah dengan deadline berbeda-beda dalam satu waktu.
-- Sering kesulitan mengatur keuangan bulanan sebagai mahasiswa.
+- Memiliki banyak tugas sekolah atau kuliah dengan deadline berbeda-beda.
+- Sering lupa deadline atau kesulitan menentukan tugas yang harus dikerjakan lebih dulu.
+- Ingin mengatur progress belajar dan, bila diperlukan, keuangan pribadi.
 - Menginginkan solusi cepat pakai dengan tampilan yang jelas.
 - Terbiasa menggunakan aplikasi berbasis web/browser.
 - Ingin memantau progress belajar, pengerjaan tugas, dan kondisi keuangan secara visual.
 
-> Catatan: Pada versi saat ini, aplikasi berjalan sebagai single-user (belum ada sistem login/authentication penuh), namun seluruh data sudah tersimpan di database MySQL, bukan di browser.
+> Catatan: Pada versi saat ini, aplikasi berjalan sebagai single-user tanpa login. Data tugas, jadwal, Subjects, dan keuangan tersimpan di MySQL; preferensi tema tersimpan di `localStorage` browser.
 
 ---
 
 ## 4. Functional Requirements
 
 ### FR-1 — Task Management
-- FR-1.1 Pengguna dapat menambahkan tugas baru dengan informasi: judul, mata kuliah (relasi ke Subjects), deskripsi, deadline, mode progress.
-- FR-1.2 Pengguna dapat melihat daftar seluruh tugas.
-- FR-1.3 Pengguna dapat mengubah informasi tugas (judul, mata kuliah terkait, deskripsi, deadline, status, dll).
-- FR-1.4 Pengguna dapat menghapus tugas.
-- FR-1.5 Pengguna dapat menentukan status tugas: `Not Started`, `In Progress`, `Completed`.
+- FR-1.1 User dapat menambahkan tugas baru dengan informasi: judul, mata pelajaran/mata kuliah (relasi ke Subjects), deskripsi, deadline, dan mode progress.
+- FR-1.2 User dapat melihat daftar seluruh tugas.
+- FR-1.3 User dapat mengubah informasi tugas (judul, mata pelajaran/mata kuliah terkait, deskripsi, deadline, status, dll).
+- FR-1.4 User dapat menghapus tugas.
+- FR-1.5 User dapat menentukan status tugas: `Not Started`, `In Progress`, `Completed`.
 - FR-1.6 Input deadline hanya meminta tanggal (hari/bulan/tahun); jam bersifat opsional.
 - FR-1.7 Deadline ditampilkan di UI dengan format lengkap termasuk nama hari, contoh: "Rabu, 16 September 2026" (ditambah jam jika diisi saat input).
-- FR-1.8 Status `Completed` otomatis ter-set ketika progress tugas mencapai 100% (lihat FR-2.5) — bukan dipilih manual secara terpisah dari progress.
+- FR-1.8 Ketika progress tugas mencapai 100%, status otomatis menjadi `Completed` dan badge status menampilkan `Completed`; badge urgensi deadline juga menampilkan `Done` (lihat FR-2.5 dan FR-6.1) — keduanya bukan dipilih manual.
 - FR-1.9 Deskripsi tugas ditampilkan di halaman Task (tidak ditampilkan di ringkasan Dashboard, sesuai FR-3).
 - FR-1.10 Halaman Task List menampilkan Task Card dalam layout 2 kolom masonry (Desktop & Tablet) atau 1 kolom stack (Mobile), lihat detail visual di 8.7.
 
 ### FR-2 — Task Progress
 - FR-2.1 Setiap tugas memiliki **Mode Progress**, dipilih salah satu:
-  - **Manual** — progress diatur manual oleh pengguna, bertambah/berkurang dalam kelipatan 5% menggunakan tombol `+`/`-`.
+  - **Manual** — progress diatur manual oleh User, bertambah/berkurang dalam kelipatan 5% menggunakan tombol `+`/`-`.
   - **Checklist** — progress dihitung otomatis berdasarkan proporsi sub-tugas yang sudah dicentang selesai (contoh: 1 dari 3 sub-tugas selesai = 33%).
-- FR-2.2 Mode **Checklist** memerlukan pengguna menambahkan minimal 1 sub-tugas; setiap sub-tugas punya judul singkat dan status selesai/belum (checkbox).
+- FR-2.2 Mode **Checklist** memerlukan User menambahkan minimal 1 sub-tugas; setiap sub-tugas punya judul singkat dan status selesai/belum (checkbox).
 - FR-2.3 Setiap tugas menampilkan progress bar visual berdasarkan persentase penyelesaian (baik dari mode Manual maupun Checklist).
 - FR-2.4 Progress tersimpan otomatis ke database setiap kali diperbarui, secara real-time via Livewire.
 - FR-2.5 Ketika progress mencapai 100% (baik lewat Manual maupun Checklist), status tugas otomatis berubah menjadi `Completed`.
@@ -85,34 +89,33 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 
 ### FR-3 — Dashboard
 - FR-3.1 Menampilkan jumlah tugas per status (Total Task / Not Started / In Progress / Completed) dalam container statistik di card List Tugas.
-- FR-3.2 Menampilkan tugas dengan deadline terdekat (3–5 item: nama tugas, aksen warna mata kuliah, deadline) di card List Tugas.
+- FR-3.2 Menampilkan tugas dengan deadline terdekat (3–5 item: nama tugas, aksen warna mata pelajaran/mata kuliah terkait, deadline) di card List Tugas.
 - FR-3.3 Menampilkan ringkasan keuangan bulan berjalan (total pemasukan, pengeluaran, sisa saldo).
-- FR-3.4 Menampilkan card Profil (foto profil, nama, kelas).
-- FR-3.5 Menampilkan Greeting dengan format "[Kata Sapaan], [Nama Panggilan]!".
-- FR-3.6 Pengguna dapat mengkustomisasi Kata Sapaan (dipilih dari daftar pilihan, misal: Hai, Hii, Halo, Alloww, Heyy) melalui tombol edit pada section Greeting.
-- FR-3.7 Pengguna dapat mengkustomisasi Nama Panggilan yang ditampilkan pada Greeting.
-- FR-3.8 Preferensi Kata Sapaan dan Nama Panggilan tersimpan di database dan diterapkan otomatis setiap kali Dashboard dibuka.
-- FR-3.9 *(Phase 2)* Menampilkan Calendar View sebagai section ke-7, terpisah dari grid 6×4, diposisikan di bagian paling bawah Dashboard.
-- FR-3.10 *(Phase 2)* Kalender menampilkan tampilan bulanan (month view).
-- FR-3.11 *(Phase 2)* Tanggal yang memiliki tugas dengan deadline pada tanggal tersebut ditandai dengan indikator titik pada kalender.
-- FR-3.12 *(Phase 2)* Pengguna dapat mengklik sebuah tanggal untuk melihat detail: jadwal kuliah (berdasarkan hari yang sesuai) dan tugas dengan deadline pada tanggal tersebut.
-- FR-3.13 *(Phase 2)* Detail tanggal yang diklik ditampilkan dengan cara expand inline di bawah kalender (mendorong konten di bawahnya), bukan sebagai modal/popup.
+- FR-3.4 *(Phase 3)* Menampilkan card Profil (foto profil, nama, kelas).
+- FR-3.5 *(Phase 3)* Menampilkan Greeting dengan format "[Kata Sapaan], [Nama Panggilan]!".
+- FR-3.6 *(Phase 3)* User dapat mengkustomisasi Kata Sapaan (dipilih dari daftar pilihan, misal: Hai, Hii, Halo, Alloww, Heyy) melalui tombol edit pada section Greeting.
+- FR-3.7 *(Phase 3)* User dapat mengkustomisasi Nama Panggilan yang ditampilkan pada Greeting.
+- FR-3.8 *(Phase 3)* Preferensi Kata Sapaan dan Nama Panggilan tersimpan di database dan diterapkan otomatis setiap kali Dashboard dibuka.
+- FR-3.9 *(Phase 2)* Menampilkan Calendar View di bawah ringkasan Dashboard.
+- FR-3.10 *(Phase 2)* Kalender bulanan menandai tanggal yang memiliki tugas deadline.
+- FR-3.11 *(Phase 2)* User dapat memilih tanggal untuk melihat jadwal pelajaran/kuliah hari itu dan tugas yang deadline-nya jatuh pada tanggal tersebut.
+- FR-3.12 *(Phase 2)* Detail tanggal terpilih ditampilkan expand inline di bawah kalender.
 
-### FR-4 — Subjects (Mata Kuliah)
-- FR-4.1 Pengguna dapat menambahkan data mata kuliah (nama mata kuliah) sebagai data referensi.
-- FR-4.2 Pengguna dapat melihat, mengedit, dan menghapus data mata kuliah.
-- FR-4.3 Data mata kuliah menjadi referensi (relasi) yang digunakan oleh Task (FR-1) dan Schedule (FR-5) — dipilih lewat dropdown, bukan diinput ulang manual di form Task/Schedule.
-- FR-4.4 Halaman Subjects terpisah dari halaman Schedule, karena sifatnya sebagai data referensi yang jarang diubah (berbeda dengan Schedule yang dicek rutin).
+### FR-4 — Subjects (Mata Pelajaran/Mata Kuliah)
+- FR-4.1 User dapat menambahkan data mata pelajaran (SMA/SMK) atau mata kuliah (perguruan tinggi) sebagai data referensi.
+- FR-4.2 User dapat melihat, mengedit, dan menghapus data Subjects.
+- FR-4.3 Data Subjects menjadi referensi (relasi) untuk Task (FR-1) dan Schedule (FR-5), dipilih lewat dropdown.
+- FR-4.4 Halaman Subjects terpisah dari halaman Schedule karena Subjects merupakan data referensi yang jarang diubah, sedangkan Schedule rutin diperiksa.
 
 ### FR-5 — Schedule
-- FR-5.1 Pengguna dapat menambahkan jadwal kuliah dengan informasi: mata kuliah (relasi ke Subjects), hari, waktu, ruangan, dosen.
-- FR-5.2 Pengguna dapat melihat, mengedit, dan menghapus jadwal.
+- FR-5.1 User dapat menambahkan jadwal pelajaran/kuliah dengan informasi: mata pelajaran/mata kuliah (relasi ke Subjects), hari, waktu, ruangan, dan guru/dosen.
+- FR-5.2 User dapat melihat, mengedit, dan menghapus jadwal.
 - FR-5.3 Jadwal ditampilkan dalam bentuk Schedule Card (gaya "boarding pass"), dikelompokkan/ditandai berdasarkan hari lewat badge Hari pada tiap card, lihat detail visual di 8.8.
 - FR-5.4 Setiap Schedule Card memiliki accent color (lihat Schedule Card Accent Colors di `PROJECT.md` section 12) yang diterapkan pada border dan badge Hari.
 
 ### FR-6 — Deadline Tracking
 - FR-6.1 Sistem menghitung urgensi tugas secara otomatis, dengan urutan pengecekan sebagai berikut (dari prioritas tertinggi):
-  1. Jika progress tugas ≥ 100% → level `done` (mengabaikan kondisi lain).
+  1. Jika progress tugas ≥ 100% → level `done` dan badge urgensi menampilkan `Done` (mengabaikan kondisi lain).
   2. Jika tanggal sekarang sudah melewati deadline → level `overdue`.
   3. Jika belum, hitung sisa hari menuju deadline dan tentukan level berdasarkan tabel berikut:
 
@@ -127,40 +130,41 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 
 - FR-6.2 Level `done` menggantikan/override level urgensi lain begitu progress tugas mencapai 100%, terlepas dari sisa hari atau status deadline-nya.
 - FR-6.3 Level `overdue` dan `critical` menggunakan warna yang sama (Danger/merah), namun secara logis tetap dua kondisi berbeda (sudah lewat deadline vs mendekati deadline).
-- FR-6.4 Level urgensi ditampilkan di UI sebagai label "Priority" pada Task Card (lihat 8.4), meskipun secara teknis ini adalah hasil kalkulasi urgensi deadline, bukan field prioritas manual yang diinput pengguna.
+- FR-6.4 Level urgensi ditampilkan di UI sebagai label "Priority" pada Task Card (lihat 8.4), meskipun secara teknis ini adalah hasil kalkulasi urgensi deadline, bukan field prioritas manual yang diinput User.
 - FR-6.5 Level urgensi dihitung ulang secara otomatis (real-time) berdasarkan tanggal sistem saat ini setiap kali halaman dibuka/direfresh.
 
 ### FR-7 — Finance Tracker
-- FR-7.1 Pengguna dapat mencatat pemasukan (contoh: uang saku, kiriman orang tua, penghasilan sampingan) beserta nominal dan tanggal.
-- FR-7.2 Pengguna dapat mencatat pengeluaran dengan kategori (contoh: makan, transport, jajan, kebutuhan kuliah, lainnya) beserta nominal dan tanggal.
-- FR-7.3 Pengguna dapat menentukan budget bulanan.
+- FR-7.1 User dapat mencatat pemasukan (contoh: uang saku, kiriman orang tua, penghasilan sampingan) beserta nominal dan tanggal.
+- FR-7.2 User dapat mencatat pengeluaran dengan kategori (contoh: makan, transport, jajan, kebutuhan sekolah/kuliah, lainnya) beserta nominal dan tanggal.
+- FR-7.3 User dapat menentukan budget bulanan.
 - FR-7.4 Sistem menghitung dan menampilkan sisa saldo secara real-time berdasarkan pemasukan dan pengeluaran yang tercatat.
 - FR-7.5 Sistem menampilkan indikator visual (progress bar/warna) ketika total pengeluaran mendekati atau melebihi budget bulanan.
-- FR-7.6 Pengguna dapat mengedit dan menghapus catatan pemasukan/pengeluaran.
+- FR-7.6 User dapat mengedit dan menghapus catatan pemasukan/pengeluaran.
 
 ### FR-8 — Search, Filter & Sorting
-- FR-8.1 Pengguna dapat mencari tugas berdasarkan judul (real-time search).
+- FR-8.1 User dapat mencari tugas berdasarkan judul (real-time search).
 - FR-8.2 Filter Status: `Semua Status`, `Not Started`, `In Progress`, `Completed`.
-- FR-8.3 Filter Mata Kuliah: `Semua Mata Kuliah`, diikuti daftar dinamis dari data Subjects yang sudah diinput pengguna.
-- FR-8.4 Sorting: `Deadline Terdekat`, `Deadline Terjauh`, `Progress Tertinggi`, `Progress Terendah`, `Terbaru Dibuat`.
-- FR-8.5 Search, filter, dan sorting dapat dikombinasikan sekaligus (bukan saling eksklusif).
+- FR-8.3 Filter Subjects: pilihan semua atau daftar dinamis mata pelajaran/mata kuliah yang sudah diinput User.
+- FR-8.4 Sorting: `Deadline Terdekat`, `Deadline Terjauh`, `Progress Tertinggi`, `Progress Terendah`, `Terbaru Dibuat`, dan `Subjects (A-Z)`.
+- FR-8.5 Tugas berstatus `Completed` selalu ditampilkan di urutan paling bawah setelah sorting utama diterapkan; urutan dalam kelompok masing-masing tetap mengikuti sorting yang dipilih.
+- FR-8.6 Search, filter, dan sorting dapat dikombinasikan sekaligus (bukan saling eksklusif).
 
 ### FR-9 — Theme
-- FR-9.1 Pengguna dapat beralih antara Light mode dan Dark mode.
-- FR-9.2 Preferensi tema disimpan dan diterapkan otomatis saat website dibuka kembali.
+- FR-9.1 User dapat beralih antara Light mode dan Dark mode.
+- FR-9.2 *(Phase 3)* Preferensi tema disimpan pada akun User di database dan diterapkan otomatis saat login, termasuk saat diakses dari browser atau perangkat lain. Pada versi single-user saat ini, preferensi tema disimpan sementara di `localStorage` browser.
 
 ### FR-10 — Data Persistence
-- FR-10.1 Seluruh data (task, progress, deadline, status, schedule, subject, data keuangan, theme, pengaturan pengguna) disimpan di database MySQL melalui Laravel.
-- FR-10.2 Data tetap tersedia secara permanen selama tidak dihapus langsung dari database, tidak bergantung pada browser/perangkat yang digunakan untuk mengakses.
+- FR-10.1 Data task, progress, deadline, schedule, Subjects, dan finance disimpan di database MySQL melalui Laravel. Preferensi tema lokal dikecualikan (FR-9.2).
+- FR-10.2 Data database tetap tersedia lintas browser/perangkat selama database tidak dihapus atau diubah; backup dan pemulihan tidak termasuk scope versi ini.
 
 ### FR-11 — Navigation
-- FR-11.1 Sistem menampilkan Bottom Nav secara konsisten di seluruh halaman aplikasi (Dashboard, Task, Schedule, Subjects, Finance, Settings).
-- FR-11.2 Pada Desktop & Tablet, Bottom Nav menampilkan 3 section: logo+teks (kiri), menu navigasi berlabel (tengah), icon akun + toggle Light/Dark (kanan).
-- FR-11.3 Pada Desktop & Tablet, item menu yang aktif menampilkan icon dengan animasi slide-in dari belakang label (dan slide-out saat berpindah halaman), disertai perubahan warna border dan warna label/icon.
-- FR-11.4 Pada Mobile, Bottom Nav menampilkan menu dalam bentuk icon-only, dengan label yang hanya muncul saat menu tersebut aktif.
-- FR-11.5 Pada Mobile, sistem menampilkan Top Bar terpisah (sticky di atas) berisi logo+teks (kiri) dan toggle Light/Dark (kanan).
-- FR-11.6 Top Bar pada Mobile tampil transparan saat halaman berada di posisi paling atas, dan menampilkan background dengan animasi transisi saat halaman di-scroll.
-- FR-11.7 Icon menu Task menampilkan badge notifikasi berupa angka (misal jumlah tugas overdue/due today), pada seluruh breakpoint.
+- FR-11.1 Bottom Nav tampil konsisten pada halaman Dashboard, Task, Schedule, Subjects, dan Finance.
+- FR-11.2 Navigasi menggunakan gaya floating liquid-glass pill (`bg-surface/20`, `backdrop-blur-xs`, border, rounded penuh).
+- FR-11.3 Pada Desktop & Tablet, Bottom Nav menampilkan logo+teks di kiri, menu berlabel di tengah, dan toggle Light/Dark di kanan.
+- FR-11.4 Pada Desktop & Tablet, menu aktif ditandai sliding pill ber-border Primary, teks berwarna Primary, dan icon yang muncul dengan animasi; menu nonaktif menampilkan label rapat tanpa icon.
+- FR-11.5 Pada Mobile, Bottom Nav berupa floating pill dengan icon untuk semua menu; label hanya ditampilkan pada menu aktif dan sliding pill mengikuti item aktif.
+- FR-11.6 Pada Mobile, Top Bar terpisah dan fixed di atas, berisi logo+teks di kiri dan toggle Light/Dark di kanan, dengan gaya liquid glass.
+- FR-11.7 Badge Task menampilkan jumlah tugas yang belum selesai; badge Schedule menampilkan jumlah jadwal pada hari ini. Keduanya tampil pada semua breakpoint dan diperbarui setelah perubahan data terkait.
 
 ---
 
@@ -171,9 +175,9 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 | **Usability** | Antarmuka harus intuitif dan dapat digunakan tanpa onboarding/tutorial; alur menambah tugas maksimal 3 langkah. |
 | **Performance** | Interaksi CRUD tugas, update progress, dan kalkulasi keuangan harus terasa responsif, memanfaatkan update real-time Livewire tanpa reload halaman penuh. |
 | **Responsiveness** | Tampilan harus responsif dan berfungsi baik di perangkat Mobile, Tablet, dan Desktop. |
-| **Reliability** | Data tidak boleh hilang selama tidak ada penghapusan manual di database; backend harus menangani validasi input dengan baik. |
-| **Availability** | Aplikasi berjalan sebagai web application yang diakses melalui local development server (Laragon) selama tahap pengembangan ini. |
-| **Maintainability** | Struktur kode mengikuti konvensi Laravel (MVC) agar mudah dipelihara dan dikembangkan lebih lanjut (mis. penambahan authentication di Phase 3). |
+| **Reliability** | Data aplikasi tersimpan di database dan backend memvalidasi input; backup dan pemulihan data belum termasuk scope versi ini. |
+| **Availability** | Aplikasi berupa web application; selama pengembangan diakses melalui local development server Laragon. |
+| **Maintainability** | Struktur kode mengikuti pola Laravel dan Livewire agar mudah dipelihara serta dikembangkan, termasuk penambahan authentication pada Phase 3. |
 | **Scalability** | Struktur database (migration & relasi antar tabel) dirancang agar mudah diperluas, misalnya menambahkan relasi user saat multi-user diimplementasikan. |
 | **Security (Future)** | Saat Phase 3 (Authentication) diimplementasikan, data per-user harus terlindungi dan tervalidasi di sisi server (backend Laravel). |
 | **Portability** | Aplikasi saat ini dijalankan secara lokal melalui Laragon; struktur project memungkinkan deployment ke hosting PHP/cloud di tahap berikutnya bila dibutuhkan. |
@@ -184,12 +188,12 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 ## 6. Product Scope
 
 ### 6.1 In Scope — Phase 1 (Core Full Stack Build)
-- Student dashboard (ringkasan aktivitas & keuangan).
+- Dashboard pelajar (jadwal hari ini, ringkasan tugas dan budget, deadline terdekat, transaksi bulan ini).
 - Task management (CRUD tugas).
 - Progress tracking per tugas.
 - Deadline management & indikator urgensi warna.
-- Subjects (CRUD data mata kuliah sebagai referensi).
-- Schedule (jadwal kuliah).
+- Subjects (CRUD data mata pelajaran/mata kuliah sebagai referensi).
+- Schedule (jadwal pelajaran/kuliah).
 - Finance tracker (pemasukan, pengeluaran, budget bulanan, indikator saldo).
 - Search, filter & sorting tugas.
 - Theme preference (Light/Dark mode).
@@ -199,20 +203,19 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 ### 6.2 Out of Scope — Future Phases
 
 **Phase 2 — Refinement & UX Polish:**
-- Penyempurnaan search/filter/sorting.
-- Penyempurnaan indikator urgensi deadline.
-- Penyempurnaan dark/light mode & aksesibilitas.
-- Multi color theme — tambahan tema Blue dan Monochrome (masing-masing Light Mode + Dark Mode), selain tema Pink default dari Phase 1.
-- Calendar View di Dashboard — kalender bulanan dengan indikator deadline tugas dan detail expand per tanggal.
+- Calendar View bulanan pada Dashboard, penanda deadline, dan detail tanggal expand inline.
+- Penyempurnaan UX dan aksesibilitas yang belum selesai.
 
 **Phase 3 — Enhancement:**
+- Profil Dashboard (foto profil, nama, kelas) dan Greeting yang dapat dikustomisasi.
+- Penyimpanan preferensi Profil/Greeting per pengguna; dikerjakan bersama authentication dan multi-user.
 - User authentication (login/register).
 - Role management & multi-user support.
 - Notifikasi.
 - Advanced analytics (laporan akademik & keuangan lebih mendalam).
 - Kemungkinan deployment ke hosting/cloud untuk akses publik.
 
-> Catatan: Fitur-fitur di atas TIDAK termasuk dalam scope PRD versi 1.0 ini, namun struktur database & arsitektur Laravel pada Phase 1 dirancang agar kompatibel untuk pengembangan ke fase tersebut (contoh: tabel sudah siap ditambahkan relasi `user_id`).
+> Catatan: Item Future di atas belum termasuk scope versi saat ini. Struktur database dapat dikembangkan untuk mendukungnya.
 
 ---
 
@@ -223,15 +226,15 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 | 1 | Task Management | CRUD tugas, status, deadline, prioritas | Must Have |
 | 2 | Task Progress | Progress bar per tugas, update real-time | Must Have |
 | 3 | Dashboard | Ringkasan total tugas, status, progress, deadline terdekat, ringkasan keuangan | Must Have |
-| 4 | Subjects | CRUD data mata kuliah sebagai data referensi (terpisah dari Schedule) | Must Have |
-| 5 | Schedule | Jadwal kuliah (relasi ke Subjects, hari, waktu, ruangan, dosen) | Must Have |
+| 4 | Subjects | CRUD mata pelajaran/mata kuliah sebagai data referensi (terpisah dari Schedule) | Must Have |
+| 5 | Schedule | Jadwal pelajaran/kuliah (relasi ke Subjects, hari, waktu, ruangan, guru/dosen) | Must Have |
 | 6 | Deadline Tracking | Kategori urgensi + indikator warna otomatis | Must Have |
 | 7 | Finance Tracker | Pemasukan, pengeluaran, budget bulanan, indikator saldo | Must Have |
 | 8 | Search, Filter & Sorting | Cari & atur tugas berdasarkan kriteria | Should Have |
-| 9 | Theme (Light/Dark) | Toggle tema + preferensi tersimpan | Should Have |
+| 9 | Theme (Light/Dark) | Toggle tema; simpan preferensi lokal sekarang, sinkronisasi akun Phase 3 | Should Have |
 | 10 | Data Persistence | Simpan semua data ke database MySQL | Must Have |
 | 11 | Responsive Design | Optimal di Mobile, Tablet, Desktop | Must Have |
-| 12 | Navigation | Bottom Nav (semua device) + Top Bar khusus Mobile, dengan animasi & badge notifikasi | Must Have |
+| 12 | Navigation | Floating Bottom Nav semua device, Top Bar mobile, sliding active state, badge Task dan Schedule | Must Have |
 
 ---
 
@@ -245,7 +248,7 @@ Mahasiswa membutuhkan satu dashboard terpusat yang dapat menampilkan tugas, prog
 
 ### 8.2 Tema (Theming)
 - Mendukung **Light Mode** dan **Dark Mode**.
-- Preferensi tema disimpan dan diterapkan otomatis saat aplikasi dibuka kembali.
+- Preferensi tema disimpan di `localStorage` pada versi single-user saat ini; penyimpanan lintas perangkat melalui akun direncanakan pada Phase 3 (FR-9.2).
 
 ### 8.3 Sistem Warna — Urgency Indicator
 Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadline tracking (dan indikator budget pada Finance Tracker):
@@ -259,12 +262,12 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
 
 ### 8.4 Komponen Utama
 
-- **Navigation Bar (Bottom Nav)** — komponen navigasi utama, tampil **konsisten di seluruh halaman aplikasi** (Dashboard, Task, Schedule, Finance, Settings, dll), posisi **fixed di bagian bawah layar** di semua ukuran device.
+- **Navigation Bar (Bottom Nav)** — floating liquid-glass pill, fixed di bagian bawah halaman Dashboard, Task, Schedule, Subjects, dan Finance.
 
   **Desktop & Tablet** — layout terbagi jadi 3 section:
   - **Section kiri:** Logo Nestly + teks "Nestly".
   - **Section tengah:** Menu navigasi (`Home`, `Task`, `Schedule`, `Subjects`, `Finance`).
-  - **Section kanan:** Icon akun/login (icon orang) **+ Toggle switch Light/Dark Mode**, ditampilkan berdampingan.
+  - **Section kanan:** Toggle switch Light/Dark Mode.
   - Tablet mengikuti layout yang sama persis seperti Desktop, hanya dengan ukuran elemen yang diperkecil (scaled down).
   - **Perilaku menu aktif:** Setiap item menu defaultnya hanya menampilkan **label teks**. Saat sebuah menu menjadi aktif (halaman sedang dibuka):
     - Sebuah **icon muncul dari belakang label**, bergeser ke posisi **sebelah kiri label** (slide-in dari arah kanan/belakang teks ke kiri).
@@ -272,34 +275,30 @@ Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadl
     - Menu yang aktif juga dibedakan lewat **warna border** dan **warna label + icon** (menggunakan token warna `Primary` dari Color System).
 
   **Mobile** — layout lebih ringkas, kebalikan dari perilaku Desktop/Tablet:
-  - Isi menu: `Home`, `Task`, `Schedule`, `Subjects`, `Finance`, `Account` — seluruhnya dalam bentuk **icon saja** secara default (tanpa label).
+  - Isi menu: `Home`, `Task`, `Schedule`, `Subjects`, `Finance` — seluruhnya dalam bentuk **icon saja** secara default (tanpa label).
   - **Perilaku menu aktif:** kebalikan dari Desktop/Tablet — icon selalu tampil, dan **label baru muncul saat menu tersebut aktif** (icon lain tetap icon-only, hanya menu aktif yang melebar menampilkan label di sebelah iconnya).
-  - Logo Nestly **tidak ditampilkan** di Bottom Nav pada Mobile — sudah ditangani oleh **Top Bar** (lihat komponen di bawah) yang tampil konsisten di semua breakpoint termasuk Mobile.
+  - Logo Nestly **tidak ditampilkan** di Bottom Nav pada Mobile — ditampilkan pada Top Bar khusus Mobile.
 
   Referensi visual perilaku "icon-only default, melebar dengan label saat aktif" mengikuti pola floating pill navigation seperti pada aplikasi mobile modern (icon-only nav yang salah satu itemnya melebar menampilkan label saat dipilih).
 
-  **Badge/notifikasi:** Icon menu `Task` menampilkan badge angka (misal jumlah tugas overdue/due today), baik di tampilan Desktop, Tablet, maupun Mobile. Badge tetap muncul terlepas dari status aktif/tidaknya menu tersebut.
+  **Badge:** Menu `Task` menampilkan jumlah tugas belum selesai; menu `Schedule` menampilkan jumlah jadwal hari ini. Badge muncul di semua breakpoint.
 
 - **Theme Toggle (Light/Dark Mode)** — button toggle switch untuk beralih Light/Dark mode. Posisinya berbeda antar breakpoint:
-  - **Desktop & Tablet:** berada di section kanan Bottom Nav, berdampingan dengan icon akun.
+  - **Desktop & Tablet:** berada di section kanan Bottom Nav.
   - **Mobile:** berada di Top Bar (lihat komponen di bawah), karena Bottom Nav Mobile berbentuk icon-only tanpa ruang untuk toggle.
 
 - **Top Bar** — komponen navigasi tambahan di bagian atas layar, **khusus tampil pada breakpoint Mobile** (karena Bottom Nav di Mobile berupa icon-only tanpa slot logo). Pada Desktop & Tablet, Top Bar ini **tidak digunakan** — logo tetap berada di section kiri Bottom Nav (lihat spesifikasi Desktop & Tablet di atas).
-  - **Posisi:** `position: sticky` di bagian atas (top), menempel terus saat halaman di-scroll.
+  - **Posisi:** fixed di bagian atas layar.
   - **Isi:** 2 elemen saja —
     - **Kiri:** Logo Nestly + teks "Nestly".
     - **Kanan:** Toggle switch Light/Dark Mode (tanpa hamburger menu).
-  - **Shape:** hanya sudut **bottom-left dan bottom-right** yang diberi border-radius; bagian atas rata/menyatu dengan tepi layar (tidak ada radius di top-left & top-right), sehingga terkesan menyambung dengan browser/viewport.
-  - **Perilaku animasi saat scroll:**
-    - **State awal (belum di-scroll / di posisi paling atas halaman):** Top Bar tampil **transparan, tanpa background** — logo dan toggle terlihat mengambang langsung di atas konten halaman.
-    - **Setelah halaman di-scroll (user mulai scroll ke bawah):** Top Bar mendapatkan **background** (solid/blur sesuai token Color System), muncul dengan animasi transisi halus (fade/slide), memberi kesan "muncul" saat dibutuhkan agar tetap terbaca di atas konten yang sedang di-scroll.
+  - **Tampilan:** liquid-glass (`bg-surface/20`, blur, border bawah, shadow) dengan sudut bawah membulat.
 
-- **Accent Color Selector** — pemilihan tema warna (**Pink** default, serta **Blue** dan **Monochrome** pada Phase 2) ditempatkan di halaman **Pengaturan/Settings**, terpisah dari Theme Toggle Light/Dark di atas. Accent color bersifat "diatur sekali, jarang diubah", sehingga tidak perlu akses secepat toggle Light/Dark mode.
 - **Task Card (halaman Task)** — desain lengkap & detail visual ada di section 8.7.
-- **Task Card (ringkas, khusus di Dashboard)** — versi mini dari Task Card, hanya menampilkan nama tugas, aksen warna mata kuliah, dan deadline (lihat 8.6).
+- **Task Card (ringkas, khusus di Dashboard)** — versi mini dari Task Card, hanya menampilkan nama tugas, aksen warna Subjects terkait, dan deadline (lihat 8.6).
 - **Progress Bar** — representasi visual progress (persentase) per tugas dan progress keseluruhan.
 - **Dashboard Summary Widget** — kartu ringkasan statistik (total tugas, status, deadline terdekat, ringkasan keuangan).
-- **Schedule Card/List** — menampilkan jadwal kuliah secara terstruktur, dengan accent color per kartu.
+- **Schedule Card/List** — menampilkan jadwal pelajaran/kuliah secara terstruktur, dengan accent color per kartu.
 - **Finance Summary Widget** — kartu ringkasan pemasukan, pengeluaran, dan sisa saldo, dengan indikator progress terhadap budget.
 - **Filter & Sort Bar** — kontrol untuk pencarian, filter, dan pengurutan tugas.
 
@@ -308,26 +307,26 @@ Referensi warna lengkap (hex code untuk Light & Dark mode, serta accent color un
 ### 8.5 Layout & Responsiveness
 
 - Layout adaptif untuk 3 breakpoint utama: **Mobile**, **Tablet**, **Desktop**.
-- **Top Bar** (lihat 8.4) hanya muncul pada **Mobile** — `sticky` di atas, transparan di awal lalu memunculkan background saat halaman di-scroll. Berisi logo+teks (kiri) dan toggle Light/Dark (kanan).
+- **Top Bar** (lihat 8.4) hanya muncul pada **Mobile** — fixed di atas, berisi logo+teks (kiri) dan toggle Light/Dark (kanan).
 - **Navigation Bar** (lihat 8.4) tetap berada di **bottom** pada seluruh breakpoint, namun kontennya berubah:
-  - **Desktop:** 3-section layout penuh (logo+teks | menu | icon akun + toggle Light/Dark), menu default menampilkan label, icon muncul dengan animasi saat aktif.
+  - **Desktop:** 3-section layout penuh (logo+teks | menu | toggle Light/Dark), menu default menampilkan label, icon muncul saat aktif.
   - **Tablet:** identik dengan Desktop, ukuran elemen diperkecil (scaled down).
-  - **Mobile:** hanya icon-only nav (`Home`, `Task`, `Schedule`, `Subjects`, `Finance`, `Account`), tanpa logo/teks dan tanpa toggle Light/Dark; label baru muncul saat menu aktif. Logo dan toggle Light/Dark sudah ditangani oleh Top Bar (khusus Mobile).
+  - **Mobile:** icon nav (`Home`, `Task`, `Schedule`, `Subjects`, `Finance`), tanpa logo/teks dan toggle; label hanya muncul pada menu aktif. Logo dan toggle ada di Top Bar.
 - Dashboard sebagai halaman utama (landing) setelah aplikasi dibuka.
-- Konten utama halaman (Task List, Schedule, Finance) perlu diberi padding/margin atas & bawah yang cukup agar tidak tertutup oleh Top Bar maupun Bottom Nav yang bersifat fixed/sticky.
+- Konten utama halaman (Task List, Schedule, Finance) perlu diberi padding/margin agar tidak tertutup oleh Top Bar maupun Bottom Nav yang fixed.
 
 ### 8.6 Dashboard Page Layout
 
-Dashboard menggunakan **CSS Grid 6 kolom × 4 baris** (gap 10px) pada tampilan Desktop, dengan 6 section yang ditempatkan sebagai berikut:
+Dashboard menggunakan grid 6 kolom pada Tablet/Desktop. Konten utama terdiri dari jadwal, ringkasan singkat, tugas, dan transaksi; Profil dan Greeting direncanakan untuk Phase 3:
 
 | # | Section | Posisi Grid (kolom, baris) | Isi |
 |---|---|---|---|
 | 1 | **Jadwal** | Kolom 1–5, Baris 1 | 4 card jadwal sejajar di dalam section ini |
 | 2 | **Ringkasan Singkat** | Kolom 6, Baris 1 | Jumlah tugas belum selesai + persentase budget terpakai bulan ini |
-| 3 | **List Tugas Terdekat Deadline** | Kolom 1–2, Baris 2–4 | Lihat detail sub-struktur di bawah |
-| 4 | **List Transaksi Finance** | Kolom 3–4, Baris 2–4 | 3–5 transaksi bulan berjalan (dengan empty state jika belum ada) |
-| 5 | **Profil** | Kolom 5–6, Baris 3–4 | Foto profil (bentuk lingkaran), Nama, Kelas |
-| 6 | **Greeting** | Kolom 5–6, Baris 2 | Sapaan custom (lihat detail di bawah) |
+| 3 | **List Tugas Terdekat Deadline** | Kolom 1–4, Baris 2–4 | Lihat detail sub-struktur di bawah |
+| 4 | **List Transaksi Finance** | Kolom 5–6, Baris 2–4 | Maksimal 5 transaksi bulan berjalan (dengan empty state jika belum ada) |
+| 5 | **Profil** *(Phase 3)* | Kolom 5–6, Baris 3–4 | Foto profil (bentuk lingkaran), Nama, Kelas |
+| 6 | **Greeting** *(Phase 3)* | Kolom 5–6, Baris 2 | Sapaan custom (lihat detail di bawah) |
 
 **Detail Section 3 — List Tugas Terdekat Deadline:**
 
@@ -353,23 +352,24 @@ Section ini dipecah jadi 2 container tersusun vertikal:
 - Sebuah **tombol edit** ditempatkan di sisi **paling kanan** section ini (tetap berada di dalam batas section 6) untuk membuka pengaturan kustomisasi kata sapaan & nama panggilan.
 
 **Responsiveness:**
-- **Desktop:** grid 6×4 seperti tabel di atas.
-- **Tablet:** grid & proporsi yang sama, seluruh elemen di-scale lebih kecil (tidak ada perubahan susunan).
+- **Desktop:** grid 6 kolom seperti tabel di atas.
+  - **Tablet:** mengikuti grid 6 kolom dengan susunan section yang sama seperti Desktop.
 - **Mobile:** grid ditata ulang total menjadi **1 kolom vertikal (stacked)**, dengan urutan dari atas ke bawah:
-  1. Greeting + Profil (digabung sebagai header personal di paling atas)
-  2. Jadwal
-  3. Ringkasan Singkat
-  4. List Tugas Terdekat Deadline
-  5. List Transaksi Finance
+  1. Jadwal
+  2. Ringkasan Singkat
+  3. List Tugas Terdekat Deadline
+  4. List Transaksi Finance
+
+  Greeting + Profil akan ditambahkan di bagian paling atas setelah fitur Phase 3 tersedia.
 
 > Catatan: Section Jadwal (poin 1 di atas) di dalamnya sendiri berisi 4 card jadwal — perilaku responsivenya (grid 2×2 di Tablet/Mobile) mengikuti spesifikasi yang sudah ditetapkan sebelumnya, tetap berlaku sebagai bagian dari section ini.
 
-**Section 7 — Calendar View *(Phase 2, belum dikerjakan di Phase 1)*:**
-- Ditempatkan **terpisah di bagian paling bawah Dashboard**, di luar grid 6×4 (bukan bagian dari 6 section sebelumnya).
+**Section 7 — Calendar View *(Phase 2)*:**
+- Ditempatkan terpisah di bagian paling bawah Dashboard, di luar grid konten utama.
 - Tampilan kalender bulanan (month view).
 - Tanggal dengan deadline tugas ditandai indikator titik.
 - Klik tanggal → **expand inline di bawah kalender** (mendorong konten lain ke bawah, bukan modal/popup), menampilkan:
-  - Jadwal kuliah pada hari yang sesuai dengan tanggal tersebut.
+  - Jadwal pelajaran/kuliah pada hari yang sesuai dengan tanggal tersebut.
   - Tugas dengan deadline pada tanggal tersebut.
 
 ### 8.7 Task Card Design (Halaman Task)
@@ -383,7 +383,7 @@ Task Card di halaman Task (bukan versi ringkas di Dashboard) menggunakan gaya **
 - Background card mengikuti token `Surface`.
 
 **Badge yang "nempel" di garis border atas card:**
-- **Badge Mata Kuliah** — posisi tengah atas, bentuk pill, background sama dengan `Surface` card (supaya seolah "memotong" garis border), border & warna teks mengikuti aksen mata kuliah.
+- **Badge Subjects** — posisi tengah atas, bentuk pill, background sama dengan `Surface` card (supaya seolah "memotong" garis border), border & warna teks mengikuti aksen mata pelajaran/mata kuliah.
 - **Badge Status** (`Not Started` / `In Progress` / `Completed`) — posisi kanan atas, bentuk pill sama seperti badge Mata Kuliah, namun warna mengikuti token status masing-masing.
 - Kedua badge diposisikan `position: absolute`, sedikit naik ke atas garis border (setengah tinggi badge berada di luar card, setengah di dalam).
 
@@ -433,10 +433,10 @@ Schedule Card menggunakan gaya visual yang konsisten dengan Task Card (neo-bruta
   - Menit ditampilkan kecil di bawahnya (contoh: "00").
   - Garis vertikal pemisah pendek.
   - Jam selesai ditampilkan kecil di bawah garis (contoh: "09:40").
-- **Kolom kanan (info mata kuliah):**
-  - Nama mata kuliah — font besar & bold (lebih besar dari teks lain di card).
+- **Kolom kanan (info Subjects):**
+  - Nama mata pelajaran/mata kuliah — font besar & bold (lebih besar dari teks lain di card).
   - Ruangan — baris tersendiri.
-  - Nama pengajar/dosen — baris tersendiri, **di bawah** ruangan.
+  - Nama guru/dosen — baris tersendiri, **di bawah** ruangan.
 
 ---
 
@@ -444,8 +444,8 @@ Schedule Card menggunakan gaya visual yang konsisten dengan Task Card (neo-bruta
 
 - **Data yang disimpan di database (MySQL):** Task, Progress, Deadline, Status, Schedule, Data keuangan (income, expense, budget), Theme preference, Pengaturan pengguna.
 - **Roadmap Pengembangan:**
-  - Phase 1 (🟢 Current) — Core Full Stack Build (Task, Schedule, Finance Tracker, Dashboard, Livewire integration).
-  - Phase 2 (🟡 Future) — Refinement & UX Polish (search/filter/sorting, urgency indicator, dark/light mode, multi color theme Blue & Monochrome).
+  - Phase 1 (🟢 Current) — Core Full Stack Build, including Task, Schedule, Finance, Dashboard, search/filter/sorting, urgency indicators, theme toggle, responsive navigation, and UX polish.
+  - Phase 2 (🟡 Future) — Calendar View Dashboard (monthly calendar, deadline markers, inline date details).
   - Phase 3 (🔵 Future) — Enhancement (Authentication, multi-user, notifications, advanced analytics, kemungkinan deployment ke hosting/cloud).
 - **Deployment (Saat Ini):** Local development via Laragon, database dikelola via HeidiSQL — digunakan sebagai project pembelajaran/portofolio pribadi.
 - **Tech Stack:** Laravel (Backend & Frontend melalui Blade + Livewire), Tailwind CSS untuk styling, MySQL sebagai database. Tidak menggunakan JavaScript framework terpisah — seluruh interaktivitas ditangani oleh Livewire.
