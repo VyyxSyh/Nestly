@@ -17,6 +17,13 @@ new class extends Component
 
     public string $passwordConfirmation = '';
 
+    public function mount(): void
+    {
+        if (Auth::check()) {
+            $this->redirect(route('dashboard'), navigate: true);
+        }
+    }
+
     public function setMode(string $mode): void
     {
         abort_unless(in_array($mode, ['login', 'register'], true), 404);

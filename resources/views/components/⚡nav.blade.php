@@ -2,8 +2,8 @@
 
 use App\Models\Schedule;
 use App\Models\Task;
-use Livewire\Component;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
 new class extends Component
 {
@@ -138,8 +138,15 @@ new class extends Component
             </div>
 
             {{-- Kanan: toggle tema --}}
-            <div class="flex items-center justify-end">
+            <div class="flex items-center justify-end gap-2">
                 <x-theme-toggle />
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" aria-label="Log out" title="Log out"
+                        class="flex h-9 w-9 items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                        <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+                    </button>
+                </form>
             </div>
         </div>
     </nav>
@@ -150,7 +157,16 @@ new class extends Component
             <img src="{{ asset('logo.png') }}" alt="Nestly" class="h-7 w-auto">
             Nestly
         </div>
-        <x-theme-toggle />
+        <div class="flex items-center gap-3">
+            <x-theme-toggle />
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" aria-label="Log out" title="Log out"
+                    class="flex h-9 w-9 items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                    <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
     </div>
 
     {{-- Mobile Bottom Nav (pill melayang, lebar dibagi otomatis, label muncul di menu aktif) --}}
