@@ -1,6 +1,6 @@
-# TODO — Nestly (Phase 1: Core Full Stack Build)
+# TODO — Nestly Roadmap
 
-Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang item yang sudah selesai.
+Status implementasi dan roadmap Nestly, selaras dengan aplikasi saat ini serta PRD.md.
 
 > Legend: `[ ]` belum dikerjakan · `[~]` sedang dikerjakan · `[x]` selesai
 
@@ -163,30 +163,24 @@ Checklist pengembangan Nestly, dikelompokkan per fitur sesuai PRD.md. Centang it
 ---
 
 ## 🔮 Future (Phase 2 & 3 — Reference Only)
-> Tidak dikerjakan di Phase 1, dicatat untuk konteks roadmap ke depan.
+> Phase 1 selesai. Phase 2 selesai; daftar berikut mencatat hasil dan pekerjaan lanjutan.
 
-**Phase 2 — Refinement & UX Polish**
-- [ ] Penyempurnaan UX search/filter/sorting
-- [ ] Penyempurnaan indikator urgensi & aksesibilitas warna
-- [ ] Optimasi query & performa Livewire component
-- [ ] Buat tema warna **Blue** (Light Mode + Dark Mode) mengikuti struktur 12-token yang sama
-- [ ] Buat tema warna **Monochrome** (Light Mode + Dark Mode) mengikuti struktur 12-token yang sama
-- [ ] Buat mekanisme pilih & simpan preferensi tema warna (terpisah dari preferensi Light/Dark mode)
-- [ ] Livewire component: Calendar View — section ke-7 di bagian paling bawah Dashboard (terpisah dari grid 6x4)
-- [ ] Tampilan kalender bulanan (month view)
-- [ ] Logika penandaan tanggal yang punya deadline tugas dengan indikator titik
-- [ ] Fitur klik tanggal → expand inline di bawah kalender (bukan modal/popup)
-- [ ] Query jadwal kuliah (berdasarkan hari yang sesuai) dan tugas dengan deadline pada tanggal yang diklik
+**Phase 2 — Calendar View & UX Polish (Selesai)**
+- [x] Kalender bulanan Dashboard dengan navigasi bulan dan indikator deadline
+- [x] Pilih tanggal untuk melihat jadwal serta deadline tugas pada tanggal tersebut
+- [x] Panel detail responsif: inline pada mobile/tablet, berdampingan dengan kalender pada desktop
+- [x] Poles animasi, tampilan mobile/tablet, dan jarak antar-item
+- [ ] Selesaikan penyempurnaan UX dan aksesibilitas yang masih tersisa
 
 **Phase 3 — Enhancement**
-- [ ] Profil: foto profil, nama, kelas
-- [ ] Greeting: tampilkan sapaan dan nama panggilan di Dashboard
-- [ ] Edit sapaan dan nama panggilan, simpan sebagai preferensi pengguna
-- [ ] Migration & model preferensi profil/Greeting per pengguna
-- [ ] Implementasi User Authentication (Laravel Breeze/Fortify)
+- [ ] Implementasi User Authentication
+- [ ] Profil: nama, kelas, foto profil
+- [ ] Greeting: sapaan dan nama panggilan yang dapat dikustomisasi
+- [ ] Simpan preferensi profil dan Greeting per pengguna
+- [ ] Migrasi data relevan agar mendukung multi-user (`user_id`)
 - [ ] Role management
-- [ ] Migrasi struktur data agar mendukung multi-user (`user_id` di setiap tabel relevan)
-- [ ] Cross-device synchronization (otomatis, karena sudah berbasis database & auth)
+- [ ] Sinkronisasi data dan preferensi tema lintas perangkat
+- [ ] Simpan preferensi tema pada akun
 - [ ] Notifications system
 - [ ] Advanced analytics (laporan akademik & keuangan)
 - [ ] Deployment ke hosting/cloud (jika ingin diakses publik)

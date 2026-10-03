@@ -7,16 +7,23 @@ use Livewire\Component;
 new class extends Component
 {
     public bool $showRecordModal = false;
+
     public bool $isEditingRecord = false;
+
     public ?int $editingRecordId = null;
 
     public $type = 'expense';
+
     public $category = '';
+
     public $amount = '';
+
     public $date = '';
+
     public $note = '';
 
     public bool $showBudgetModal = false;
+
     public $budget_amount = '';
 
     public ?int $confirmingDeleteId = null;

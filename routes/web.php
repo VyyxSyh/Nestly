@@ -21,3 +21,7 @@ Route::get('/subjects', function () {
 Route::get('/finance', function () {
     return view('finance-page');
 })->name('finance');
+
+Route::get('/login', function () {
+    return view('auth-page');
+})->name('login');
