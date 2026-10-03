@@ -166,14 +166,21 @@
 .doodle-btn-alt:hover { transform: translateY(-2px) rotate(2deg); background: var(--secondary-btn-hover); }
 .doodle-btn:active { transform: translate(3px, 3px) rotate(0); box-shadow: 0 0 0 var(--ink); }
 .doodle-error { width: 100%; margin: -12px 0; color: #b42318; font-size: 12px; font-weight: 700; }
-.doodle-password-hint { width: 100%; margin: 0; padding: 2px 0; color: #5f5660; font-size: 12px; line-height: 1.35; }
+.doodle-password-hint { width: 100%; margin: 0; padding: 1px 0; color: #5f5660; font-size: 12px; line-height: 1.25; }
+.doodle-card-back .doodle-form { gap: 10px; }
+.doodle-card-back .doodle-password-hint { padding: 0; line-height: 1.15; }
 .doodle-card-scene:hover .doodle-title { animation: auth-title-wiggle .5s ease-in-out; }
 
 @media (max-width: 380px) {
     .doodle-card-scene { height: 390px; }
     .doodle-card-back .doodle-title-alt { margin-bottom: 8px; }
     .doodle-card-back .doodle-form { gap: 9px; }
-    .doodle-card-back .doodle-btn { margin: 2px 0; }
+    .doodle-card-back .doodle-btn { margin: 12px 0 2px; }
+}
+
+@media (min-width: 381px) {
+    .doodle-card-back .doodle-title-alt { margin-bottom: 12px; }
+    .doodle-card-back .doodle-btn { margin: 4px 0; }
 }
 
 .auth-doodle .doodle-title:hover {
