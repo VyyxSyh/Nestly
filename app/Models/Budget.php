@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Budget extends Model
 {
     protected $fillable = [
         'month',
+        'user_id',
         'year',
         'amount',
     ];
@@ -15,4 +17,9 @@ class Budget extends Model
     protected $casts = [
         'amount' => 'decimal:2',
     ];
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -44,7 +44,7 @@ new class extends Component
 
     public function openEditRecordModal(int $id)
     {
-        $record = FinanceRecord::findOrFail($id);
+        $record = FinanceRecord::where('user_id', auth()->id())->findOrFail($id);
 
         $this->editingRecordId = $record->id;
         $this->type = $record->type;
@@ -74,9 +74,9 @@ new class extends Component
         ]);
 
         if ($this->isEditingRecord && $this->editingRecordId) {
-            FinanceRecord::findOrFail($this->editingRecordId)->update($validated);
+            FinanceRecord::where('user_id', auth()->id())->findOrFail($this->editingRecordId)->update($validated);
         } else {
-            FinanceRecord::create($validated);
+            FinanceRecord::create([...$validated, 'user_id' => auth()->id()]);
         }
 
         $this->closeRecordModal();
@@ -94,7 +94,7 @@ new class extends Component
 
     public function deleteRecord(int $id)
     {
-        FinanceRecord::findOrFail($id)->delete();
+        FinanceRecord::where('user_id', auth()->id())->findOrFail($id)->delete();
         $this->confirmingDeleteId = null;
     }
 
@@ -117,7 +117,7 @@ new class extends Component
         ]);
 
         Budget::updateOrCreate(
-            ['month' => now()->month, 'year' => now()->year],
+            ['user_id' => auth()->id(), 'month' => now()->month, 'year' => now()->year],
             ['amount' => $validated['budget_amount']]
         );
 
@@ -126,25 +126,25 @@ new class extends Component
 
     public function with(): array
     {
-        $currentMonthRecords = FinanceRecord::whereMonth('date', now()->month)
+        $currentMonthRecords = FinanceRecord::where('user_id', auth()->id())->whereMonth('date', now()->month)
             ->whereYear('date', now()->year)
             ->get();
 
         $totalIncome = $currentMonthRecords->where('type', 'income')->sum('amount');
         $totalExpense = $currentMonthRecords->where('type', 'expense')->sum('amount');
-        $previousBalance = FinanceRecord::where('date', '<', now()->startOfMonth()->toDateString())
+        $previousBalance = FinanceRecord::where('user_id', auth()->id())->where('date', '<', now()->startOfMonth()->toDateString())
             ->where('type', 'income')
             ->sum('amount')
-            - FinanceRecord::where('date', '<', now()->startOfMonth()->toDateString())
+            - FinanceRecord::where('user_id', auth()->id())->where('date', '<', now()->startOfMonth()->toDateString())
                 ->where('type', 'expense')
                 ->sum('amount');
         $netBalance = $previousBalance + $totalIncome - $totalExpense;
 
-        $groupedRecords = FinanceRecord::orderByDesc('date')
+        $groupedRecords = FinanceRecord::where('user_id', auth()->id())->orderByDesc('date')
             ->get()
             ->groupBy(fn ($record) => $record->date->format('F Y'));
 
-        $currentMonthBudget = Budget::where('month', now()->month)->where('year', now()->year)->first();
+        $currentMonthBudget = Budget::where('user_id', auth()->id())->where('month', now()->month)->where('year', now()->year)->first();
         $effectiveBudget = $this->getEffectiveBudget();
         $budgetAmount = $effectiveBudget?->amount ?? 0;
         $isInheritedBudget = ! $currentMonthBudget && $effectiveBudget;
@@ -166,13 +166,13 @@ new class extends Component
 
     private function getEffectiveBudget(): ?Budget
     {
-        $current = Budget::where('month', now()->month)->where('year', now()->year)->first();
+        $current = Budget::where('user_id', auth()->id())->where('month', now()->month)->where('year', now()->year)->first();
 
         if ($current) {
             return $current;
         }
 
-        return Budget::where(function ($query) {
+        return Budget::where('user_id', auth()->id())->where(function ($query) {
             $query->where('year', '<', now()->year)
                 ->orWhere(function ($q) {
                     $q->where('year', now()->year)->where('month', '<', now()->month);

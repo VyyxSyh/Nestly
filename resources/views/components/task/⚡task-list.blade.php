@@ -4,30 +4,47 @@ use App\Models\Subject;
 use App\Models\Task;
 use App\Models\TaskChecklistItem;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 new class extends Component
 {
     public bool $showModal = false;
+
     public bool $isEditing = false;
+
     public ?int $editingTaskId = null;
 
     public $subject_id = '';
+
     public $title = '';
+
     public $description = '';
+
     public $deadline = '';
+
     public $deadline_time = '';
+
     public $progress_mode = 'manual';
+
     public $newChecklistItemTitle = '';
+
     public $search = '';
+
     public $filterStatus = '';
+
     public $filterSubject = '';
+
     public $sortBy = 'deadline_asc';
 
     public array $pendingNewItems = [];
+
     public array $pendingDeleteIds = [];
+
     public array $pendingEdits = [];
+
     public ?int $editingItemId = null;
+
     public $editingItemTitle = '';
 
     public ?int $confirmingDeleteId = null;
@@ -43,7 +60,7 @@ new class extends Component
 
     public function openEditModal(int $taskId)
     {
-        $task = Task::findOrFail($taskId);
+        $task = Task::where('user_id', auth()->id())->findOrFail($taskId);
 
         $this->editingTaskId = $task->id;
         $this->subject_id = $task->subject_id ?? '';
@@ -132,7 +149,7 @@ new class extends Component
     {
         $validated = $this->validate([
             'title' => 'required|string|max:255',
-            'subject_id' => 'nullable|exists:subjects,id',
+            'subject_id' => ['nullable', Rule::exists('subjects', 'id')->where('user_id', auth()->id())],
             'description' => 'nullable|string',
             'deadline' => 'required|date',
             'deadline_time' => 'nullable',
@@ -143,26 +160,25 @@ new class extends Component
         $validated['deadline_time'] = $validated['deadline_time'] ?: null;
 
         if ($this->isEditing && $this->editingTaskId) {
-            $task = Task::findOrFail($this->editingTaskId);
+            $task = Task::where('user_id', auth()->id())->findOrFail($this->editingTaskId);
             $task->update($validated);
         } else {
-            $task = Task::create($validated);
+            $task = Task::create([...$validated, 'user_id' => auth()->id()]);
         }
 
         if (! empty($this->pendingDeleteIds)) {
-            TaskChecklistItem::whereIn('id', $this->pendingDeleteIds)->delete();
+            $task->checklistItems()->whereIn('id', $this->pendingDeleteIds)->delete();
         }
 
         foreach ($this->pendingEdits as $itemId => $newTitle) {
             if (trim($newTitle) !== '') {
-                TaskChecklistItem::where('id', $itemId)->update(['title' => $newTitle]);
+                $task->checklistItems()->where('id', $itemId)->update(['title' => $newTitle]);
             }
         }
 
         foreach ($this->pendingNewItems as $itemTitle) {
             if (trim($itemTitle) !== '') {
-                TaskChecklistItem::create([
-                    'task_id' => $task->id,
+                $task->checklistItems()->create([
                     'title' => $itemTitle,
                     'is_done' => false,
                 ]);
@@ -176,21 +192,21 @@ new class extends Component
 
     public function incrementProgress(int $taskId)
     {
-        $task = Task::findOrFail($taskId);
+        $task = Task::where('user_id', auth()->id())->findOrFail($taskId);
         $task->update(['progress' => min(100, $task->progress + 5)]);
         $this->dispatch('badges-updated');
     }
 
     public function decrementProgress(int $taskId)
     {
-        $task = Task::findOrFail($taskId);
+        $task = Task::where('user_id', auth()->id())->findOrFail($taskId);
         $task->update(['progress' => max(0, $task->progress - 5)]);
         $this->dispatch('badges-updated');
     }
 
     public function toggleChecklistItem(int $itemId)
     {
-        $item = TaskChecklistItem::findOrFail($itemId);
+        $item = TaskChecklistItem::whereHas('task', fn ($query) => $query->where('user_id', auth()->id()))->findOrFail($itemId);
         $item->update(['is_done' => ! $item->is_done]);
         $this->recalculateProgress($item->task_id);
         $this->dispatch('badges-updated');
@@ -198,7 +214,7 @@ new class extends Component
 
     private function recalculateProgress(int $taskId): void
     {
-        $task = Task::findOrFail($taskId);
+        $task = Task::where('user_id', auth()->id())->findOrFail($taskId);
         $total = $task->checklistItems()->count();
         $done = $task->checklistItems()->where('is_done', true)->count();
         $newProgress = $total > 0 ? (int) round(($done / $total) * 100) : 0;
@@ -218,14 +234,14 @@ new class extends Component
 
     public function delete(int $taskId)
     {
-        Task::findOrFail($taskId)->delete();
+        Task::where('user_id', auth()->id())->findOrFail($taskId)->delete();
         $this->dispatch('badges-updated');
         $this->confirmingDeleteId = null;
     }
 
     public function with(): array
     {
-        $query = Task::with(['subject', 'checklistItems']);
+        $query = Task::where('user_id', auth()->id())->with(['subject', 'checklistItems']);
 
         if ($this->search) {
             $query->where('title', 'like', '%'.$this->search.'%');
@@ -254,9 +270,9 @@ new class extends Component
 
         return [
             'tasks' => $tasks->values(),
-            'subjects' => Subject::all(),
+            'subjects' => Subject::where('user_id', auth()->id())->get(),
             'editingTaskExistingItems' => ($this->isEditing && $this->editingTaskId)
-                ? TaskChecklistItem::where('task_id', $this->editingTaskId)->get()
+                ? TaskChecklistItem::whereHas('task', fn ($query) => $query->where('user_id', auth()->id()))->where('task_id', $this->editingTaskId)->get()
                 : collect(),
         ];
     }

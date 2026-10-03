@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Task extends Model
 {
     protected $fillable = [
         'subject_id',
+        'user_id',
         'title',
         'description',
         'deadline',
@@ -21,14 +24,19 @@ class Task extends Model
         'deadline' => 'date',
     ];
 
-    public function subject()
+    public function subject(): BelongsTo
     {
         return $this->belongsTo(Subject::class);
     }
 
-    public function checklistItems()
+    public function checklistItems(): HasMany
     {
         return $this->hasMany(TaskChecklistItem::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function getStatusAttribute(): string
@@ -75,8 +83,9 @@ class Task extends Model
     {
         $formatted = $this->deadline->translatedFormat('l, d F Y');
         if ($this->deadline_time) {
-            $formatted .= ', ' . \Carbon\Carbon::parse($this->deadline_time)->format('H:i');
+            $formatted .= ', '.Carbon::parse($this->deadline_time)->format('H:i');
         }
+
         return $formatted;
     }
 

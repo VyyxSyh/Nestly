@@ -6,9 +6,13 @@ use Livewire\Component;
 new class extends Component
 {
     public bool $isEditing = false;
+
     public ?int $editingSubjectId = null;
+
     public bool $showModal = false;
+
     public $name = '';
+
     public ?int $confirmingDeleteId = null;
 
     public $accent_color = '';
@@ -28,7 +32,7 @@ new class extends Component
 
     public function openEditModal(int $id)
     {
-        $subject = Subject::findOrFail($id);
+        $subject = Subject::where('user_id', auth()->id())->findOrFail($id);
         $this->editingSubjectId = $subject->id;
         $this->name = $subject->name;
         $this->accent_color = $subject->accent_color;
@@ -59,9 +63,9 @@ new class extends Component
         ]);
 
         if ($this->isEditing && $this->editingSubjectId) {
-            Subject::findOrFail($this->editingSubjectId)->update($validated);
+            Subject::where('user_id', auth()->id())->findOrFail($this->editingSubjectId)->update($validated);
         } else {
-            Subject::create($validated);
+            Subject::create([...$validated, 'user_id' => auth()->id()]);
         }
 
         $this->closeModal();
@@ -79,11 +83,12 @@ new class extends Component
 
     public function delete(int $id)
     {
-        $subject = Subject::withCount(['tasks', 'schedules'])->findOrFail($id);
+        $subject = Subject::where('user_id', auth()->id())->withCount(['tasks', 'schedules'])->findOrFail($id);
 
         if ($subject->tasks_count > 0 || $subject->schedules_count > 0) {
-            session()->flash('deleteError', 'Tidak bisa hapus "' . $subject->name . '" karena masih dipakai di ' . $subject->tasks_count . ' tugas dan ' . $subject->schedules_count . ' jadwal.');
+            session()->flash('deleteError', 'Tidak bisa hapus "'.$subject->name.'" karena masih dipakai di '.$subject->tasks_count.' tugas dan '.$subject->schedules_count.' jadwal.');
             $this->confirmingDeleteId = null;
+
             return;
         }
 
@@ -94,7 +99,7 @@ new class extends Component
     public function with(): array
     {
         return [
-            'subjects' => Subject::withCount(['tasks', 'schedules'])->get(),
+            'subjects' => Subject::where('user_id', auth()->id())->withCount(['tasks', 'schedules'])->get(),
         ];
     }
 };

@@ -2,19 +2,27 @@
 
 use App\Models\Schedule;
 use App\Models\Subject;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 new class extends Component
 {
     public bool $showModal = false;
+
     public bool $isEditing = false;
+
     public ?int $editingScheduleId = null;
 
     public $subject_id = '';
+
     public $day = 'Senin';
+
     public $start_time = '';
+
     public $end_time = '';
+
     public $room = '';
+
     public $lecturer = '';
 
     public array $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
@@ -31,7 +39,7 @@ new class extends Component
 
     public function openEditModal(int $scheduleId)
     {
-        $schedule = Schedule::findOrFail($scheduleId);
+        $schedule = Schedule::where('user_id', auth()->id())->findOrFail($scheduleId);
 
         $this->editingScheduleId = $schedule->id;
         $this->subject_id = $schedule->subject_id;
@@ -54,7 +62,7 @@ new class extends Component
     public function save()
     {
         $validated = $this->validate([
-            'subject_id' => 'required|exists:subjects,id',
+            'subject_id' => ['required', Rule::exists('subjects', 'id')->where('user_id', auth()->id())],
             'day' => 'required|string',
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
@@ -63,9 +71,9 @@ new class extends Component
         ]);
 
         if ($this->isEditing && $this->editingScheduleId) {
-            Schedule::findOrFail($this->editingScheduleId)->update($validated);
+            Schedule::where('user_id', auth()->id())->findOrFail($this->editingScheduleId)->update($validated);
         } else {
-            Schedule::create($validated);
+            Schedule::create([...$validated, 'user_id' => auth()->id()]);
         }
 
         $this->dispatch('badges-updated');
@@ -84,7 +92,7 @@ new class extends Component
 
     public function delete(int $scheduleId)
     {
-        Schedule::findOrFail($scheduleId)->delete();
+        Schedule::where('user_id', auth()->id())->findOrFail($scheduleId)->delete();
         $this->dispatch('badges-updated');
         $this->confirmingDeleteId = null;
     }
@@ -93,12 +101,12 @@ new class extends Component
     {
         $dayOrder = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
 
-        $schedules = Schedule::with('subject')->get()
+        $schedules = Schedule::where('user_id', auth()->id())->with('subject')->get()
             ->sortBy(fn ($s) => array_search($s->day, $dayOrder) * 1440 + (int) str_replace(':', '', substr($s->start_time, 0, 5)));
 
         return [
             'schedules' => $schedules,
-            'subjects' => Subject::all(),
+            'subjects' => Subject::where('user_id', auth()->id())->get(),
         ];
     }
 };

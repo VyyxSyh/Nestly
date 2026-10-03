@@ -16,8 +16,8 @@ new class extends Component
 
         return [
             'badges' => [
-                'tasks' => Task::where('progress', '<', 100)->count(),
-                'schedules' => Schedule::where('day', $hariIni)->count(),
+                'tasks' => Task::where('user_id', auth()->id())->where('progress', '<', 100)->count(),
+                'schedules' => Schedule::where('user_id', auth()->id())->where('day', $hariIni)->count(),
             ],
             'menus' => [
                 ['route' => 'dashboard', 'label' => 'Home', 'icon' => 'fa-house', 'url' => '/'],

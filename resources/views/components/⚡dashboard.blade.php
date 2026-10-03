@@ -51,13 +51,12 @@ new class extends Component
 
     public function with(): array
     {
-        // --- Tugas ---
-        $totalTasks = Task::count();
-        $completed = Task::where('progress', '>=', 100)->count();
-        $notStarted = Task::where('progress', 0)->count();
-        $inProgress = Task::where('progress', '>', 0)->where('progress', '<', 100)->count();
+        $totalTasks = Task::where('user_id', auth()->id())->count();
+        $completed = Task::where('user_id', auth()->id())->where('progress', '>=', 100)->count();
+        $notStarted = Task::where('user_id', auth()->id())->where('progress', 0)->count();
+        $inProgress = Task::where('user_id', auth()->id())->where('progress', '>', 0)->where('progress', '<', 100)->count();
 
-        $nearestTasks = Task::with('subject')
+        $nearestTasks = Task::where('user_id', auth()->id())->with('subject')
             ->where('progress', '<', 100)
             ->orderBy('deadline')
             ->orderBy('deadline_time')
@@ -66,16 +65,16 @@ new class extends Component
 
         // --- Jadwal hari ini ---
         $hariIni = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][now()->dayOfWeekIso - 1];
-        $allToday = Schedule::with('subject')->where('day', $hariIni)->orderBy('start_time')->get();
+        $allToday = Schedule::where('user_id', auth()->id())->with('subject')->where('day', $hariIni)->orderBy('start_time')->get();
 
         // --- Keuangan bulan berjalan ---
-        $monthQuery = fn () => FinanceRecord::whereYear('date', now()->year)->whereMonth('date', now()->month);
+        $monthQuery = fn () => FinanceRecord::where('user_id', auth()->id())->whereYear('date', now()->year)->whereMonth('date', now()->month);
         $totalIncome = (float) $monthQuery()->where('type', 'income')->sum('amount');
         $totalExpense = (float) $monthQuery()->where('type', 'expense')->sum('amount');
         $recentRecords = $monthQuery()->orderByDesc('date')->orderByDesc('id')->limit(5)->get();
 
-        $budget = Budget::where('month', now()->month)->where('year', now()->year)->first()
-            ?? Budget::orderByDesc('year')->orderByDesc('month')->first();
+        $budget = Budget::where('user_id', auth()->id())->where('month', now()->month)->where('year', now()->year)->first()
+            ?? Budget::where('user_id', auth()->id())->orderByDesc('year')->orderByDesc('month')->first();
         $budgetAmount = (float) ($budget?->amount ?? 0);
 
         $calendarStart = Carbon::create($this->calendarYear, $this->calendarMonth, 1)->startOfDay();
@@ -88,7 +87,7 @@ new class extends Component
             $calendarDays->push($day->copy());
         }
 
-        $calendarTasks = Task::with('subject')
+        $calendarTasks = Task::where('user_id', auth()->id())->with('subject')
             ->whereDate('deadline', '>=', $calendarGridStart->toDateString())
             ->whereDate('deadline', '<=', $calendarGridEnd->toDateString())
             ->orderBy('deadline')
@@ -100,7 +99,7 @@ new class extends Component
             ? Carbon::createFromFormat('!Y-m-d', $this->selectedCalendarDate)
             : null;
         $selectedDaySchedules = $selectedDate
-            ? Schedule::with('subject')
+            ? Schedule::where('user_id', auth()->id())->with('subject')
                 ->where('day', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'][$selectedDate->dayOfWeekIso - 1])
                 ->orderBy('start_time')
                 ->get()
