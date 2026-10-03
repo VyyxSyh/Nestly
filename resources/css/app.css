@@ -7,8 +7,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Patrick Hand', 'Comic Sans MS', 'Chalkboard SE', cursive;
 
     --color-primary: #FF4D8D;
     --color-secondary: #FF9DBB;
@@ -24,6 +23,27 @@
     --color-caution: #EAB308;
     --color-neutral: #9CA3AF;
     --color-info: #3B82F6;
+}
+
+body {
+    font-family: 'Patrick Hand', 'Comic Sans MS', 'Chalkboard SE', cursive;
+    letter-spacing: .02em;
+}
+
+.page-content { font-size: 1.1em; }
+.page-content .text-\[10px\] { font-size: 12px; }
+.page-content .text-xs { font-size: 14px; }
+.page-content .text-sm { font-size: 16px; }
+.page-content .text-base { font-size: 18px; }
+.page-content .text-lg { font-size: 20px; }
+
+@media (min-width: 640px) {
+    .page-content { font-size: 1.15em; }
+    .page-content .text-\[10px\] { font-size: 13px; }
+    .page-content .text-xs { font-size: 15px; }
+    .page-content .text-sm { font-size: 17px; }
+    .page-content .text-base { font-size: 19px; }
+    .page-content .text-lg { font-size: 21px; }
 }
 
 .auth-doodle {
@@ -79,6 +99,8 @@
     color: var(--ink);
     font-size: 18px;
     font-weight: 700;
+    font-family: inherit;
+    letter-spacing: .02em;
     cursor: pointer;
     transition: opacity .3s;
 }
@@ -149,7 +171,7 @@
 .doodle-title-alt { margin: 0 0 15px; transform: rotate(2deg); }
 .doodle-form { display: flex; width: 100%; flex-direction: column; align-items: center; gap: 15px; }
 .doodle-password-wrap { position: relative; width: 100%; }
-.doodle-input { box-sizing: border-box; width: 100%; height: 40px; padding: 5px 40px 5px 15px; border: 2px solid var(--ink); border-radius: var(--sketch-radius-1); outline: none; background: var(--bg-color); box-shadow: 3px 3px 0 var(--ink); color: var(--ink); font: 600 15px 'Patrick Hand', 'Comic Sans MS', cursive; transition: all .2s ease; }
+.doodle-input { box-sizing: border-box; width: 100%; height: 40px; padding: 5px 40px 5px 15px; border: 2px solid var(--ink); border-radius: var(--sketch-radius-1); outline: none; background: var(--bg-color); box-shadow: 3px 3px 0 var(--ink); color: var(--ink); font: 600 15px 'Patrick Hand', 'Comic Sans MS', cursive; letter-spacing: .02em; transition: all .2s ease; }
 .doodle-form > .doodle-input { width: 100%; }
 .doodle-password-toggle { position: absolute; top: 50%; right: 10px; display: grid; width: 24px; height: 24px; place-items: center; padding: 0; border: 0; background: transparent; color: var(--ink); cursor: pointer; transform: translateY(-50%); }
 .doodle-password-toggle svg { width: 19px; height: 19px; }
