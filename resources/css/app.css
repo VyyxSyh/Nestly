@@ -148,7 +148,12 @@
 .doodle-title { margin: 10px 0 20px; color: var(--ink); font-size: 25px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; transform: rotate(-3deg); text-shadow: 1px 1px 0 rgba(0, 0, 0, .1); }
 .doodle-title-alt { margin: 0 0 15px; transform: rotate(2deg); }
 .doodle-form { display: flex; width: 100%; flex-direction: column; align-items: center; gap: 15px; }
-.doodle-input { box-sizing: border-box; width: 100%; height: 40px; padding: 5px 15px; border: 2px solid var(--ink); border-radius: var(--sketch-radius-1); outline: none; background: var(--bg-color); box-shadow: 3px 3px 0 var(--ink); color: var(--ink); font: 600 15px 'Patrick Hand', 'Comic Sans MS', cursive; transition: all .2s ease; }
+.doodle-password-wrap { position: relative; width: 100%; }
+.doodle-input { box-sizing: border-box; width: 100%; height: 40px; padding: 5px 40px 5px 15px; border: 2px solid var(--ink); border-radius: var(--sketch-radius-1); outline: none; background: var(--bg-color); box-shadow: 3px 3px 0 var(--ink); color: var(--ink); font: 600 15px 'Patrick Hand', 'Comic Sans MS', cursive; transition: all .2s ease; }
+.doodle-form > .doodle-input { width: 100%; }
+.doodle-password-toggle { position: absolute; top: 50%; right: 10px; display: grid; width: 24px; height: 24px; place-items: center; padding: 0; border: 0; background: transparent; color: var(--ink); cursor: pointer; transform: translateY(-50%); }
+.doodle-password-toggle svg { width: 19px; height: 19px; }
+.doodle-password-toggle:focus-visible { border-radius: 4px; outline: 2px solid var(--input-focus); outline-offset: 2px; }
 .doodle-input::placeholder { color: #666; opacity: .8; }
 .doodle-input:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 var(--ink); }
 .doodle-input:focus, .doodle-input:focus-visible { border-color: var(--input-focus); border-radius: var(--sketch-radius-2); background: #fffdf5; box-shadow: 4px 4px 0 var(--ink); }
@@ -158,6 +163,7 @@
 .doodle-btn-alt:hover { transform: translateY(-2px) rotate(2deg); background: var(--secondary-btn-hover); }
 .doodle-btn:active { transform: translate(3px, 3px) rotate(0); box-shadow: 0 0 0 var(--ink); }
 .doodle-error { width: 100%; margin: -12px 0; color: #b42318; font-size: 12px; font-weight: 700; }
+.doodle-password-hint { width: 100%; margin: -9px 0; color: #5f5660; font-size: 12px; line-height: 1.2; }
 .doodle-card-scene:hover .doodle-title { animation: auth-title-wiggle .5s ease-in-out; }
 
 @media (max-width: 380px) {
