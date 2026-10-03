@@ -162,25 +162,25 @@ Status implementasi dan roadmap Nestly, selaras dengan aplikasi saat ini serta P
 
 ---
 
-## 🔮 Future (Phase 2 & 3 — Reference Only)
-> Phase 1 selesai. Phase 2 selesai; daftar berikut mencatat hasil dan pekerjaan lanjutan.
-
-**Phase 2 — Calendar View & UX Polish (Selesai)**
+## 🔮 Phase 2 — Calendar, Authentication & Enhancements
 - [x] Kalender bulanan Dashboard dengan navigasi bulan dan indikator deadline
 - [x] Pilih tanggal untuk melihat jadwal serta deadline tugas pada tanggal tersebut
 - [x] Panel detail responsif: inline pada mobile/tablet, berdampingan dengan kalender pada desktop
 - [x] Poles animasi, tampilan mobile/tablet, dan jarak antar-item
-- [ ] Selesaikan penyempurnaan UX dan aksesibilitas yang masih tersisa
-
-**Phase 3 — Enhancement**
-- [ ] Implementasi User Authentication
-- [ ] Profil: nama, kelas, foto profil
+- [x] Implementasi User Authentication (register, login, logout, route protection)
+- [x] Isolasi data CRUD per akun melalui `user_id`
+- [x] Account popup dengan kontrol Light/Dark yang berfungsi
+- [ ] Profil: nama panggilan, nama lengkap, kelas, foto profil
+- [ ] Ganti password dari Account popup
 - [ ] Greeting: sapaan dan nama panggilan yang dapat dikustomisasi
 - [ ] Simpan preferensi profil dan Greeting per pengguna
-- [ ] Migrasi data relevan agar mendukung multi-user (`user_id`)
+- [x] Migrasi data relevan agar mendukung multi-user (`user_id`)
 - [ ] Role management
 - [ ] Sinkronisasi data dan preferensi tema lintas perangkat
-- [ ] Simpan preferensi tema pada akun
+- [ ] Simpan preferensi tema pada akun (saat ini tersimpan di localStorage)
+- [ ] Pilihan theme Pink/Blue
+- [ ] Pilihan font judul dan deskripsi (Sans-serif/Handwriting)
+- [ ] Pilihan bahasa
 - [ ] Notifications system
 - [ ] Advanced analytics (laporan akademik & keuangan)
 - [ ] Deployment ke hosting/cloud (jika ingin diakses publik)

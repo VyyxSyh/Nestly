@@ -30,6 +30,8 @@ body {
     letter-spacing: .02em;
 }
 
+[x-cloak] { display: none !important; }
+
 .page-content { font-size: 1.1em; }
 .page-content .text-\[10px\] { font-size: 12px; }
 .page-content .text-xs { font-size: 14px; }

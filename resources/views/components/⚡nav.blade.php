@@ -35,6 +35,7 @@ new class extends Component
     x-data="{
         path: '',
         scrolled: false,
+        accountOpen: false,
         desktopIndicator: { left: 0, width: 0, opacity: 0 },
         mobileIndicator: { left: 0, width: 0, opacity: 0 },
         norm(p) { return (p.replace(/\/+$/, '') || '/').toLowerCase() },
@@ -100,10 +101,12 @@ new class extends Component
         scrolled = window.scrollY > 8;
         updateIndicators();
     "
+    x-on:keydown.escape.window="accountOpen = false"
+    x-on:click.outside="accountOpen = false"
 >
     {{-- Desktop & Tablet Bottom Nav --}}
     <nav class="hidden sm:flex fixed bottom-3 lg:bottom-4 inset-x-0 z-50 justify-center px-4">
-        <div class="grid grid-cols-[1fr_auto_1fr] items-center w-full max-w-7xl bg-surface/20 backdrop-blur-xs border border-border/70 rounded-full px-5 py-2.5 lg:px-6 lg:py-3 shadow-lg">
+        <div class="grid grid-cols-[1fr_auto_1fr] items-center w-full max-w-7xl bg-surface/10 backdrop-blur-xs border border-border/70 rounded-full px-5 py-2.5 lg:px-6 lg:py-3 shadow-lg">
 
             {{-- Kiri: logo + teks --}}
             <div class="flex items-center gap-2 font-bold text-sm md:text-base text-text">
@@ -137,37 +140,93 @@ new class extends Component
                 @endforeach
             </div>
 
-            {{-- Kanan: toggle tema --}}
+            {{-- Kanan: akun --}}
             <div class="flex items-center justify-end gap-2">
-                <x-theme-toggle />
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" aria-label="Log out" title="Log out"
-                        class="flex h-9 w-9 items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
-                        <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
-                    </button>
-                </form>
+                <button type="button" aria-label="Account" title="Account" x-on:click="accountOpen = !accountOpen"
+                    class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                    <i class="fa-regular fa-user" aria-hidden="true"></i>
+                </button>
             </div>
         </div>
     </nav>
 
     {{-- Mobile Top Bar --}}
-    <div class="sm:hidden fixed top-0 inset-x-0 z-50 flex items-center justify-between rounded-b-2xl px-4 py-3 bg-surface/20 backdrop-blur-xs border-b border-border/70 shadow-md transition-all duration-300">
+    <div class="sm:hidden fixed top-0 inset-x-0 z-50 flex items-center justify-between rounded-b-2xl px-4 py-3 bg-surface/10 backdrop-blur-xs border-b border-border/70 shadow-md transition-all duration-300">
         <div class="flex items-center gap-2 font-bold text-text">
             <img src="{{ asset('logo.png') }}" alt="Nestly" class="h-7 w-auto">
             Nestly
         </div>
         <div class="flex items-center gap-3">
-            <x-theme-toggle />
-            <form method="POST" action="{{ route('logout') }}">
+            <button type="button" aria-label="Account" title="Account" x-on:click="accountOpen = !accountOpen"
+                class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    {{-- Account settings popup --}}
+    <section x-cloak x-show="accountOpen" x-transition.opacity
+        class="account-popup fixed top-1/2 left-1/2 z-[60] w-[min(22rem,calc(100vw-1.5rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border/70 bg-surface/20 p-4 text-text shadow-xl backdrop-blur-sm"
+        aria-label="Account settings">
+        <header class="mb-3 border-b border-border/60 pb-2">
+            <h2 class="text-lg font-bold">Account</h2>
+        </header>
+
+        <div class="max-h-[70vh] space-y-3 overflow-y-auto pr-1">
+            <section class="space-y-2">
+                <h3 class="font-semibold">Profil</h3>
+                <label class="block text-sm text-text-muted">Nama panggilan
+                    <input type="text" placeholder="Nama panggilan" disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted disabled:cursor-not-allowed">
+                </label>
+                <label class="block text-sm text-text-muted">Nama lengkap
+                    <input type="text" placeholder="Nama lengkap" disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted disabled:cursor-not-allowed">
+                </label>
+            </section>
+
+            <section class="flex items-center justify-between gap-3 border-t border-border/60 pt-3">
+                <div>
+                    <h3 class="font-semibold">Mode tampilan</h3>
+                    <p class="text-sm text-text-muted">Light / Dark</p>
+                </div>
+                <x-theme-toggle />
+            </section>
+
+            <section class="grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
+                <label class="text-sm text-text-muted">Bahasa
+                    <select disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text disabled:cursor-not-allowed">
+                        <option>Indonesia</option><option>English</option>
+                    </select>
+                </label>
+                <label class="text-sm text-text-muted">Theme
+                    <select disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text disabled:cursor-not-allowed">
+                        <option>Pink</option><option>Blue</option>
+                    </select>
+                </label>
+            </section>
+
+            <section class="grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
+                <label class="text-sm text-text-muted">Font judul
+                    <select disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text disabled:cursor-not-allowed">
+                        <option>Handwriting</option><option>Sans-serif</option>
+                    </select>
+                </label>
+                <label class="text-sm text-text-muted">Font deskripsi
+                    <select disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text disabled:cursor-not-allowed">
+                        <option>Handwriting</option><option>Sans-serif</option>
+                    </select>
+                </label>
+            </section>
+
+            <button type="button" disabled class="w-full rounded-lg border border-border/70 px-3 py-2 text-left text-text-muted opacity-60">Ganti password</button>
+
+            <form method="POST" action="{{ route('logout') }}" class="border-t border-border/60 pt-3">
                 @csrf
-                <button type="submit" aria-label="Log out" title="Log out"
-                    class="flex h-9 w-9 items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
-                    <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+                <button type="submit" class="w-full rounded-lg bg-danger px-3 py-2 font-semibold text-white transition hover:brightness-110">
+                    <i class="fa-solid fa-arrow-right-from-bracket mr-2" aria-hidden="true"></i>Log out
                 </button>
             </form>
         </div>
-    </div>
+    </section>
 
     {{-- Mobile Bottom Nav (pill melayang, lebar dibagi otomatis, label muncul di menu aktif) --}}
     <nav class="sm:hidden fixed bottom-3 inset-x-2 min-[360px]:inset-x-3 z-50 bg-surface/20 backdrop-blur-xs border border-border/70 rounded-full shadow-lg px-1.5 min-[360px]:px-2 py-1.5">

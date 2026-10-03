@@ -49,7 +49,7 @@ Pelajar membutuhkan satu dashboard terpusat yang membantu mengatur tugas, memant
 | **Siswa SMA/SMK** | User yang perlu mencatat tugas sekolah, mengingat deadline, dan menentukan prioritas pengerjaan. |
 | **Mahasiswa** | User yang mengelola tugas kuliah, jadwal, deadline, progress, dan keuangan pribadi. |
 | **Kelompok belajar / study circle** | Kelompok pelajar atau mahasiswa yang ingin mengelola aktivitas belajar masing-masing. |
-| **Kelas** | Berpotensi menggunakan dashboard bersama pada pengembangan lanjutan (Phase 3) saat multi-user/authentication sudah tersedia. |
+| **Kelas** | Berpotensi menggunakan dashboard bersama pada pengembangan lanjutan (Phase 2) saat multi-user/authentication sudah tersedia. |
 
 **Karakteristik pengguna:**
 - Memiliki banyak tugas sekolah atau kuliah dengan deadline berbeda-beda.
@@ -91,11 +91,11 @@ Pelajar membutuhkan satu dashboard terpusat yang membantu mengatur tugas, memant
 - FR-3.1 Menampilkan jumlah tugas per status (Total Task / Not Started / In Progress / Completed) dalam container statistik di card List Tugas.
 - FR-3.2 Menampilkan tugas dengan deadline terdekat (3–5 item: nama tugas, aksen warna mata pelajaran/mata kuliah terkait, deadline) di card List Tugas.
 - FR-3.3 Menampilkan ringkasan keuangan bulan berjalan (total pemasukan, pengeluaran, sisa saldo).
-- FR-3.4 *(Phase 3)* Menampilkan card Profil (foto profil, nama, kelas).
-- FR-3.5 *(Phase 3)* Menampilkan Greeting dengan format "[Kata Sapaan], [Nama Panggilan]!".
-- FR-3.6 *(Phase 3)* User dapat mengkustomisasi Kata Sapaan (dipilih dari daftar pilihan, misal: Hai, Hii, Halo, Alloww, Heyy) melalui tombol edit pada section Greeting.
-- FR-3.7 *(Phase 3)* User dapat mengkustomisasi Nama Panggilan yang ditampilkan pada Greeting.
-- FR-3.8 *(Phase 3)* Preferensi Kata Sapaan dan Nama Panggilan tersimpan di database dan diterapkan otomatis setiap kali Dashboard dibuka.
+- FR-3.4 *(Phase 2)* Menampilkan card Profil (foto profil, nama, kelas).
+- FR-3.5 *(Phase 2)* Menampilkan Greeting dengan format "[Kata Sapaan], [Nama Panggilan]!".
+- FR-3.6 *(Phase 2)* User dapat mengkustomisasi Kata Sapaan (dipilih dari daftar pilihan, misal: Hai, Hii, Halo, Alloww, Heyy) melalui tombol edit pada section Greeting.
+- FR-3.7 *(Phase 2)* User dapat mengkustomisasi Nama Panggilan yang ditampilkan pada Greeting.
+- FR-3.8 *(Phase 2)* Preferensi Kata Sapaan dan Nama Panggilan tersimpan di database dan diterapkan otomatis setiap kali Dashboard dibuka.
 - FR-3.9 *(Phase 2)* Menampilkan Calendar View di bawah ringkasan Dashboard.
 - FR-3.10 *(Phase 2)* Kalender bulanan menandai tanggal yang memiliki tugas deadline.
 - FR-3.11 *(Phase 2)* User dapat memilih tanggal untuk melihat jadwal pelajaran/kuliah hari itu dan tugas yang deadline-nya jatuh pada tanggal tersebut.
@@ -151,7 +151,7 @@ Pelajar membutuhkan satu dashboard terpusat yang membantu mengatur tugas, memant
 
 ### FR-9 — Theme
 - FR-9.1 User dapat beralih antara Light mode dan Dark mode.
-- FR-9.2 *(Phase 3)* Preferensi tema disimpan pada akun User di database dan diterapkan otomatis saat login, termasuk saat diakses dari browser atau perangkat lain. Pada versi single-user saat ini, preferensi tema disimpan sementara di `localStorage` browser.
+- FR-9.2 *(Phase 2)* Preferensi tema disimpan pada akun User di database dan diterapkan otomatis saat login, termasuk saat diakses dari browser atau perangkat lain. Pada versi single-user saat ini, preferensi tema disimpan sementara di `localStorage` browser.
 
 ### FR-10 — Data Persistence
 - FR-10.1 Data task, progress, deadline, schedule, Subjects, dan finance disimpan di database MySQL melalui Laravel. Preferensi tema lokal dikecualikan (FR-9.2).
@@ -177,9 +177,9 @@ Pelajar membutuhkan satu dashboard terpusat yang membantu mengatur tugas, memant
 | **Responsiveness** | Tampilan harus responsif dan berfungsi baik di perangkat Mobile, Tablet, dan Desktop. |
 | **Reliability** | Data aplikasi tersimpan di database dan backend memvalidasi input; backup dan pemulihan data belum termasuk scope versi ini. |
 | **Availability** | Aplikasi berupa web application; selama pengembangan diakses melalui local development server Laragon. |
-| **Maintainability** | Struktur kode mengikuti pola Laravel dan Livewire agar mudah dipelihara serta dikembangkan, termasuk penambahan authentication pada Phase 3. |
+| **Maintainability** | Struktur kode mengikuti pola Laravel dan Livewire agar mudah dipelihara serta dikembangkan, termasuk penambahan authentication pada Phase 2. |
 | **Scalability** | Struktur database (migration & relasi antar tabel) dirancang agar mudah diperluas, misalnya menambahkan relasi user saat multi-user diimplementasikan. |
-| **Security (Future)** | Saat Phase 3 (Authentication) diimplementasikan, data per-user harus terlindungi dan tervalidasi di sisi server (backend Laravel). |
+| **Security (Future)** | Saat Phase 2 (Authentication) diimplementasikan, data per-user harus terlindungi dan tervalidasi di sisi server (backend Laravel). |
 | **Portability** | Aplikasi saat ini dijalankan secara lokal melalui Laragon; struktur project memungkinkan deployment ke hosting PHP/cloud di tahap berikutnya bila dibutuhkan. |
 | **Accessibility** | Kontras warna (termasuk indikator urgensi & dark/light mode) harus tetap terbaca dan sesuai standar aksesibilitas dasar. |
 
@@ -202,11 +202,9 @@ Pelajar membutuhkan satu dashboard terpusat yang membantu mengatur tugas, memant
 
 ### 6.2 Out of Scope — Future Phases
 
-**Phase 2 — Refinement & UX Polish:**
+**Phase 2 — Refinement, Enhancement, & UX Polish:**
 - Calendar View bulanan pada Dashboard, penanda deadline, dan detail tanggal expand inline.
 - Penyempurnaan UX dan aksesibilitas yang belum selesai.
-
-**Phase 3 — Enhancement:**
 - Profil Dashboard (foto profil, nama, kelas) dan Greeting yang dapat dikustomisasi.
 - Penyimpanan preferensi Profil/Greeting per pengguna; dikerjakan bersama authentication dan multi-user.
 - User authentication (login/register).
@@ -231,7 +229,7 @@ Pelajar membutuhkan satu dashboard terpusat yang membantu mengatur tugas, memant
 | 6 | Deadline Tracking | Kategori urgensi + indikator warna otomatis | Must Have |
 | 7 | Finance Tracker | Pemasukan, pengeluaran, budget bulanan, indikator saldo | Must Have |
 | 8 | Search, Filter & Sorting | Cari & atur tugas berdasarkan kriteria | Should Have |
-| 9 | Theme (Light/Dark) | Toggle tema; simpan preferensi lokal sekarang, sinkronisasi akun Phase 3 | Should Have |
+| 9 | Theme (Light/Dark) | Toggle tema; simpan preferensi lokal sekarang, sinkronisasi akun Phase 2 | Should Have |
 | 10 | Data Persistence | Simpan semua data ke database MySQL | Must Have |
 | 11 | Responsive Design | Optimal di Mobile, Tablet, Desktop | Must Have |
 | 12 | Navigation | Floating Bottom Nav semua device, Top Bar mobile, sliding active state, badge Task dan Schedule | Must Have |
@@ -248,7 +246,7 @@ Pelajar membutuhkan satu dashboard terpusat yang membantu mengatur tugas, memant
 
 ### 8.2 Tema (Theming)
 - Mendukung **Light Mode** dan **Dark Mode**.
-- Preferensi tema disimpan di `localStorage` pada versi single-user saat ini; penyimpanan lintas perangkat melalui akun direncanakan pada Phase 3 (FR-9.2).
+- Preferensi tema disimpan di `localStorage` pada versi single-user saat ini; penyimpanan lintas perangkat melalui akun direncanakan pada Phase 2 (FR-9.2).
 
 ### 8.3 Sistem Warna — Urgency Indicator
 Warna berikut digunakan secara konsisten sebagai bahasa visual utama untuk deadline tracking (dan indikator budget pada Finance Tracker):
@@ -317,7 +315,7 @@ Referensi warna lengkap (hex code untuk Light & Dark mode, serta accent color un
 
 ### 8.6 Dashboard Page Layout
 
-Dashboard menggunakan grid 6 kolom pada Tablet/Desktop. Konten utama terdiri dari jadwal, ringkasan singkat, tugas, dan transaksi; Profil dan Greeting direncanakan untuk Phase 3:
+Dashboard menggunakan grid 6 kolom pada Tablet/Desktop. Konten utama terdiri dari jadwal, ringkasan singkat, tugas, dan transaksi; Profil dan Greeting direncanakan untuk Phase 2:
 
 | # | Section | Posisi Grid (kolom, baris) | Isi |
 |---|---|---|---|
@@ -325,8 +323,8 @@ Dashboard menggunakan grid 6 kolom pada Tablet/Desktop. Konten utama terdiri dar
 | 2 | **Ringkasan Singkat** | Kolom 6, Baris 1 | Jumlah tugas belum selesai + persentase budget terpakai bulan ini |
 | 3 | **List Tugas Terdekat Deadline** | Kolom 1–4, Baris 2–4 | Lihat detail sub-struktur di bawah |
 | 4 | **List Transaksi Finance** | Kolom 5–6, Baris 2–4 | Maksimal 5 transaksi bulan berjalan (dengan empty state jika belum ada) |
-| 5 | **Profil** *(Phase 3)* | Kolom 5–6, Baris 3–4 | Foto profil (bentuk lingkaran), Nama, Kelas |
-| 6 | **Greeting** *(Phase 3)* | Kolom 5–6, Baris 2 | Sapaan custom (lihat detail di bawah) |
+| 5 | **Profil** *(Phase 2)* | Kolom 5–6, Baris 3–4 | Foto profil (bentuk lingkaran), Nama, Kelas |
+| 6 | **Greeting** *(Phase 2)* | Kolom 5–6, Baris 2 | Sapaan custom (lihat detail di bawah) |
 
 **Detail Section 3 — List Tugas Terdekat Deadline:**
 
@@ -360,7 +358,7 @@ Section ini dipecah jadi 2 container tersusun vertikal:
   3. List Tugas Terdekat Deadline
   4. List Transaksi Finance
 
-  Greeting + Profil akan ditambahkan di bagian paling atas setelah fitur Phase 3 tersedia.
+  Greeting + Profil akan ditambahkan di bagian paling atas setelah fitur Phase 2 tersedia.
 
 > Catatan: Section Jadwal (poin 1 di atas) di dalamnya sendiri berisi 4 card jadwal — perilaku responsivenya (grid 2×2 di Tablet/Mobile) mengikuti spesifikasi yang sudah ditetapkan sebelumnya, tetap berlaku sebagai bagian dari section ini.
 
@@ -445,7 +443,6 @@ Schedule Card menggunakan gaya visual yang konsisten dengan Task Card (neo-bruta
 - **Data yang disimpan di database (MySQL):** Task, Progress, Deadline, Status, Schedule, Data keuangan (income, expense, budget), Theme preference, Pengaturan pengguna.
 - **Roadmap Pengembangan:**
   - Phase 1 (🟢 Current) — Core Full Stack Build, including Task, Schedule, Finance, Dashboard, search/filter/sorting, urgency indicators, theme toggle, responsive navigation, and UX polish.
-  - Phase 2 (🟡 Future) — Calendar View Dashboard (monthly calendar, deadline markers, inline date details).
-  - Phase 3 (🔵 Future) — Enhancement (Authentication, multi-user, notifications, advanced analytics, kemungkinan deployment ke hosting/cloud).
+  - Phase 2 (🟡 Future) — Calendar View Dashboard (monthly calendar, deadline markers, inline date details), Enhancement (Authentication, multi-user, notifications, advanced analytics, kemungkinan deployment ke hosting/cloud).
 - **Deployment (Saat Ini):** Local development via Laragon, database dikelola via HeidiSQL — digunakan sebagai project pembelajaran/portofolio pribadi.
 - **Tech Stack:** Laravel (Backend & Frontend melalui Blade + Livewire), Tailwind CSS untuk styling, MySQL sebagai database. Tidak menggunakan JavaScript framework terpisah — seluruh interaktivitas ditangani oleh Livewire.
