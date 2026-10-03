@@ -6,6 +6,7 @@ use App\Models\Schedule;
 use App\Models\Task;
 use Carbon\Carbon;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new class extends Component
@@ -19,11 +20,19 @@ new class extends Component
     #[Locked]
     public ?string $selectedCalendarDate = null;
 
+    public bool $editingGreeting = false;
+
+    #[Validate('required|string|max:100')]
+    public string $greeting = '';
+
+    public string $customGreeting = '';
+
     public function mount(): void
     {
         $today = now();
         $this->calendarMonth = $today->month;
         $this->calendarYear = $today->year;
+        $this->greeting = auth()->user()->greeting ?: 'Hello!';
     }
 
     public function changeCalendarMonth(int $direction): void
@@ -47,6 +56,28 @@ new class extends Component
         abort_unless($selectedDate->format('Y-m-d') === $date, 404);
 
         $this->selectedCalendarDate = $date;
+    }
+
+    public function saveGreeting(string $greeting): void
+    {
+        $this->authorizeGreeting($greeting);
+        $this->greeting = $greeting;
+        $this->validateOnly('greeting');
+        auth()->user()->update(['greeting' => $this->greeting]);
+        $this->editingGreeting = false;
+    }
+
+    public function saveCustomGreeting(): void
+    {
+        $this->greeting = trim($this->customGreeting);
+        $this->validateOnly('greeting');
+        auth()->user()->update(['greeting' => $this->greeting]);
+        $this->editingGreeting = false;
+    }
+
+    private function authorizeGreeting(string $greeting): void
+    {
+        abort_unless(in_array($greeting, ['Hello', 'Hii', "What's up?", 'Heyy', 'Allooww'], true), 422);
     }
 
     public function with(): array
@@ -106,6 +137,8 @@ new class extends Component
             : collect();
 
         return [
+            'greeting' => $this->greeting,
+            'nickname' => auth()->user()->nickname,
             'totalTasks' => $totalTasks,
             'completed' => $completed,
             'notStarted' => $notStarted,
@@ -145,6 +178,28 @@ new class extends Component
         default => 'text-success',
     };
 @endphp
+
+<div class="text-text">
+<div class="mb-3 rounded-[14px] border-2 border-border bg-surface p-3 lg:p-4">
+    <div class="flex items-center justify-between gap-3">
+        <h1 class="text-lg font-bold lg:text-xl">{{ rtrim($greeting, '!.?') }}{{ $nickname ? ', '.$nickname : '' }}!</h1>
+        <button type="button" wire:click="$set('editingGreeting', {{ $editingGreeting ? 'false' : 'true' }})" aria-label="Edit greeting" title="Edit greeting" class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+            <i class="fa-solid fa-pen" aria-hidden="true"></i>
+        </button>
+    </div>
+    @if ($editingGreeting)
+        <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            @foreach (["Hello", 'Hii', "What's up?", 'Heyy', 'Allooww'] as $greetingOption)
+                <button type="button" wire:click="saveGreeting(@js($greetingOption))" class="rounded-lg border border-border px-3 py-2 text-sm transition hover:border-primary hover:text-primary">{{ $greetingOption }}</button>
+            @endforeach
+            <div class="col-span-2 flex gap-2 sm:col-span-3">
+                <input type="text" wire:model="customGreeting" maxlength="100" placeholder="Greeting custom" class="min-w-0 flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-text-muted">
+                <button type="button" wire:click="saveCustomGreeting" class="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white">Simpan</button>
+            </div>
+            @error('greeting') <p class="col-span-2 text-sm text-danger sm:col-span-3">{{ $message }}</p> @enderror
+        </div>
+    @endif
+</div>
 
 <div class="grid grid-cols-1 sm:grid-cols-6 gap-2.5 text-text">
 
@@ -433,4 +488,5 @@ new class extends Component
         </div>
     </div>
 </section>
+</div>
 </div>

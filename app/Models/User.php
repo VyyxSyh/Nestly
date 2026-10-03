@@ -11,12 +11,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'nickname', 'theme_mode', 'language', 'theme_color', 'title_font', 'description_font', 'greeting'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    protected $attributes = [
+        'theme_mode' => 'dark',
+        'language' => 'id',
+        'theme_color' => 'pink',
+        'title_font' => 'sans_serif',
+        'description_font' => 'sans_serif',
+        'greeting' => 'Hello!',
+    ];
 
     public function subjects(): HasMany
     {

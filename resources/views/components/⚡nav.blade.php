@@ -7,6 +7,63 @@ use Livewire\Component;
 
 new class extends Component
 {
+    public string $themeMode = 'dark';
+
+    public string $language = 'id';
+
+    public string $themeColor = 'pink';
+
+    public string $titleFont = 'sans_serif';
+
+    public string $descriptionFont = 'sans_serif';
+
+    public function mount(): void
+    {
+        $user = auth()->user();
+        $this->themeMode = $user->theme_mode;
+        $this->language = $user->language;
+        $this->themeColor = $user->theme_color;
+        $this->titleFont = $user->title_font;
+        $this->descriptionFont = $user->description_font;
+    }
+
+    public function boot(): void
+    {
+        app()->setLocale(auth()->user()->language);
+    }
+
+    public function updatedThemeMode(string $value): void
+    {
+        $this->validate(['themeMode' => ['required', 'in:dark,light']]);
+        auth()->user()->update(['theme_mode' => $value]);
+        $this->dispatch('theme-mode-updated', dark: $value === 'dark');
+    }
+
+    public function updatedLanguage(string $value): void
+    {
+        $this->validate(['language' => ['required', 'in:id,en']]);
+        auth()->user()->update(['language' => $value]);
+        app()->setLocale($value);
+    }
+
+    public function updatedThemeColor(string $value): void
+    {
+        $this->validate(['themeColor' => ['required', 'in:pink,blue']]);
+        auth()->user()->update(['theme_color' => $value]);
+    }
+
+    public function updatedTitleFont(string $value): void
+    {
+        $this->validate(['titleFont' => ['required', 'in:sans_serif,handwritting']]);
+        auth()->user()->update(['title_font' => $value]);
+    }
+
+    public function updatedDescriptionFont(string $value): void
+    {
+        $this->validate(['descriptionFont' => ['required', 'in:sans_serif,handwritting']]);
+        auth()->user()->update(['description_font' => $value]);
+    }
+
     #[On('badges-updated')]
     public function refreshBadges(): void {}
 
@@ -96,6 +153,19 @@ new class extends Component
             window.addEventListener('resize', () => this.updateIndicators());
         },
     }"
+    x-init="
+        document.documentElement.classList.toggle('dark', $wire.themeMode === 'dark');
+        localStorage.setItem('theme', $wire.themeMode);
+        window.currentThemeMode = $wire.themeMode;
+        document.documentElement.dataset.titleFont = $wire.titleFont;
+        document.documentElement.dataset.descriptionFont = $wire.descriptionFont;
+        document.documentElement.lang = $wire.language;
+    "
+    x-effect="
+        document.documentElement.dataset.titleFont = $wire.titleFont;
+        document.documentElement.dataset.descriptionFont = $wire.descriptionFont;
+        document.documentElement.lang = $wire.language;
+    "
     x-on:scroll.window.passive="scrolled = window.scrollY > 8"
     x-on:livewire:navigated.window="
         scrolled = window.scrollY > 8;
@@ -103,6 +173,12 @@ new class extends Component
     "
     x-on:keydown.escape.window="accountOpen = false"
     x-on:click.outside="accountOpen = false"
+    x-on:theme-changed.window="$wire.set('themeMode', $event.detail ? 'dark' : 'light')"
+    x-on:theme-mode-updated.window="
+        document.documentElement.classList.toggle('dark', $event.detail.dark);
+        localStorage.setItem('theme', $event.detail.dark ? 'dark' : 'light');
+        window.currentThemeMode = $event.detail.dark ? 'dark' : 'light';
+    "
 >
     {{-- Desktop & Tablet Bottom Nav --}}
     <nav class="hidden sm:flex fixed bottom-3 lg:bottom-4 inset-x-0 z-50 justify-center px-4">
@@ -188,31 +264,35 @@ new class extends Component
                     <h3 class="font-semibold">Mode tampilan</h3>
                     <p class="text-sm text-text-muted">Light / Dark</p>
                 </div>
-                <x-theme-toggle />
+                <label class="flex items-center gap-2 text-sm">
+                    <span>Light</span>
+                    <x-theme-toggle />
+                    <span>Dark</span>
+                </label>
             </section>
 
             <section class="grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
                 <label class="text-sm text-text-muted">Bahasa
-                    <select disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text disabled:cursor-not-allowed">
-                        <option>Indonesia</option><option>English</option>
+                    <select wire:model.live="language" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text">
+                        <option value="id">Indonesia</option><option value="en">English</option>
                     </select>
                 </label>
                 <label class="text-sm text-text-muted">Theme
-                    <select disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text disabled:cursor-not-allowed">
-                        <option>Pink</option><option>Blue</option>
+                    <select wire:model.live="themeColor" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text">
+                        <option value="pink">Pink</option><option value="blue">Blue</option>
                     </select>
                 </label>
             </section>
 
             <section class="grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
                 <label class="text-sm text-text-muted">Font judul
-                    <select disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text disabled:cursor-not-allowed">
-                        <option>Handwriting</option><option>Sans-serif</option>
+                    <select wire:model.live="titleFont" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text">
+                        <option value="sans_serif">Sans-serif</option><option value="handwritting">Handwriting</option>
                     </select>
                 </label>
                 <label class="text-sm text-text-muted">Font deskripsi
-                    <select disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text disabled:cursor-not-allowed">
-                        <option>Handwriting</option><option>Sans-serif</option>
+                    <select wire:model.live="descriptionFont" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text">
+                        <option value="sans_serif">Sans-serif</option><option value="handwritting">Handwriting</option>
                     </select>
                 </label>
             </section>

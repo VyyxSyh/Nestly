@@ -1,12 +1,14 @@
 <label class="switch" wire:ignore
     x-data="{ dark: document.documentElement.classList.contains('dark') }"
-    x-on:theme-changed.window="dark = $event.detail">
+    x-on:theme-changed.window="dark = $event.detail"
+    x-on:theme-mode-updated.window="dark = $event.detail.dark">
     <input type="checkbox" class="switch-input" aria-label="Toggle dark mode"
         x-bind:checked="dark"
         x-on:change="
             const isDark = $event.target.checked;
             const root = document.documentElement;
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            window.currentThemeMode = isDark ? 'dark' : 'light';
             root.classList.add('theme-transition');
             root.classList.toggle('dark', isDark);
             clearTimeout(window.themeTimer);

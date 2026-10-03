@@ -1,5 +1,7 @@
 function applyTheme() {
-    document.documentElement.classList.toggle('dark', localStorage.getItem('theme') !== 'light');
+    if (window.currentThemeMode) {
+        document.documentElement.classList.toggle('dark', window.currentThemeMode === 'dark');
+    }
 }
 applyTheme();
 document.addEventListener('livewire:navigated', applyTheme);

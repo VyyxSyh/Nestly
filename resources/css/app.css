@@ -30,6 +30,11 @@ body {
     letter-spacing: .02em;
 }
 
+:root[data-description-font='sans_serif'] body { font-family: Arial, sans-serif; }
+:root[data-description-font='handwritting'] body { font-family: 'Patrick Hand', 'Comic Sans MS', 'Chalkboard SE', cursive; }
+:root[data-title-font='sans_serif'] :is(h1, h2, h3, h4, h5, h6) { font-family: Arial, sans-serif; }
+:root[data-title-font='handwritting'] :is(h1, h2, h3, h4, h5, h6) { font-family: 'Patrick Hand', 'Comic Sans MS', 'Chalkboard SE', cursive; }
+
 [x-cloak] { display: none !important; }
 
 .page-content { font-size: 1.1em; }
