@@ -157,13 +157,16 @@
 .doodle-input::placeholder { color: #666; opacity: .8; }
 .doodle-input:hover { transform: translateY(-2px); box-shadow: 4px 4px 0 var(--ink); }
 .doodle-input:focus, .doodle-input:focus-visible { border-color: var(--input-focus); border-radius: var(--sketch-radius-2); background: #fffdf5; box-shadow: 4px 4px 0 var(--ink); }
+.doodle-input.is-invalid.is-focused { border-color: #dc2626; }
+.doodle-input.is-valid.is-focused { border-color: var(--input-focus); }
 .doodle-btn { width: 120px; height: 40px; margin: 8px 0; border: 2px solid var(--ink); border-radius: var(--sketch-radius-btn); background: var(--primary-btn); box-shadow: 4px 4px 0 var(--ink); color: var(--ink); cursor: pointer; font: 900 17px 'Patrick Hand', 'Comic Sans MS', cursive; letter-spacing: 1px; transform: rotate(-1deg); transition: all .15s ease; }
 .doodle-btn-alt { background: var(--secondary-btn); transform: rotate(1deg); }
+.doodle-btn:disabled, .doodle-btn:disabled:hover { cursor: not-allowed; opacity: .5; transform: rotate(1deg); box-shadow: 4px 4px 0 var(--ink); }
 .doodle-btn:hover { transform: translateY(-2px) rotate(-2deg); background: var(--primary-btn-hover); box-shadow: 5px 5px 0 var(--ink); }
 .doodle-btn-alt:hover { transform: translateY(-2px) rotate(2deg); background: var(--secondary-btn-hover); }
 .doodle-btn:active { transform: translate(3px, 3px) rotate(0); box-shadow: 0 0 0 var(--ink); }
 .doodle-error { width: 100%; margin: -12px 0; color: #b42318; font-size: 12px; font-weight: 700; }
-.doodle-password-hint { width: 100%; margin: -9px 0; color: #5f5660; font-size: 12px; line-height: 1.2; }
+.doodle-password-hint { width: 100%; margin: 0; padding: 2px 0; color: #5f5660; font-size: 12px; line-height: 1.35; }
 .doodle-card-scene:hover .doodle-title { animation: auth-title-wiggle .5s ease-in-out; }
 
 @media (max-width: 380px) {

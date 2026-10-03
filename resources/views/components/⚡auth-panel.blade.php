@@ -115,32 +115,32 @@ new class extends Component
 
             <section class="doodle-card-back">
                 <h2 class="doodle-title doodle-title-alt">Join Us!</h2>
-                <form class="doodle-form" wire:submit="register">
+                <form class="doodle-form" wire:submit="register" x-data="{ email: '', password: '', confirmation: '', get emailValid() { return this.email.includes('@') }, get passwordValid() { return this.password.length >= 8 && /[A-Z]/.test(this.password) && /[a-z]/.test(this.password) && /[0-9]/.test(this.password) }, get confirmationValid() { return this.confirmation.length > 0 && this.confirmation === this.password } }">
                     <label class="sr-only" for="register-name">Name</label>
                     <input id="register-name" class="doodle-input" wire:model="name" name="username" placeholder="Name" type="text" autocomplete="name" required>
                     @error('name') <p class="doodle-error">{{ $message }}</p> @enderror
                     <label class="sr-only" for="register-email">Email</label>
-                    <input id="register-email" class="doodle-input" wire:model="email" name="email" placeholder="Email" type="email" autocomplete="email" required>
+                    <input id="register-email" class="doodle-input" wire:model="email" x-model="email" x-on:focus="$el.classList.add('is-focused')" x-on:blur="$el.classList.remove('is-focused')" x-bind:class="emailValid ? 'is-valid' : 'is-invalid'" name="email" placeholder="Email" type="email" autocomplete="email" required>
                     @error('email') <p class="doodle-error">{{ $message }}</p> @enderror
                     <label class="sr-only" for="register-password">Password</label>
                     <div class="doodle-password-wrap" x-data="{ visible: false }">
-                        <input id="register-password" class="doodle-input" wire:model="password" name="password" placeholder="Password" x-bind:type="visible ? 'text' : 'password'" autocomplete="new-password" required>
+                        <input id="register-password" class="doodle-input" wire:model="password" x-model="password" x-on:focus="$el.classList.add('is-focused')" x-on:blur="$el.classList.remove('is-focused')" x-bind:class="passwordValid ? 'is-valid' : 'is-invalid'" name="password" placeholder="Password" x-bind:type="visible ? 'text' : 'password'" autocomplete="new-password" aria-describedby="password-requirements" required>
                         <button class="doodle-password-toggle" type="button" x-on:click="visible = !visible" x-bind:aria-label="visible ? 'Hide password' : 'Show password'" x-bind:title="visible ? 'Hide password' : 'Show password'">
                             <svg x-show="!visible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                             <svg x-cloak x-show="visible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a15 15 0 0 1-3 3.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7c1.2 0 2.3-.2 3.3-.7"/></svg>
                         </button>
                     </div>
-                    <p class="doodle-password-hint">Min. 8 karakter, huruf besar, huruf kecil, dan angka.</p>
+                    <p id="password-requirements" class="doodle-password-hint" aria-live="polite">Min. 8 karakter, huruf besar, huruf kecil, dan angka.</p>
                     @error('password') <p class="doodle-error">{{ $message }}</p> @enderror
                     <label class="sr-only" for="register-password-confirmation">Confirm password</label>
                     <div class="doodle-password-wrap" x-data="{ visible: false }">
-                        <input id="register-password-confirmation" class="doodle-input" wire:model="passwordConfirmation" name="password_confirmation" placeholder="Confirm Password" x-bind:type="visible ? 'text' : 'password'" autocomplete="new-password" required>
+                        <input id="register-password-confirmation" class="doodle-input" wire:model="passwordConfirmation" x-model="confirmation" x-on:focus="$el.classList.add('is-focused')" x-on:blur="$el.classList.remove('is-focused')" x-bind:class="confirmationValid ? 'is-valid' : 'is-invalid'" name="password_confirmation" placeholder="Confirm Password" x-bind:type="visible ? 'text' : 'password'" autocomplete="new-password" required>
                         <button class="doodle-password-toggle" type="button" x-on:click="visible = !visible" x-bind:aria-label="visible ? 'Hide password' : 'Show password'" x-bind:title="visible ? 'Hide password' : 'Show password'">
                             <svg x-show="!visible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                             <svg x-cloak x-show="visible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 3 18 18M10.6 10.6a2 2 0 0 0 2.8 2.8"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a15 15 0 0 1-3 3.8M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7c1.2 0 2.3-.2 3.3-.7"/></svg>
                         </button>
                     </div>
-                    <button class="doodle-btn doodle-btn-alt" type="submit">Confirm!</button>
+                    <button class="doodle-btn doodle-btn-alt" type="submit" x-bind:disabled="!passwordValid || !confirmationValid">Confirm!</button>
                 </form>
             </section>
         </div>
