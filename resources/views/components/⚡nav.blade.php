@@ -283,13 +283,13 @@ new class extends Component
 
     {{-- Account settings popup --}}
     <section x-cloak x-show="accountOpen" x-transition.opacity
-        class="account-popup fixed top-1/2 left-1/2 z-[60] w-[min(22rem,calc(100vw-1.5rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border/70 bg-surface/20 p-4 text-text shadow-xl backdrop-blur-sm"
+        class="account-popup fixed inset-x-3 top-[4.5rem] bottom-20 z-[60] mx-auto flex max-h-[calc(100dvh-6.5rem)] w-auto max-w-[22rem] flex-col rounded-2xl border border-border/70 bg-surface/20 p-4 text-text shadow-xl backdrop-blur-sm sm:inset-x-auto sm:bottom-auto sm:left-1/2 sm:top-1/2 sm:max-h-none sm:w-[min(22rem,calc(100vw-1.5rem))] sm:-translate-x-1/2 sm:-translate-y-1/2"
         aria-label="Account settings">
         <header class="mb-3 border-b border-border/60 pb-2">
             <h2 class="text-lg font-bold">Account</h2>
         </header>
 
-        <div class="max-h-[70vh] space-y-3 overflow-y-auto px-2.5 sm:px-3">
+        <div class="min-h-0 flex-1 space-y-3 overflow-y-auto px-2.5 sm:max-h-[70vh] sm:flex-none sm:px-3">
             <section class="space-y-2">
                 <h3 class="font-semibold">Profil</h3>
                 <label class="block text-sm text-text-muted">Nama panggilan
