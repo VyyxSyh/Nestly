@@ -315,29 +315,49 @@ new class extends Component
             </section>
 
             <section class="grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
-                <label class="text-sm text-text-muted">Bahasa
-                    <select wire:model.live="language" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-                        <option value="id">Indonesia</option><option value="en">English</option>
-                    </select>
-                </label>
-                <label class="text-sm text-text-muted">Theme
-                    <select wire:model.live="themeColor" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-                        <option value="pink">Pink</option><option value="blue">Blue</option>
-                    </select>
-                </label>
+                <div class="relative text-sm text-text-muted" x-data="{ open: false }" x-on:click.outside="open = false" x-on:keydown.escape.window="open = false">
+                    <span>Bahasa</span>
+                    <button type="button" x-on:click="open = !open" x-bind:aria-expanded="open" class="mt-1 flex w-full cursor-pointer items-center justify-between rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-left text-text focus-visible:border-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
+                        <span>{{ $language === 'id' ? 'Indonesia' : 'English' }}</span><i class="fa-solid fa-chevron-down text-xs" aria-hidden="true"></i>
+                    </button>
+                    <div x-cloak x-show="open" x-transition.opacity class="absolute inset-x-0 z-[70] mt-1.5 w-full rounded-lg border border-border bg-surface p-1 text-text shadow-xl">
+                        <button type="button" wire:click="$set('language', 'id')" x-on:click="open = false" class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left hover:bg-primary/15">Indonesia</button>
+                        <button type="button" wire:click="$set('language', 'en')" x-on:click="open = false" class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left hover:bg-primary/15">English</button>
+                    </div>
+                </div>
+                <div class="relative text-sm text-text-muted" x-data="{ open: false }" x-on:click.outside="open = false" x-on:keydown.escape.window="open = false">
+                    <span>Theme</span>
+                    <button type="button" x-on:click="open = !open" x-bind:aria-expanded="open" class="mt-1 flex w-full cursor-pointer items-center justify-between rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-left text-text focus-visible:border-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
+                        <span>{{ ucfirst($themeColor) }}</span><i class="fa-solid fa-chevron-down text-xs" aria-hidden="true"></i>
+                    </button>
+                    <div x-cloak x-show="open" x-transition.opacity class="absolute inset-x-0 z-[70] mt-1.5 w-full rounded-lg border border-border bg-surface p-1 text-text shadow-xl">
+                        <button type="button" wire:click="$set('themeColor', 'pink')" x-on:click="open = false" class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left hover:bg-primary/15">Pink</button>
+                        <button type="button" wire:click="$set('themeColor', 'blue')" x-on:click="open = false" class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left hover:bg-primary/15">Blue</button>
+                    </div>
+                </div>
             </section>
 
             <section class="grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
-                <label class="text-sm text-text-muted">Font judul
-                    <select wire:model.live="titleFont" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-                        <option value="sans_serif">Sans-serif</option><option value="handwritting">Handwriting</option>
-                    </select>
-                </label>
-                <label class="text-sm text-text-muted">Font deskripsi
-                    <select wire:model.live="descriptionFont" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
-                        <option value="sans_serif">Sans-serif</option><option value="handwritting">Handwriting</option>
-                    </select>
-                </label>
+                <div class="relative text-sm text-text-muted" x-data="{ open: false }" x-on:click.outside="open = false" x-on:keydown.escape.window="open = false">
+                    <span>Font judul</span>
+                    <button type="button" x-on:click="open = !open" x-bind:aria-expanded="open" class="mt-1 flex w-full cursor-pointer items-center justify-between rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-left text-text focus-visible:border-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
+                        <span>{{ $titleFont === 'sans_serif' ? 'Sans-serif' : 'Handwriting' }}</span><i class="fa-solid fa-chevron-down text-xs" aria-hidden="true"></i>
+                    </button>
+                    <div x-cloak x-show="open" x-transition.opacity class="absolute inset-x-0 z-[70] mt-1.5 w-full rounded-lg border border-border bg-surface p-1 text-text shadow-xl">
+                        <button type="button" wire:click="$set('titleFont', 'sans_serif')" x-on:click="open = false" class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left hover:bg-primary/15">Sans-serif</button>
+                        <button type="button" wire:click="$set('titleFont', 'handwritting')" x-on:click="open = false" class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left hover:bg-primary/15">Handwriting</button>
+                    </div>
+                </div>
+                <div class="relative text-sm text-text-muted" x-data="{ open: false }" x-on:click.outside="open = false" x-on:keydown.escape.window="open = false">
+                    <span>Font deskripsi</span>
+                    <button type="button" x-on:click="open = !open" x-bind:aria-expanded="open" class="mt-1 flex w-full cursor-pointer items-center justify-between rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-left text-text focus-visible:border-primary focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary">
+                        <span>{{ $descriptionFont === 'sans_serif' ? 'Sans-serif' : 'Handwriting' }}</span><i class="fa-solid fa-chevron-down text-xs" aria-hidden="true"></i>
+                    </button>
+                    <div x-cloak x-show="open" x-transition.opacity class="absolute inset-x-0 z-[70] mt-1.5 w-full rounded-lg border border-border bg-surface p-1 text-text shadow-xl">
+                        <button type="button" wire:click="$set('descriptionFont', 'sans_serif')" x-on:click="open = false" class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left hover:bg-primary/15">Sans-serif</button>
+                        <button type="button" wire:click="$set('descriptionFont', 'handwritting')" x-on:click="open = false" class="block w-full cursor-pointer rounded-md px-2 py-1.5 text-left hover:bg-primary/15">Handwriting</button>
+                    </div>
+                </div>
             </section>
 
             <form wire:submit="updatePassword" class="space-y-2" x-data="{
