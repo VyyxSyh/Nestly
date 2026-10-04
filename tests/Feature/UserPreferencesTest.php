@@ -57,11 +57,27 @@ class UserPreferencesTest extends TestCase
             ->set('name', 'Full Name')
             ->set('nickname', 'Sunny')
             ->set('newPassword', 'NewPassword8')
+            ->set('passwordConfirmation', 'NewPassword8')
             ->call('updatePassword');
 
         $user->refresh();
         $this->assertSame('Full Name', $user->name);
         $this->assertSame('Sunny', $user->nickname);
         $this->assertTrue(password_verify('NewPassword8', $user->password));
+    }
+
+    public function test_password_is_not_updated_when_confirmation_does_not_match(): void
+    {
+        $user = User::factory()->create();
+        $originalPassword = $user->password;
+        $this->actingAs($user);
+
+        Livewire::test('nav')
+            ->set('newPassword', 'NewPassword8')
+            ->set('passwordConfirmation', 'Mismatch8')
+            ->call('updatePassword')
+            ->assertHasErrors(['passwordConfirmation' => 'same']);
+
+        $this->assertSame($originalPassword, $user->fresh()->password);
     }
 }

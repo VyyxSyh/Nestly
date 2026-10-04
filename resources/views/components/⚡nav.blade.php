@@ -23,6 +23,8 @@ new class extends Component
 
     public string $newPassword = '';
 
+    public string $passwordConfirmation = '';
+
     public function mount(): void
     {
         $user = auth()->user();
@@ -88,9 +90,15 @@ new class extends Component
 
     public function updatePassword(): void
     {
-        $this->validate(['newPassword' => ['required', 'string', 'min:8', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[0-9]/']]);
+        $this->validate([
+            'newPassword' => ['required', 'string', 'min:8', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[0-9]/'],
+            'passwordConfirmation' => ['required', 'same:newPassword'],
+        ], [
+            'passwordConfirmation.required' => 'Konfirmasi password wajib diisi.',
+            'passwordConfirmation.same' => 'Konfirmasi password tidak cocok.',
+        ]);
         auth()->user()->update(['password' => $this->newPassword]);
-        $this->reset('newPassword');
+        $this->reset('newPassword', 'passwordConfirmation');
         session()->flash('password-updated', true);
     }
 
@@ -278,7 +286,7 @@ new class extends Component
             <h2 class="text-lg font-bold">Account</h2>
         </header>
 
-        <div class="max-h-[70vh] space-y-3 overflow-y-auto pr-1">
+        <div class="max-h-[70vh] space-y-3 overflow-y-auto px-2.5 sm:px-3">
             <section class="space-y-2">
                 <h3 class="font-semibold">Profil</h3>
                 <label class="block text-sm text-text-muted">Nama panggilan
@@ -329,11 +337,17 @@ new class extends Component
                 </label>
             </section>
 
-            <form wire:submit="updatePassword" class="space-y-1">
+            <form wire:submit="updatePassword" class="space-y-2">
                 <input type="password" wire:model="newPassword" placeholder="password" autocomplete="new-password" class="w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted">
                 @error('newPassword') <span class="block text-sm text-danger">{{ $message }}</span> @enderror
+                <div class="flex items-center gap-2 rounded-lg border border-border/70 bg-surface/10 pr-1.5 focus-within:border-info">
+                    <input type="password" wire:model="passwordConfirmation" placeholder="Verifikasi password" autocomplete="new-password" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-text outline-none placeholder:text-text-muted">
+                    <button type="submit" aria-label="Ganti password" title="Ganti password" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                        <i class="fa-solid fa-check" aria-hidden="true"></i>
+                    </button>
+                </div>
+                @error('passwordConfirmation') <span class="block text-sm text-danger">{{ $message }}</span> @enderror
                 @if (session()->has('password-updated')) <span class="block text-sm text-success">Password diperbarui.</span> @endif
-                <button type="submit" class="w-full rounded-lg border border-border/70 px-3 py-2 text-left text-text-muted transition hover:border-primary hover:text-primary">Ganti password</button>
             </form>
 
             <form method="POST" action="{{ route('logout') }}" class="border-t border-border/60 pt-3">
