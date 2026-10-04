@@ -17,6 +17,12 @@ new class extends Component
 
     public string $descriptionFont = 'sans_serif';
 
+    public string $name = '';
+
+    public string $nickname = '';
+
+    public string $newPassword = '';
+
     public function mount(): void
     {
         $user = auth()->user();
@@ -25,6 +31,8 @@ new class extends Component
         $this->themeColor = $user->theme_color;
         $this->titleFont = $user->title_font;
         $this->descriptionFont = $user->description_font;
+        $this->name = $user->name;
+        $this->nickname = $user->nickname ?? '';
     }
 
     public function boot(): void
@@ -62,6 +70,28 @@ new class extends Component
     {
         $this->validate(['descriptionFont' => ['required', 'in:sans_serif,handwritting']]);
         auth()->user()->update(['description_font' => $value]);
+    }
+
+    public function updatedName(string $value): void
+    {
+        $this->validate(['name' => ['required', 'string', 'max:255']]);
+        auth()->user()->update(['name' => trim($value)]);
+        $this->dispatch('profile-updated');
+    }
+
+    public function updatedNickname(string $value): void
+    {
+        $this->validate(['nickname' => ['nullable', 'string', 'max:255']]);
+        auth()->user()->update(['nickname' => trim($value) ?: null]);
+        $this->dispatch('profile-updated');
+    }
+
+    public function updatePassword(): void
+    {
+        $this->validate(['newPassword' => ['required', 'string', 'min:8', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[0-9]/']]);
+        auth()->user()->update(['password' => $this->newPassword]);
+        $this->reset('newPassword');
+        session()->flash('password-updated', true);
     }
 
     #[On('badges-updated')]
@@ -252,10 +282,12 @@ new class extends Component
             <section class="space-y-2">
                 <h3 class="font-semibold">Profil</h3>
                 <label class="block text-sm text-text-muted">Nama panggilan
-                    <input type="text" placeholder="Nama panggilan" disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted disabled:cursor-not-allowed">
+                    <input type="text" wire:model.live.debounce.400ms="nickname" placeholder="Nama panggilan" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted">
+                    @error('nickname') <span class="text-danger">{{ $message }}</span> @enderror
                 </label>
                 <label class="block text-sm text-text-muted">Nama lengkap
-                    <input type="text" placeholder="Nama lengkap" disabled class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted disabled:cursor-not-allowed">
+                    <input type="text" wire:model.live.debounce.400ms="name" placeholder="Nama lengkap" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted">
+                    @error('name') <span class="text-danger">{{ $message }}</span> @enderror
                 </label>
             </section>
 
@@ -297,7 +329,12 @@ new class extends Component
                 </label>
             </section>
 
-            <button type="button" disabled class="w-full rounded-lg border border-border/70 px-3 py-2 text-left text-text-muted opacity-60">Ganti password</button>
+            <form wire:submit="updatePassword" class="space-y-1">
+                <input type="password" wire:model="newPassword" placeholder="password" autocomplete="new-password" class="w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted">
+                @error('newPassword') <span class="block text-sm text-danger">{{ $message }}</span> @enderror
+                @if (session()->has('password-updated')) <span class="block text-sm text-success">Password diperbarui.</span> @endif
+                <button type="submit" class="w-full rounded-lg border border-border/70 px-3 py-2 text-left text-text-muted transition hover:border-primary hover:text-primary">Ganti password</button>
+            </form>
 
             <form method="POST" action="{{ route('logout') }}" class="border-t border-border/60 pt-3">
                 @csrf

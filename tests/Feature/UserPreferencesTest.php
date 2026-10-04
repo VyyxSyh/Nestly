@@ -47,4 +47,21 @@ class UserPreferencesTest extends TestCase
 
         $this->assertDatabaseHas('users', ['id' => $user->id, 'greeting' => 'Good morning']);
     }
+
+    public function test_account_profile_fields_and_password_are_editable(): void
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        Livewire::test('nav')
+            ->set('name', 'Full Name')
+            ->set('nickname', 'Sunny')
+            ->set('newPassword', 'NewPassword8')
+            ->call('updatePassword');
+
+        $user->refresh();
+        $this->assertSame('Full Name', $user->name);
+        $this->assertSame('Sunny', $user->nickname);
+        $this->assertTrue(password_verify('NewPassword8', $user->password));
+    }
 }

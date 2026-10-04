@@ -6,6 +6,7 @@ use App\Models\Schedule;
 use App\Models\Task;
 use Carbon\Carbon;
 use Livewire\Attributes\Locked;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -34,6 +35,9 @@ new class extends Component
         $this->calendarYear = $today->year;
         $this->greeting = auth()->user()->greeting ?: 'Hello!';
     }
+
+    #[On('profile-updated')]
+    public function refreshProfile(): void {}
 
     public function changeCalendarMonth(int $direction): void
     {
