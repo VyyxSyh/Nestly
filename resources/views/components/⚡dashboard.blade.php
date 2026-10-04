@@ -179,29 +179,7 @@ new class extends Component
     };
 @endphp
 
-<div class="text-text">
-<div class="mb-3 rounded-[14px] border-2 border-border bg-surface p-3 lg:p-4">
-    <div class="flex items-center justify-between gap-3">
-        <h1 class="text-lg font-bold lg:text-xl">{{ rtrim($greeting, '!.?') }}{{ $nickname ? ', '.$nickname : '' }}!</h1>
-        <button type="button" wire:click="$set('editingGreeting', {{ $editingGreeting ? 'false' : 'true' }})" aria-label="Edit greeting" title="Edit greeting" class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
-            <i class="fa-solid fa-pen" aria-hidden="true"></i>
-        </button>
-    </div>
-    @if ($editingGreeting)
-        <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            @foreach (["Hello", 'Hii', "What's up?", 'Heyy', 'Allooww'] as $greetingOption)
-                <button type="button" wire:click="saveGreeting(@js($greetingOption))" class="rounded-lg border border-border px-3 py-2 text-sm transition hover:border-primary hover:text-primary">{{ $greetingOption }}</button>
-            @endforeach
-            <div class="col-span-2 flex gap-2 sm:col-span-3">
-                <input type="text" wire:model="customGreeting" maxlength="100" placeholder="Greeting custom" class="min-w-0 flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-text-muted">
-                <button type="button" wire:click="saveCustomGreeting" class="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-white">Simpan</button>
-            </div>
-            @error('greeting') <p class="col-span-2 text-sm text-danger sm:col-span-3">{{ $message }}</p> @enderror
-        </div>
-    @endif
-</div>
-
-<div class="grid grid-cols-1 sm:grid-cols-6 gap-2.5 text-text">
+<div class="grid grid-cols-1 gap-2.5 text-text sm:grid-cols-6 sm:grid-rows-[auto_repeat(3,minmax(8rem,auto))]">
 
     {{-- 1. Jadwal (kolom 1-5, baris 1) --}}
     <section class="{{ $card }} sm:col-span-5 sm:row-start-1">
@@ -258,8 +236,8 @@ new class extends Component
         </div>
     </section>
 
-    {{-- 3. Tugas (kolom 1-4, baris 2-4) --}}
-    <section class="{{ $card }} sm:col-span-4 sm:row-start-2 sm:row-span-3 sm:min-h-[22rem] flex flex-col gap-3">
+    {{-- 3. Tugas (kolom 1-2, baris 2-4) --}}
+    <section class="{{ $card }} flex flex-col gap-3 sm:col-span-2 sm:col-start-1 sm:row-span-3 sm:row-start-2">
         <div class="flex justify-evenly rounded-xl bg-bg px-2 py-2 text-center">
             @foreach ($stats as [$label, $value, $color])
                 <div>
@@ -276,7 +254,7 @@ new class extends Component
                     {{ $totalTasks === 0 ? 'Belum ada tugas.' : 'Semua tugas sudah selesai.' }}
                 </p>
             @else
-                <div class="columns-1 md:columns-2 gap-3 [&>*]:mb-3 [&>*]:break-inside-avoid">
+                <div class="columns-1 gap-3 [&>*]:mb-3 [&>*]:break-inside-avoid">
                     @foreach ($nearestTasks as $task)
                         @php
                             $accent = $task->subject?->accent_color ?? '#9CA3AF';
@@ -317,8 +295,8 @@ new class extends Component
         </div>
     </section>
 
-    {{-- 4. Transaksi (kolom 5-6, baris 2-4) --}}
-    <section class="{{ $card }} sm:col-start-5 sm:col-span-2 sm:row-start-2 sm:row-span-3 sm:min-h-[22rem] flex flex-col gap-3">
+    {{-- 4. Transaksi (kolom 3-4, baris 2-4) --}}
+    <section class="{{ $card }} flex flex-col gap-3 sm:col-span-2 sm:col-start-3 sm:row-span-3 sm:row-start-2">
         <div class="space-y-1 rounded-xl bg-bg px-3 py-2 text-xs lg:text-sm">
             <div class="flex justify-between gap-2">
                 <span class="text-text-muted">Pemasukan</span>
@@ -355,7 +333,40 @@ new class extends Component
             </div>
         </div>
     </section>
-<section
+
+    {{-- Greeting + profil occupy the right-hand grid column. --}}
+    <div class="flex flex-col gap-2.5 sm:col-span-2 sm:col-start-5 sm:row-span-3 sm:row-start-2">
+        <section class="{{ $card }} shrink-0">
+            <div class="flex items-center justify-between gap-2">
+                <h1 class="text-lg font-bold lg:text-xl">{{ rtrim($greeting, '!.?') }}{{ $nickname ? ', '.$nickname : '' }}!</h1>
+                <button type="button" wire:click="$set('editingGreeting', {{ $editingGreeting ? 'false' : 'true' }})" aria-label="Edit greeting" title="Edit greeting" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                    <i class="fa-solid fa-pen" aria-hidden="true"></i>
+                </button>
+            </div>
+            @if ($editingGreeting)
+                <div class="mt-3 grid w-full grid-cols-2 gap-2 text-left">
+                    @foreach (["Hello", 'Hii', "What's up?", 'Heyy', 'Allooww'] as $greetingOption)
+                        <button type="button" wire:click="saveGreeting(@js($greetingOption))" class="rounded-lg border border-border px-2 py-1.5 text-sm transition hover:border-primary hover:text-primary">{{ $greetingOption }}</button>
+                    @endforeach
+                    <div class="col-span-2 flex gap-2">
+                        <input type="text" wire:model="customGreeting" maxlength="100" placeholder="Greeting custom" class="min-w-0 flex-1 rounded-lg border border-border bg-bg px-2 py-1.5 text-sm text-text placeholder:text-text-muted">
+                        <button type="button" wire:click="saveCustomGreeting" class="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-white">Simpan</button>
+                    </div>
+                    @error('greeting') <p class="col-span-2 text-sm text-danger">{{ $message }}</p> @enderror
+                </div>
+            @endif
+        </section>
+
+        <section class="{{ $card }} flex min-h-0 flex-1 flex-col items-center justify-center text-center">
+            <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary/30 bg-primary/10 text-2xl text-primary" aria-label="Foto profil">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+            </div>
+            <p class="mt-2 font-bold">{{ auth()->user()->name }}</p>
+            <p class="text-sm text-text-muted">Kelas belum diatur</p>
+        </section>
+    </div>
+
+    <section
     x-data="{
         selectedDate: null,
         indicator: { left: 0, top: 0, width: 0, height: 0, opacity: 0 },
@@ -488,5 +499,4 @@ new class extends Component
         </div>
     </div>
 </section>
-</div>
 </div>
