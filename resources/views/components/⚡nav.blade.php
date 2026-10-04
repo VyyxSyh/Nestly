@@ -340,21 +340,28 @@ new class extends Component
                 </label>
             </section>
 
-            <form wire:submit="updatePassword" class="space-y-2" x-data="{ showNewPassword: false, showPasswordConfirmation: false }">
-                <div class="flex items-center gap-2 rounded-lg border border-border/70 bg-surface/10 pr-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
-                    <input x-bind:type="showNewPassword ? 'text' : 'password'" wire:model="newPassword" placeholder="password" autocomplete="new-password" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-text outline-none placeholder:text-text-muted">
+            <form wire:submit="updatePassword" class="space-y-2" x-data="{
+                showNewPassword: false,
+                showPasswordConfirmation: false,
+                newPassword: '',
+                passwordConfirmation: '',
+                passwordIsValid() { return this.newPassword.length >= 8 && /[a-z]/.test(this.newPassword) && /[A-Z]/.test(this.newPassword) && /[0-9]/.test(this.newPassword) },
+                confirmationIsValid() { return this.passwordIsValid() && this.passwordConfirmation.length > 0 && this.passwordConfirmation === this.newPassword }
+            }">
+                <div class="flex items-center gap-2 rounded-lg border border-border/70 bg-surface/10 pr-1.5 focus-within:ring-1" x-bind:class="passwordIsValid() ? 'focus-within:border-primary focus-within:ring-primary' : 'focus-within:border-danger focus-within:ring-danger'">
+                    <input x-bind:type="showNewPassword ? 'text' : 'password'" x-on:input="newPassword = $event.target.value" wire:model="newPassword" placeholder="password" autocomplete="new-password" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-text outline-none placeholder:text-text-muted">
                     <button type="button" x-on:click="showNewPassword = !showNewPassword" x-bind:aria-label="showNewPassword ? 'Sembunyikan password baru' : 'Tampilkan password baru'" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
                         <i x-bind:class="showNewPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'" aria-hidden="true"></i>
                     </button>
                 </div>
                 <p class="text-xs text-text-muted">Minimal 8 karakter, huruf besar, huruf kecil, dan angka.</p>
                 @error('newPassword') <span class="block text-sm text-danger">{{ $message }}</span> @enderror
-                <div class="flex items-center gap-2 rounded-lg border border-border/70 bg-surface/10 pr-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
-                    <input x-bind:type="showPasswordConfirmation ? 'text' : 'password'" wire:model="passwordConfirmation" placeholder="Verifikasi password" autocomplete="new-password" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-text outline-none placeholder:text-text-muted">
+                <div class="flex items-center gap-2 rounded-lg border border-border/70 bg-surface/10 pr-1.5 focus-within:ring-1" x-bind:class="confirmationIsValid() ? 'focus-within:border-primary focus-within:ring-primary' : 'focus-within:border-danger focus-within:ring-danger'">
+                    <input x-bind:type="showPasswordConfirmation ? 'text' : 'password'" x-on:input="passwordConfirmation = $event.target.value" wire:model="passwordConfirmation" placeholder="Verifikasi password" autocomplete="new-password" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-text outline-none placeholder:text-text-muted">
                     <button type="button" x-on:click="showPasswordConfirmation = !showPasswordConfirmation" x-bind:aria-label="showPasswordConfirmation ? 'Sembunyikan verifikasi password' : 'Tampilkan verifikasi password'" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
                         <i x-bind:class="showPasswordConfirmation ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'" aria-hidden="true"></i>
                     </button>
-                    <button type="submit" aria-label="Ganti password" title="Ganti password" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                    <button type="submit" aria-label="Ganti password" title="Ganti password" x-bind:disabled="!confirmationIsValid()" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-40">
                         <i class="fa-solid fa-check" aria-hidden="true"></i>
                     </button>
                 </div>
