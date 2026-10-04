@@ -94,6 +94,9 @@ new class extends Component
             'newPassword' => ['required', 'string', 'min:8', 'regex:/[a-z]/', 'regex:/[A-Z]/', 'regex:/[0-9]/'],
             'passwordConfirmation' => ['required', 'same:newPassword'],
         ], [
+            'newPassword.required' => 'Password wajib diisi.',
+            'newPassword.min' => 'Password minimal 8 karakter.',
+            'newPassword.regex' => 'Password harus berisi huruf besar, huruf kecil, dan angka.',
             'passwordConfirmation.required' => 'Konfirmasi password wajib diisi.',
             'passwordConfirmation.same' => 'Konfirmasi password tidak cocok.',
         ]);
@@ -290,11 +293,11 @@ new class extends Component
             <section class="space-y-2">
                 <h3 class="font-semibold">Profil</h3>
                 <label class="block text-sm text-text-muted">Nama panggilan
-                    <input type="text" wire:model.live.debounce.400ms="nickname" placeholder="Nama panggilan" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted">
+                    <input type="text" wire:model.live.debounce.400ms="nickname" placeholder="Nama panggilan" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                     @error('nickname') <span class="text-danger">{{ $message }}</span> @enderror
                 </label>
                 <label class="block text-sm text-text-muted">Nama lengkap
-                    <input type="text" wire:model.live.debounce.400ms="name" placeholder="Nama lengkap" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted">
+                    <input type="text" wire:model.live.debounce.400ms="name" placeholder="Nama lengkap" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                     @error('name') <span class="text-danger">{{ $message }}</span> @enderror
                 </label>
             </section>
@@ -313,12 +316,12 @@ new class extends Component
 
             <section class="grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
                 <label class="text-sm text-text-muted">Bahasa
-                    <select wire:model.live="language" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text">
+                    <select wire:model.live="language" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                         <option value="id">Indonesia</option><option value="en">English</option>
                     </select>
                 </label>
                 <label class="text-sm text-text-muted">Theme
-                    <select wire:model.live="themeColor" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text">
+                    <select wire:model.live="themeColor" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                         <option value="pink">Pink</option><option value="blue">Blue</option>
                     </select>
                 </label>
@@ -326,22 +329,31 @@ new class extends Component
 
             <section class="grid grid-cols-2 gap-2 border-t border-border/60 pt-3">
                 <label class="text-sm text-text-muted">Font judul
-                    <select wire:model.live="titleFont" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text">
+                    <select wire:model.live="titleFont" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                         <option value="sans_serif">Sans-serif</option><option value="handwritting">Handwriting</option>
                     </select>
                 </label>
                 <label class="text-sm text-text-muted">Font deskripsi
-                    <select wire:model.live="descriptionFont" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text">
+                    <select wire:model.live="descriptionFont" class="mt-1 w-full rounded-lg border border-border/70 bg-surface/10 px-2 py-2 text-text focus:border-primary focus:outline-none focus-visible:ring-1 focus-visible:ring-primary">
                         <option value="sans_serif">Sans-serif</option><option value="handwritting">Handwriting</option>
                     </select>
                 </label>
             </section>
 
-            <form wire:submit="updatePassword" class="space-y-2">
-                <input type="password" wire:model="newPassword" placeholder="password" autocomplete="new-password" class="w-full rounded-lg border border-border/70 bg-surface/10 px-3 py-2 text-text placeholder:text-text-muted">
+            <form wire:submit="updatePassword" class="space-y-2" x-data="{ showNewPassword: false, showPasswordConfirmation: false }">
+                <div class="flex items-center gap-2 rounded-lg border border-border/70 bg-surface/10 pr-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+                    <input x-bind:type="showNewPassword ? 'text' : 'password'" wire:model="newPassword" placeholder="password" autocomplete="new-password" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-text outline-none placeholder:text-text-muted">
+                    <button type="button" x-on:click="showNewPassword = !showNewPassword" x-bind:aria-label="showNewPassword ? 'Sembunyikan password baru' : 'Tampilkan password baru'" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                        <i x-bind:class="showNewPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <p class="text-xs text-text-muted">Minimal 8 karakter, huruf besar, huruf kecil, dan angka.</p>
                 @error('newPassword') <span class="block text-sm text-danger">{{ $message }}</span> @enderror
-                <div class="flex items-center gap-2 rounded-lg border border-border/70 bg-surface/10 pr-1.5 focus-within:border-info">
-                    <input type="password" wire:model="passwordConfirmation" placeholder="Verifikasi password" autocomplete="new-password" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-text outline-none placeholder:text-text-muted">
+                <div class="flex items-center gap-2 rounded-lg border border-border/70 bg-surface/10 pr-1.5 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+                    <input x-bind:type="showPasswordConfirmation ? 'text' : 'password'" wire:model="passwordConfirmation" placeholder="Verifikasi password" autocomplete="new-password" class="min-w-0 flex-1 bg-transparent px-3 py-2 text-text outline-none placeholder:text-text-muted">
+                    <button type="button" x-on:click="showPasswordConfirmation = !showPasswordConfirmation" x-bind:aria-label="showPasswordConfirmation ? 'Sembunyikan verifikasi password' : 'Tampilkan verifikasi password'" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
+                        <i x-bind:class="showPasswordConfirmation ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye'" aria-hidden="true"></i>
+                    </button>
                     <button type="submit" aria-label="Ganti password" title="Ganti password" class="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-text-muted transition hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-primary">
                         <i class="fa-solid fa-check" aria-hidden="true"></i>
                     </button>
